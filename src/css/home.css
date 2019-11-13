@@ -1,0 +1,27 @@
+#logo{
+    width: 500px;
+    height: 200px;
+    margin-bottom: 7%;
+    margin-top: 3%;
+}
+#logo1{
+    width: 500px;
+    height: 200px;
+    margin-bottom: 7%;
+    margin-top: 3%;
+    float: right;
+}
+
+#text1{
+    text-align: center;
+    color: #1d324e;
+}
+
+#text2{
+    text-decoration: #1d324e;
+    text-decoration-line: underline;
+    text-align: center;
+    color: #de0023;
+    text-decoration-style: solid
+}
+
