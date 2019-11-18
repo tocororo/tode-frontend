@@ -5,16 +5,27 @@ import {
     Collapse, Navbar, NavbarToggler, Nav, NavItem, Container, Dropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,Button
 } from 'reactstrap'
 
 import RegisterModal from './User/Register'
 import Logout from './User/Logout'
 import LoginModal from './User/Login'
-//import DocumentServer from './DocumentServer'
 import '../css/navigationBar.css';
 
 import PropTypes from 'prop-types'
+import { logout } from '../actions/AuthAction'
+
+/* <Dropdown group isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle caret className="DropdownToggle">
+
+                            {user ? `${user.name}` : ''}
+
+                        </DropdownToggle>
+                        <DropdownMenu className="dropdownMenu">
+                            <DropdownItem className="dropdownItem" ><Logout /></DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown> */
 
 class NavigationBar extends Component {
     state = {
@@ -30,8 +41,10 @@ class NavigationBar extends Component {
     }
 
     static propTypes = {
-        auth: PropTypes.object.isRequired
+        auth: PropTypes.object.isRequired,
+        logout: PropTypes.func.isRequired
     }
+    
 
     toggle() {
         this.setState(prevState => ({
@@ -45,23 +58,14 @@ class NavigationBar extends Component {
         const authLinks = (
             <Fragment>
 
-                <NavItem >
+                <NavItem>
                     <Link className="nav-link" to='/users'>Users</Link>
                 </NavItem>
                 <NavItem >
                     <Link className="nav-link" to='/editar'>Editar</Link>
                 </NavItem>
                 <NavItem>
-                    <Dropdown group isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle caret color="info">
-
-                            {user ? `${user.name}` : ''}
-
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdownMenu">
-                            <DropdownItem className="dropdownItem" ><Logout /></DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
+                    <Button className="logout" onClick={this.props.logout}>{user ? `${user.name}` : ''}</Button>
                 </NavItem>
 
 
@@ -71,7 +75,7 @@ class NavigationBar extends Component {
 
         const gestLinks = (
             <Fragment>
-                <NavItem color="info">
+                <NavItem color="">
                     <RegisterModal />
                 </NavItem>
                 <NavItem>
@@ -82,12 +86,12 @@ class NavigationBar extends Component {
 
         return (
             <div className="menu">
-                <Navbar color="dark" dark expand='sm' className='mb-5'>
+                <Navbar className="navbar" dark expand='sm' >
                     <Container>
                         <Link className="navbar-brand" to='/'>TocororoEAC</Link>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav className='ml-auto' navbar>
+                            <Nav className='nav ml-auto' navbar>
                                 {isAuthenticated ? authLinks : gestLinks}
                             </Nav>
                         </Collapse>
@@ -159,4 +163,8 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, null)(NavigationBar)
+export default connect(mapStateToProps, {logout})(NavigationBar)
+
+
+
+

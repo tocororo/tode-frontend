@@ -1,6 +1,6 @@
 
 .card {
-    border: 1px solid #28a745;
+    border: 1px solid;
 }
 .card-login {
     margin-top: 80px;
@@ -28,7 +28,7 @@
 
 .input-group-prepend span{
     width: 50px;
-    background-color:cadetblue;
+    background-color:tomato;
     color: #fff;
     border:0 !important;
 }
@@ -40,8 +40,8 @@ input:focus{
 
 .login_btn{
     width: 130px;
-    border:2px solid cadetblue;
-    color: cadetblue;
+    border:2px solid #df3e32;
+    color: tomato;
     background-color:white;
 }
 
@@ -53,8 +53,8 @@ input:focus{
 
 .login_btn:hover{
     color: #fff;
-    border:2px solid cadetblue;
-    background-color:cadetblue
+    border:2px solid #df3e32;
+    background-color:tomato
 }
 
 .btn-outline-danger {

@@ -1,6 +1,8 @@
-.messages-container {
-    height: 40vh;
+.messages {
     overflow-y: scroll;
     text-decoration-line: none;
+    margin-right: -43px;
+    height: 80vh;
 }
+
 

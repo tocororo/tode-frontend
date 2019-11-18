@@ -9,10 +9,16 @@ import { clearErrors } from '../../actions/ErrorAction'
 import { faUser, faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+const roles={
+    AUTHOR: 'Autor',
+    EDITOR: 'Editor',
+    REVIEWER: 'Revisor'
+}
+
 const options = [
-    { value: 'Autor', label: 'Autor' },
-    { value: 'Editor', label: 'Editor' },
-    { value: 'Revisor', label: 'Revisor' },
+    { value: roles.AUTHOR, label: 'Autor' },
+    { value: roles.EDITOR, label: 'Editor' },
+    { value: roles.REVIEWER, label: 'Revisor' },
 ];
 
 
@@ -23,7 +29,7 @@ class RegisterModal extends Component {
         name: "",
         email: "",
         password: "",
-        rol: "",
+        rol: [],
         msg: null,
         slectedOptiom: null
 
@@ -65,12 +71,17 @@ class RegisterModal extends Component {
     }
 
     selectChange = (Option) => {
+        const selected_roles = new Array(Option.lengt)
+        for (let i = 0; i < Option.length; i++) {
+            selected_roles[i] = Option[i].value + " | " ;            
+        }       
         this.setState({
             selectedOption: Option.value,
-            rol: Option.value
-        })
+            rol: selected_roles
+        })            
+       
 
-        console.log('Ha seleccionado el rol de: ', Option.value);
+        console.log('Ha seleccionado el rol de: ', roles);
 
     }
 
@@ -125,7 +136,7 @@ class RegisterModal extends Component {
                                         <Select placeholder="Seleccione su Rol(es)" className="col-md-8 col-offset-4"
                                             onChange={this.selectChange}
                                             components={makeAnimated()}
-                                            //isMulti
+                                            isMulti
                                             options={options}
                                         />
                                     </div>

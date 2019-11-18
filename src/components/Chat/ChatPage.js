@@ -42,12 +42,12 @@ class ChatPage extends Component {
 
 
         return (
-            <Grid>
+            <Grid className="grid">
 
-                <Grid.Column width={4} />
+                <Grid.Column width={1} />
 
-                <Grid.Column width={8}>
-                    <Grid.Row className="messages-container">
+                <Grid.Column className="messages-container" width={12}>
+                    <Grid.Row className="messages">
                         {this.state.messages.length > 0 ?
                             <MessagesContainer messages={this.state.messages} />
                             :
@@ -59,7 +59,7 @@ class ChatPage extends Component {
                     </Grid.Row>
                 </Grid.Column>
 
-                <Grid.Column width={4} />
+                <Grid.Column width={1} />
 
             </Grid>
         );

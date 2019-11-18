@@ -5,6 +5,7 @@ export const EDIT_SUCCES = 'EDIT_SUCCES';
 export const EDIT_FAIL = 'EDIT_FAIL';
 export const GET_DOCUMENTS = 'GET_DOCUMENTS';
 export const GET_DOCUMENT = 'GET_DOCUMENT';
+export const ADD_DOCUMENT = 'ADD_DOCUMENT';
 
 export const DELETE_USER = 'DELETE_USER';
 export const ITEMS_LOADING = 'ITEMS_LOADING';

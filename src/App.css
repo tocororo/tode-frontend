@@ -1,0 +1,17 @@
+div.center{
+    min-height: 91vh;
+}
+
+
+.end,.start {
+    padding-top: 41.5vh;
+    min-height: 91vh;
+}
+
+.doc, .chats{
+    height: 25px;
+    width: 25px;
+}
+
+
+

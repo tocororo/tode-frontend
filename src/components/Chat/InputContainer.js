@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'semantic-ui-react';
+import '../../css/ChatPage.css'
 
 
 import { connect } from 'react-redux'
@@ -24,12 +25,12 @@ class InputContainer extends Component {
 
         const { user } = this.props.auth
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form className="input" onSubmit={this.handleSubmit}>
 
                 <Form.Input
                     placeholder="Escribe aqui..."
                     value={this.state.content}
-                    onChange={(e) => { user ? this.setState({ content: e.target.value, sender: user.name }) : this.setState({ content: "", sener: "" }) }}
+                    onChange={(e) => { user ? this.setState({ content: e.target.value, sender: user.name }) : this.setState({ content: "", sender: "" }) }}
                     required
                 />
             </Form>

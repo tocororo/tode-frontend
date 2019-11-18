@@ -1,5 +1,6 @@
 .dropdownMenu{
-    background-color: rgb(95, 145, 160);
+    background-color: tomato;
+    color: white;
 }
 
 .register_login{
@@ -8,19 +9,53 @@
     margin-left: 5px;
     margin-right: 5px;
     background-color:white;
-    color: cadetblue;
-    border: 2px solid cadetblue;  
+    color: #df3e32;
+    border: 2px solid #df3e32;  
 
 }
 
 .register_login:hover{
-    background-color:cadetblue ;
+    background-color:#1d314d ;
+    border: 2px solid #df3e32;
+}
+
+.DropdownToggle{
+    background-color: tomato;
+    
+}
+
+.DropdownToggle:hover{
+    background-color: #df3e32
 }
 
 .dropdownItem:hover{
-    background-color: rgb(95, 145, 160)
+    background-color: #df3e32
 }
 
-.menu{
-    position:sticky;
+div.menu {
+    position: -webkit-sticky ;
+    position: sticky ;
+    top: 0;
 }
+
+.menu .navbar{
+    background-color:#1d314d;
+}
+
+.logout{
+    background-color: tomato
+}
+
+.logout:hover{
+    background-color: #df3e32
+}
+
+.nav-link:hover{
+    margin: 0px 5px 0px 5px;
+}
+
+.nav-link:hover{
+    border:1px solid #df3e32;
+    border-radius: 5px;
+}
+
