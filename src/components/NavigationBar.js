@@ -18,14 +18,14 @@ import { logout } from '../actions/AuthAction'
 
 class NavigationBar extends Component {
 
-    state = { activeIndex: -1 }
+    state = { activeIndex: 0 }
 
     handleClick = (e, titleProps) => {
-        const { index } = titleProps
-        const { activeIndex } = this.state
-        const newIndex = activeIndex === index ? -1 : index
-
-        this.setState({ activeIndex: newIndex })
+      const { index } = titleProps
+      const { activeIndex } = this.state
+      const newIndex = activeIndex === index ? -1 : index
+  
+      this.setState({ activeIndex: newIndex })
     }
 
 
@@ -39,33 +39,23 @@ class NavigationBar extends Component {
     render() {
 
         const Documentos = (
-
-            <Grid textAlign='left'>
-                <Grid.Row columns={1}>
-                    <Grid.Column>
-                        <Link className="nav-link " to="/new_document">Nuevo Documentos</Link>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Link className="nav-link " to="/document">Biblioteca</Link>
-                    </Grid.Column>
-                </Grid.Row>
-
-            </Grid>
+             <table className="table  table-borderless">
+                <tr>
+                    <tr scope="col"> <Link className="nav-link " to="/document">Biblioteca</Link> </tr>
+                    <tr scope="col">  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></tr>
+                </tr>
+             </table>
+            
 
         )
 
         const User = (
-
-            <Grid textAlign='left'>
-                <Grid.Row columns={1}>
-                    <Grid.Column>
-                        <Link className="nav-link " to="/user">Usuarios</Link>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Link className="nav-link " onClick={this.props.logout}>Salir</Link>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+ <table className="table  table-borderless">
+               
+                    <tr scope="col"> <Link className="nav-link " to="/user">Usuario</Link> </tr>
+                    <tr scope="col">  <Link className="nav-link " onClick={this.props.logout}>Salir</Link></tr>
+                
+             </table>
 
         )
 

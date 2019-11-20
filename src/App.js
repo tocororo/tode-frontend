@@ -32,12 +32,13 @@ import { GoThreeBars } from 'react-icons/go'
 
 const VerticalSidebarDoc = ({ animation, direction, visible }) => (
   <Sidebar
-    as={Menu}
     animation={animation}
     direction={direction}
     vertical
     visible={visible}
+    width="thin"
   >
+  
     <NavigationBar />
   </Sidebar>
 )

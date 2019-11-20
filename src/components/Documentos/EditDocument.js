@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom';
 import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -48,6 +49,7 @@ class NewDocument extends Component {
         const { coment, document_user, document } = this.state;
         const newDoc = { coment, document_user, document };
         this.props.newDocument_version(newDoc);
+        this.props.history.push('/document');
 
 
     }
@@ -87,4 +89,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument_version })(NewDocument)
+export default connect(mapStateToProps, { newDocument_version }) (withRouter(NewDocument))

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom';
 import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -38,7 +39,7 @@ class NewDocument extends Component {
     OnChange = e => {
 
 
-        this.setState({ [e.target.name]: e.target.value, });
+        this.setState({ [e.target.name]: e.target.value,});
         const { user } = this.props.auth
         user ? this.setState({ document_user: user._id }) : this.setState({ document_user: "" })
 
@@ -49,10 +50,8 @@ class NewDocument extends Component {
 
         const { name, coment, document_user } = this.state;
         const newDoc = { name, coment, document_user };
-        const newDoc_version = { coment, document_user };
         this.props.newDocument(newDoc);
-        this.props.newDocument_version(newDoc_version);
-
+        this.props.history.push('/document');
     }
 
     render() {
@@ -101,4 +100,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument, getDocument, newDocument_version })(NewDocument)
+export default connect(mapStateToProps, { newDocument, getDocument, newDocument_version }) (withRouter(NewDocument))
