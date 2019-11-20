@@ -9,7 +9,7 @@ import { clearErrors } from '../../actions/ErrorAction'
 import { faUser, faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const roles={
+const roles = {
     AUTHOR: 'Autor',
     EDITOR: 'Editor',
     REVIEWER: 'Revisor'
@@ -73,15 +73,12 @@ class RegisterModal extends Component {
     selectChange = (Option) => {
         const selected_roles = new Array(Option.lengt)
         for (let i = 0; i < Option.length; i++) {
-            selected_roles[i] = Option[i].value + " | " ;            
-        }       
+            selected_roles[i] = Option[i].value + " | ";
+        }
         this.setState({
             selectedOption: Option.value,
             rol: selected_roles
-        })            
-       
-
-        console.log('Ha seleccionado el rol de: ', roles);
+        })
 
     }
 

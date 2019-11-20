@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { Button, Modal, ModalBody, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -7,6 +6,7 @@ import { login } from '../../actions/AuthAction'
 import { clearErrors } from '../../actions/ErrorAction'
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Avatar from '../../assets/Avatar.png'
 import '../../css/login.css';
 
 
@@ -78,7 +78,7 @@ class LoginModal extends Component {
 
                     <ModalBody className="">
 
-                        <img id="profile-img" alt="" className="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+                        <img id="profile-img" alt="" className="profile-img-card" src={Avatar} />
                         {this.state.msg ? (<div className="alert alert-danger" role="alert">
                             <strong>{this.state.msg}</strong>
                         </div>) : null}

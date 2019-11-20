@@ -1,5 +1,5 @@
 .messages {
-    overflow-y: scroll;
+    overflow-y: auto;
     text-decoration-line: none;
     margin-right: -43px;
     height: 80vh;

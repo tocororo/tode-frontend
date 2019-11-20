@@ -3,19 +3,3 @@
     height: 91vh;
     background-color: #1d314d;
 }
-*, :after, :before{
-    
-}
-
-table{
-    margin-right: -2vh;
-}
-
-.documents-container .list-group{
-    margin-top: 2vh;
-}
-
-.documents-container .list-group .list-group-item{
-    background-color: snow;
-    color: #1d314d;
-}

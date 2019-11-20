@@ -2,21 +2,19 @@ import React, { Component } from 'react'
 import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getDocument, newDocument } from '../../actions/DocumentAction'
 import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
 
 class NewDocument extends Component {
     state = {
         _id: "",
-        name: "",
         coment: "",
+        document: "",
         document_user: "",
         editing: false
     }
 
     static propTypes = {
-        newDocument: PropTypes.func.isRequired,
         newDocument_version: PropTypes.func.isRequired,
         auth: PropTypes.object.isRequired
     }
@@ -26,8 +24,8 @@ class NewDocument extends Component {
             this.setState({
                 editing: true,
                 _id: this.props.match.params.id,
-                name: res.data.name,
                 coment: res.data.coment,
+                document: this.props.match.params.id,
                 document_user: res.data.document_user
             })
             console.log(res.data);
@@ -47,11 +45,10 @@ class NewDocument extends Component {
     OnSubmit = (e) => {
         e.preventDefault();
 
-        const { name, coment, document_user } = this.state;
-        const newDoc = { name, coment, document_user };
-        const newDoc_version = { coment, document_user };
-        this.props.newDocument(newDoc);
-        this.props.newDocument_version(newDoc_version);
+        const { coment, document_user, document } = this.state;
+        const newDoc = { coment, document_user, document };
+        this.props.newDocument_version(newDoc);
+
 
     }
 
@@ -60,15 +57,7 @@ class NewDocument extends Component {
 
             <Form onSubmit={this.OnSubmit}>
                 <FormGroup>
-                    <Input
-                        type="text"
-                        id="name"
-                        className=" form-control"
-                        placeholder="Nombre del documento"
-                        name="name"
-                        onChange={this.OnChange}
-                        required
-                    />
+
                     <Input
                         type="text"
                         id="coment"
@@ -76,6 +65,7 @@ class NewDocument extends Component {
                         placeholder="Comentario sobre el documento"
                         name="coment"
                         onChange={this.OnChange}
+                        value={this.state.coment}
                         required
                     />
 
@@ -89,16 +79,12 @@ class NewDocument extends Component {
 
 NewDocument.propTypes = {
     newDocument_version: PropTypes.func.isRequired,
-    newDocument: PropTypes.func.isRequired,
-    getDocument: PropTypes.func.isRequired,
-    doc: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    doc: state.doc,
     doc_version: state.doc_version,
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument, getDocument, newDocument_version })(NewDocument)
+export default connect(mapStateToProps, { newDocument_version })(NewDocument)

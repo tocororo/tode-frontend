@@ -1,12 +1,14 @@
-export const GET_USERS = 'GET_USERS';
-export const ADD_USER = 'ADD_USER';
-
 export const EDIT_SUCCES = 'EDIT_SUCCES';
 export const EDIT_FAIL = 'EDIT_FAIL';
-export const GET_DOCUMENTS = 'GET_DOCUMENTS';
+
 export const GET_DOCUMENT = 'GET_DOCUMENT';
 export const ADD_DOCUMENT = 'ADD_DOCUMENT';
 
+export const GET_DOCUMENT_VERSION = 'GET_DOCUMENT_VERSION';
+export const ADD_DOCUMENT_VERSION = 'ADD_DOCUMENT_VERSION';
+
+export const GET_USERS = 'GET_USERS';
+export const ADD_USER = 'ADD_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const ITEMS_LOADING = 'ITEMS_LOADING';
 export const USER_LOADING = 'USER_LOADING';

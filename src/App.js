@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {
   Button,
+  Menu,
   Segment,
   Sidebar,
 } from 'semantic-ui-react'
@@ -21,21 +22,23 @@ import Editar from './components/Editar'
 import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
 import NewDocument from './components/Documentos/NewDocument'
-import ViewDocument from './components/Documentos/ViewDocument'
+import EditDocument from './components/Documentos/EditDocument'
 
 
-import {  MdChat } from 'react-icons/md'
-import { IoMdDocument } from 'react-icons/io'
+import { MdChat } from 'react-icons/md'
+import { GoThreeBars } from 'react-icons/go'
 
 
 
 const VerticalSidebarDoc = ({ animation, direction, visible }) => (
-  <Sidebar    
+  <Sidebar
+    as={Menu}
     animation={animation}
     direction={direction}
+    vertical
     visible={visible}
   >
-  <Documentos/>   
+    <NavigationBar />
   </Sidebar>
 )
 VerticalSidebarDoc.propTypes = {
@@ -45,13 +48,13 @@ VerticalSidebarDoc.propTypes = {
 }
 
 const VerticalSidebarChat = ({ animation, direction, visible }) => (
-  <Sidebar    
+  <Sidebar
     animation={animation}
     direction={direction}
     visible={visible}
   >
-   <ChatPage/>
-   
+    <ChatPage />
+
   </Sidebar>
 )
 
@@ -66,24 +69,24 @@ class App extends Component {
 
   componentDidMount() {
     store.dispatch(loadUsers())
-    }
+  }
 
-    state = {
-      animation: 'overlay',
-      direction: 'left',
-      dimmed: false,
-      visible: false,
-    }
-  
-    handleChangerigth = (direction,animation) => () =>{
-      this.setState({ direction}) 
-      this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-    }
+  state = {
+    animation: 'overlay',
+    direction: 'left',
+    dimmed: false,
+    visible: false,
+  }
 
-    handleChangeleft = (direction,animation) => () =>{
-      this.setState({ direction}) 
-      this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-    }
+  handleChangerigth = (direction, animation) => () => {
+    this.setState({ direction })
+    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
+  }
+
+  handleChangeleft = (direction, animation) => () => {
+    this.setState({ direction })
+    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
+  }
 
   render() {
     const { animation, dimmed, direction, visible } = this.state
@@ -91,65 +94,66 @@ class App extends Component {
     return (
       <Router>
         <Provider store={store}>
-          <NavigationBar />
 
-      <div>     
-        <Sidebar.Pushable as={Segment}>        
-         
-        {direction === "left" ? 
-            <VerticalSidebarDoc
-              animation={animation}
-              direction={direction}
-              visible={visible}
-            />
-           :
-          
-            <VerticalSidebarChat
-              animation={animation}
-              direction={direction}
-              visible={visible}
-            />
-          }
-          
 
-          <Sidebar.Pusher dimmed={dimmed && visible}>
-            <div className=" d-flex justify-content-between">
-            <div className="start">
-        <Button 
-        className="button" 
-        active={direction === 'left'}
-        onClick={this.handleChangeleft('left')}>
-        
-        <IoMdDocument className="doc" /> 
-        </Button>
-        
-        </div>     
-         
-        <div className="center">
-            <Segment basic>
-            <Route path="/" exact component={Home} />
-            <Route path="/users" component={Users} />
-            <Route path="/editar" component={Editar} />
-            <Route path="/new_document/" component={NewDocument} />
-            <Route path="/edit_document/:id" component={NewDocument} />
-            <Route path="/view_document/:id" component={ViewDocument} />
-           
-            </Segment>
-            </div>
-            <div className="end">
-        <Button 
-        className="button" 
-        active={direction === 'right'}
-        onClick={this.handleChangerigth('right')}>
-        
-        <MdChat className="chats" />
-        </Button>        
-        </div>        
-            </div>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
+          <div>
+            <Sidebar.Pushable as={Segment}>
 
-      </div>
+              {direction === "left" ?
+                <VerticalSidebarDoc
+                  animation={animation}
+                  direction={direction}
+                  visible={visible}
+                />
+                :
+
+                <VerticalSidebarChat
+                  animation={animation}
+                  direction={direction}
+                  visible={visible}
+                />
+              }
+
+
+              <Sidebar.Pusher dimmed={dimmed && visible}>
+                <div className=" d-flex justify-content-between">
+                  <div className="start">
+                    <Button
+                      className="button"
+                      active={direction === 'left'}
+                      onClick={this.handleChangeleft('left')}>
+
+                      <GoThreeBars className="doc" />
+                    </Button>
+
+                  </div>
+
+                  <div className="center">
+                    <Segment basic>
+                      <Route path="/" exact component={Home} />
+                      <Route path="/users" component={Users} />
+                      <Route path="/editar" component={Editar} />
+                      <Route path="/document/" component={Documentos} />
+                      <Route path="/new_document/" component={NewDocument} />
+                      <Route path="/edit_document/:id" component={EditDocument} />
+
+
+                    </Segment>
+                  </div>
+                  <div className="end">
+                    <Button
+                      className="button"
+                      active={direction === 'right'}
+                      onClick={this.handleChangerigth('right')}>
+
+                      <MdChat className="chats" />
+                    </Button>
+                  </div>
+                </div>
+              </Sidebar.Pusher>
+            </Sidebar.Pushable>
+
+          </div>
         </Provider>
       </Router>
     );
