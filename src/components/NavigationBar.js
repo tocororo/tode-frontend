@@ -1,13 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-
-
-import {
-    Accordion, Grid,
-    Menu
-} from 'semantic-ui-react'
-
+import { Accordion, Menu} from 'semantic-ui-react'
 import RegisterModal from './User/Register'
 import LoginModal from './User/Login'
 import '../css/navigationBar.css';
@@ -41,8 +35,8 @@ class NavigationBar extends Component {
         const Documentos = (
              <table className="table  table-borderless">
                 <tr>
-                    <tr scope="col"> <Link className="nav-link " to="/document">Biblioteca</Link> </tr>
-                    <tr scope="col">  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></tr>
+                    <tr> <Link className="nav-link " to="/document">Biblioteca</Link> </tr>
+                    <tr>  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></tr>
                 </tr>
              </table>
             
@@ -52,8 +46,8 @@ class NavigationBar extends Component {
         const User = (
  <table className="table  table-borderless">
                
-                    <tr scope="col"> <Link className="nav-link " to="/user">Usuario</Link> </tr>
-                    <tr scope="col">  <Link className="nav-link " onClick={this.props.logout}>Salir</Link></tr>
+                    <tr> <Link className="nav-link " to="/user">Usuario</Link> </tr>
+                    <tr>  <Link className="nav-link " onClick={this.props.logout}>Salir</Link></tr>
                 
              </table>
 

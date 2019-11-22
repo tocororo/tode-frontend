@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import {
-  Button,
-  Menu,
-  Segment,
-  Sidebar,
-} from 'semantic-ui-react'
+import {Button, Segment, Sidebar,} from 'semantic-ui-react'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/react-fontawesome'

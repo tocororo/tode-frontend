@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { getDocument, newDocument } from '../../actions/DocumentAction'
 import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
+var fs = require('browserify-fs');
 
 class NewDocument extends Component {
     state = {
@@ -47,10 +48,16 @@ class NewDocument extends Component {
 
     OnSubmit = (e) => {
         e.preventDefault();
-
         const { name, coment, document_user } = this.state;
         const newDoc = { name, coment, document_user };
         this.props.newDocument(newDoc);
+        fs.mkdir(__dirname, function() {
+            fs.writeFile(`/${__dirname}/hello-world.txt`, 'Hello world!\n', function() {
+                fs.readFile(`/${__dirname}/hello-world.txt`, 'utf-8', function(err, data) {
+                    console.log(data);
+                });
+            });
+        });
         this.props.history.push('/document');
     }
 
