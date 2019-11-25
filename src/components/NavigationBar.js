@@ -12,7 +12,7 @@ import { logout } from '../actions/AuthAction'
 
 class NavigationBar extends Component {
 
-    state = { activeIndex: 0 }
+    state = { activeIndex: -1 }
 
     handleClick = (e, titleProps) => {
       const { index } = titleProps
@@ -34,10 +34,14 @@ class NavigationBar extends Component {
 
         const Documentos = (
              <table className="table  table-borderless">
+                 <tbody>
                 <tr>
-                    <tr> <Link className="nav-link " to="/document">Biblioteca</Link> </tr>
-                    <tr>  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></tr>
+                    <th> <Link className="nav-link " to="/document">Biblioteca</Link> </th>
                 </tr>
+                <tr>
+                    <th>  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></th>
+                </tr>
+                </tbody>
              </table>
             
 
@@ -45,10 +49,14 @@ class NavigationBar extends Component {
 
         const User = (
  <table className="table  table-borderless">
-               
-                    <tr> <Link className="nav-link " to="/user">Usuario</Link> </tr>
-                    <tr>  <Link className="nav-link " onClick={this.props.logout}>Salir</Link></tr>
-                
+               <tbody>
+                    <tr>
+                        <th> <Link className="nav-link " to="/user">Usuario</Link> </th>
+                    </tr>
+                    <tr>
+                        <th>  <Link className="nav-link " onClick={this.props.logout} to="/">Salir</Link> </th>
+                    </tr>
+               </tbody>
              </table>
 
         )

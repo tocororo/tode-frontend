@@ -4,9 +4,8 @@ import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { getDocument, newDocument } from '../../actions/DocumentAction'
-import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
-var fs = require('browserify-fs');
+import { TextArea } from 'semantic-ui-react';
 
 class NewDocument extends Component {
     state = {
@@ -19,7 +18,6 @@ class NewDocument extends Component {
 
     static propTypes = {
         newDocument: PropTypes.func.isRequired,
-        newDocument_version: PropTypes.func.isRequired,
         auth: PropTypes.object.isRequired
     }
     async componentDidMount() {
@@ -32,7 +30,6 @@ class NewDocument extends Component {
                 coment: res.data.coment,
                 document_user: res.data.document_user
             })
-            console.log(res.data);
 
         }
     }
@@ -51,13 +48,6 @@ class NewDocument extends Component {
         const { name, coment, document_user } = this.state;
         const newDoc = { name, coment, document_user };
         this.props.newDocument(newDoc);
-        fs.mkdir(__dirname, function() {
-            fs.writeFile(`/${__dirname}/hello-world.txt`, 'Hello world!\n', function() {
-                fs.readFile(`/${__dirname}/hello-world.txt`, 'utf-8', function(err, data) {
-                    console.log(data);
-                });
-            });
-        });
         this.props.history.push('/document');
     }
 
@@ -75,7 +65,7 @@ class NewDocument extends Component {
                         onChange={this.OnChange}
                         required
                     />
-                    <Input
+                    <TextArea
                         type="text"
                         id="coment"
                         className=" form-control"
@@ -94,7 +84,6 @@ class NewDocument extends Component {
 }
 
 NewDocument.propTypes = {
-    newDocument_version: PropTypes.func.isRequired,
     newDocument: PropTypes.func.isRequired,
     getDocument: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
@@ -103,8 +92,7 @@ NewDocument.propTypes = {
 
 const mapStateToProps = (state) => ({
     doc: state.doc,
-    doc_version: state.doc_version,
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument, getDocument, newDocument_version }) (withRouter(NewDocument))
+export default connect(mapStateToProps, { newDocument, getDocument }) (withRouter(NewDocument))

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
-import { Button, Form, FormGroup, Input } from 'reactstrap'
+import { Button, Form, FormGroup } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
+import { TextArea } from 'semantic-ui-react';
 
-class NewDocument extends Component {
+class EditDocument extends Component {
     state = {
         _id: "",
         coment: "",
@@ -29,8 +30,6 @@ class NewDocument extends Component {
                 document: this.props.match.params.id,
                 document_user: res.data.document_user
             })
-            console.log(res.data);
-
         }
     }
 
@@ -60,7 +59,7 @@ class NewDocument extends Component {
             <Form onSubmit={this.OnSubmit}>
                 <FormGroup>
 
-                    <Input
+                    <TextArea
                         type="text"
                         id="coment"
                         className=" form-control"
@@ -79,7 +78,7 @@ class NewDocument extends Component {
     }
 }
 
-NewDocument.propTypes = {
+EditDocument.propTypes = {
     newDocument_version: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 }
@@ -89,4 +88,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument_version }) (withRouter(NewDocument))
+export default connect(mapStateToProps, { newDocument_version }) (withRouter(EditDocument))

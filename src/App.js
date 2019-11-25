@@ -17,7 +17,10 @@ import Editar from './components/Editar'
 import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
 import NewDocument from './components/Documentos/NewDocument'
+import ViewDocumentContent from './components/Documentos/ViewDocumentContent'
+import ViewDocumentVersionContent from './components/Documentos/ViewDocumentVersionContent'
 import EditDocument from './components/Documentos/EditDocument'
+import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
 
 
 import { MdChat } from 'react-icons/md'
@@ -29,7 +32,6 @@ const VerticalSidebarDoc = ({ animation, direction, visible }) => (
   <Sidebar
     animation={animation}
     direction={direction}
-    vertical
     visible={visible}
     width="thin"
   >
@@ -131,7 +133,10 @@ class App extends Component {
                       <Route path="/editar" component={Editar} />
                       <Route path="/document/" component={Documentos} />
                       <Route path="/new_document/" component={NewDocument} />
+                      <Route path="/view_document/:id" component={ViewDocumentContent} />
+                      <Route path="/view_document_version/:id" component={ViewDocumentVersionContent} />
                       <Route path="/edit_document/:id" component={EditDocument} />
+                      <Route path="/edit_document_version/:id" component={EditDocumentVersion} />
 
 
                     </Segment>
