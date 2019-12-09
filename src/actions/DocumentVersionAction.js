@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { GET_DOCUMENT_VERSION, ADD_DOCUMENT } from './types'
+import {tokenConfig} from './AuthAction'
 
 
-
-export const getDocument_version = () => dispatch => {
-    axios.get('/document_version').then(res => dispatch({
+export const getDocument_version = () => (dispatch, getState) => {
+    axios.get('/document_version', tokenConfig(getState)).then(res => dispatch({
         type: GET_DOCUMENT_VERSION,
         payload: res.data
     }))

@@ -1,13 +1,11 @@
-.menu-lateral{
-    
-}
+
 .register_login{
     border-radius: 5px;
     background-color:white;
     color: #df3e32;
     border: 2px solid #df3e32;  
     width: 100%;
-
+    margin: 5px;
 }
 
 .register_login:hover{
@@ -15,9 +13,8 @@
     border: 2px solid #df3e32;
 }
 
-.DropdownToggle{
-    background-color: tomato;
-    
+.navbar-brand{
+    text-align: center;
 }
 
 
@@ -30,12 +27,20 @@
 }
 
 .nav-link{
-    width: 25vh;
+    color: gray;
+}
+.nav-link:hover{
     color: black;
 }
 
-
+.table{
+    text-align: left;
+}
 
 .menu-item{
    font-size: 50px;
+}
+
+.edit{
+background-color: orange;
 }

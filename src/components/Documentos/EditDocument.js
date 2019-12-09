@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
-import { Button, Form, FormGroup } from 'reactstrap'
+import { Button, Form, TextArea } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
-import { TextArea } from 'semantic-ui-react';
 
 class EditDocument extends Component {
     state = {
@@ -57,21 +56,21 @@ class EditDocument extends Component {
         return (
 
             <Form onSubmit={this.OnSubmit}>
-                <FormGroup>
+                <Form.Field>
 
                     <TextArea
+                        style={{ minHeight: 100}}
                         type="text"
                         id="coment"
-                        className=" form-control"
-                        placeholder="Comentario sobre el documento"
                         name="coment"
                         onChange={this.OnChange}
                         value={this.state.coment}
                         required
                     />
-
-                    <Button type="submit"> Crear </Button>
-                </FormGroup>
+                </Form.Field>
+                <Form.Field>
+                    <Button type="submit"> Guardar </Button>
+                </Form.Field>
             </Form>
 
         )

@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
-import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { getDocument, newDocument } from '../../actions/DocumentAction'
-import axios from 'axios'
-import { TextArea } from 'semantic-ui-react';
+import { TextArea,Button, Form, Input } from 'semantic-ui-react';
 
 class NewDocument extends Component {
     state = {
@@ -19,19 +17,6 @@ class NewDocument extends Component {
     static propTypes = {
         newDocument: PropTypes.func.isRequired,
         auth: PropTypes.object.isRequired
-    }
-    async componentDidMount() {
-        if (this.props.match.params.id) {
-            const res = await axios.get(`/document/${this.props.match.params.id}`)
-            this.setState({
-                editing: true,
-                _id: this.props.match.params.id,
-                name: res.data.name,
-                coment: res.data.coment,
-                document_user: res.data.document_user
-            })
-
-        }
     }
 
     OnChange = e => {
@@ -55,28 +40,30 @@ class NewDocument extends Component {
         return (
 
             <Form onSubmit={this.OnSubmit}>
-                <FormGroup>
+                <Form.Field>
                     <Input
                         type="text"
                         id="name"
-                        className=" form-control"
                         placeholder="Nombre del documento"
                         name="name"
                         onChange={this.OnChange}
-                        required
+                        required                     
                     />
+                </Form.Field>
+                <Form.Field>
                     <TextArea
+                        style={{ minHeight: 100}}
                         type="text"
                         id="coment"
-                        className=" form-control"
                         placeholder="Comentario sobre el documento"
                         name="coment"
                         onChange={this.OnChange}
                         required
                     />
-
-                    <Button type="submit"> Crear </Button>
-                </FormGroup>
+                </Form.Field>
+                <Form.Field>
+                    <Button type="submit"> Guardar </Button>
+                </Form.Field>
             </Form>
 
         )

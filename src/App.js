@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {Button, Segment, Sidebar,} from 'semantic-ui-react'
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/react-fontawesome'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import store from './store'
 import { loadUsers } from './actions/AuthAction'
+import styled from 'styled-components'
 
 
 import NavigationBar from './components/NavigationBar';
@@ -26,10 +26,25 @@ import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
 import { MdChat } from 'react-icons/md'
 import { GoThreeBars } from 'react-icons/go'
 
+const MySidebar = styled(Sidebar)`
+  &&& {
+    background-color:#1d314d;
+  }
+`
+const MyButton = styled(Button)`
+&&&{
+    background-color:#1d314d;
+    color:white;
+}
 
+&&&:hover{
+  background-color:#0f1d31;
+  color:whitesmoke;
+}
+`
 
 const VerticalSidebarDoc = ({ animation, direction, visible }) => (
-  <Sidebar
+  <MySidebar
     animation={animation}
     direction={direction}
     visible={visible}
@@ -37,7 +52,7 @@ const VerticalSidebarDoc = ({ animation, direction, visible }) => (
   >
   
     <NavigationBar />
-  </Sidebar>
+  </MySidebar>
 )
 VerticalSidebarDoc.propTypes = {
   animation: PropTypes.string,
@@ -92,10 +107,8 @@ class App extends Component {
     return (
       <Router>
         <Provider store={store}>
-
-
           <div>
-            <Sidebar.Pushable as={Segment}>
+            <MySidebar.Pushable as={Segment}>
 
               {direction === "left" ?
                 <VerticalSidebarDoc
@@ -113,16 +126,16 @@ class App extends Component {
               }
 
 
-              <Sidebar.Pusher dimmed={dimmed && visible}>
-                <div className=" d-flex justify-content-between">
+              <MySidebar.Pusher dimmed={dimmed && visible}>
+                <div className="container">
                   <div className="start">
-                    <Button
+                    <MyButton
                       className="button"
                       active={direction === 'left'}
                       onClick={this.handleChangeleft('left')}>
 
                       <GoThreeBars className="doc" />
-                    </Button>
+                    </MyButton>
 
                   </div>
 
@@ -142,17 +155,17 @@ class App extends Component {
                     </Segment>
                   </div>
                   <div className="end">
-                    <Button
+                    <MyButton
                       className="button"
                       active={direction === 'right'}
                       onClick={this.handleChangerigth('right')}>
 
                       <MdChat className="chats" />
-                    </Button>
+                    </MyButton>
                   </div>
                 </div>
-              </Sidebar.Pusher>
-            </Sidebar.Pushable>
+              </MySidebar.Pusher>
+            </MySidebar.Pushable>
 
           </div>
         </Provider>

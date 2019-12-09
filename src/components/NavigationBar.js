@@ -1,13 +1,24 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Accordion, Menu} from 'semantic-ui-react'
+import { Accordion, Menu, Table} from 'semantic-ui-react'
 import RegisterModal from './User/Register'
 import LoginModal from './User/Login'
 import '../css/navigationBar.css';
-
 import PropTypes from 'prop-types'
 import { logout } from '../actions/AuthAction'
+import styled from 'styled-components'
+
+const MyLink = styled(Link)`
+&&&{
+    color:#df3e32;
+}
+
+&&&:hover{
+    color:tomato;
+}
+`
+
 
 
 class NavigationBar extends Component {
@@ -33,32 +44,33 @@ class NavigationBar extends Component {
     render() {
 
         const Documentos = (
-             <table className="table  table-borderless">
-                 <tbody>
-                <tr>
-                    <th> <Link className="nav-link " to="/document">Biblioteca</Link> </th>
-                </tr>
-                <tr>
-                    <th>  <Link className="nav-link " to="/new_document">Nuevo Documentos</Link></th>
-                </tr>
-                </tbody>
-             </table>
-            
-
+            <Table basic='very' celled collapsing>
+                <Table.Header>
+                    <Table.Row>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.HeaderCell><Link className="nav-link " to="/document">Biblioteca</Link></Table.HeaderCell>
+                    </Table.Row> 
+                    <Table.Row>
+                         <Table.HeaderCell><Link className="nav-link " to="/new_document">Nuevo Documento</Link></Table.HeaderCell>
+                    </Table.Row> 
+                </Table.Header>
+            </Table>             
         )
 
         const User = (
- <table className="table  table-borderless">
-               <tbody>
-                    <tr>
-                        <th> <Link className="nav-link " to="/user">Usuario</Link> </th>
-                    </tr>
-                    <tr>
-                        <th>  <Link className="nav-link " onClick={this.props.logout} to="/">Salir</Link> </th>
-                    </tr>
-               </tbody>
-             </table>
-
+            <Table basic='very' celled collapsing>
+                <Table.Header>
+                    <Table.Row>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.HeaderCell><Link className="nav-link " to="/user">Perfil</Link></Table.HeaderCell>
+                    </Table.Row> 
+                    <Table.Row>
+                         <Table.HeaderCell><Link className="nav-link " onClick={this.props.logout} to="/">Salir</Link></Table.HeaderCell>
+                    </Table.Row> 
+                </Table.Header>
+            </Table>   
         )
 
         const { activeIndex } = this.state
@@ -115,7 +127,7 @@ class NavigationBar extends Component {
         return (
             <div className="menu-lateral">
                 <Menu.Item >
-                    <Link className="navbar-brand" to='/'>TocororoEAC</Link>
+                    <MyLink className="navbar-brand" to='/'> <h1>TODE</h1></MyLink>
                 </Menu.Item>
                 {isAuthenticated ? authLinks : gestLinks}
 

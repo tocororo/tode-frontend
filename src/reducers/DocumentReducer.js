@@ -7,6 +7,7 @@ export default function (state = initialState, action) {
     switch (action.type) {
        
         case GET_DOCUMENT:
+                
             return {
                 ...state,
                 docs: action.payload

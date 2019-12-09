@@ -1,10 +1,9 @@
 import axios from 'axios'
 import {  GET_DOCUMENT, ADD_DOCUMENT, DELETE_DOCUMENT } from './types'
+import {tokenConfig} from './AuthAction'
 
-
-
-export const getDocument = () => dispatch => {
-    axios.get('/document').then(res => dispatch({
+export const getDocument = () => (dispatch, getSate) => {
+    axios.get('/document',tokenConfig(getSate)).then(res => dispatch({
         type: GET_DOCUMENT,
         payload: res.data
     }))
@@ -17,7 +16,7 @@ export const getDocumentById= (id) => dispatch => {
     }))
 };
 
-export const     newDocument = doc => dispatch => {
+export const newDocument = doc => dispatch => {
     axios.post('/new_document',doc).then(res => dispatch({
         type: ADD_DOCUMENT,
         payload: res.data

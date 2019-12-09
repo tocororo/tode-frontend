@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {TextArea } from 'semantic-ui-react'
 
 
 
@@ -19,7 +20,7 @@ class ViewDocumentContent extends Component {
     render() {
 
         return (
-            <textarea name="content" id="" cols="30" rows="10" value={this.state.content}>  </textarea>
+            <TextArea name="content" id="" cols="30" rows="10" value={this.state.content}>  </TextArea>
         
         )
     }

@@ -25,6 +25,13 @@
     border-bottom: 0;
 }
 
+.input-group{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
 
 .input-group-prepend span{
     width: 50px;
@@ -96,5 +103,5 @@ input:focus{
     white-space: nowrap;
     background-color: #e9ecef;
     border: 1px solid #ced4da;
-    border-radius: 10px;
+   
 }
