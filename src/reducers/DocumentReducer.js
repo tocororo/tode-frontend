@@ -1,6 +1,7 @@
 import {  GET_DOCUMENT, ADD_DOCUMENT, DELETE_DOCUMENT } from '../actions/types'
 const initialState = {
-    docs: []
+    docs: [],
+    doc_count:""
 }
 
 export default function (state = initialState, action) {
@@ -15,7 +16,8 @@ export default function (state = initialState, action) {
         case ADD_DOCUMENT:
             return {
              ...state,
-             docs: [action.payload, ...state.docs]
+             docs: [action.payload, ...state.docs],
+             doc_count: state.doc_count + 1
             };
             case DELETE_DOCUMENT:
             return {

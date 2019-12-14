@@ -6,6 +6,7 @@ import { getDocument, newDocument } from '../../actions/DocumentAction'
 import { TextArea,Button, Form, Input } from 'semantic-ui-react';
 
 class NewDocument extends Component {
+    
     state = {
         _id: "",
         name: "",
@@ -32,7 +33,7 @@ class NewDocument extends Component {
         e.preventDefault();
         const { name, coment, document_user } = this.state;
         const newDoc = { name, coment, document_user };
-        this.props.newDocument(newDoc);
+        this.props.newDocument(newDoc);    
         this.props.history.push('/document');
     }
 

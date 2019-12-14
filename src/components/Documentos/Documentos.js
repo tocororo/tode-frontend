@@ -7,13 +7,15 @@ import { getDocument } from '../../actions/DocumentAction'
 import { getUsers  } from '../../actions/UserAction'
 import { getPermisions } from '../../actions/PermisionAction'
 import { newPermision } from '../../actions/PermisionAction'
-import { Accordion, Icon, Form, Radio, Button, Image, Modal,Table, Divider} from 'semantic-ui-react'
+import {getUserAuth} from '../../actions/AuthAction'
+import { Accordion, Icon, Form, Radio, Button, Image, Modal,Table, List, Popup, Divider, Label, Message} from 'semantic-ui-react'
 import { faEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Moment  from 'react-moment'
 import Avatar from '../../assets/Avatar.png'
 import '../../css/DocumentsPage.css'
 import styled from 'styled-components'
+
 const MyTable = styled(Table)`
   &&& {
     background-color:#1d314d;
@@ -52,10 +54,11 @@ class Documentos extends Component {
   async componentDidMount() {
 
     fetch('/document').then(res => res.json()).then((data) => {
-      this.setState({doc:data.docs, permision:data.perms})      
+      this.setState({doc:data.docs, permision:data.perms})
+      console.log(data.docs);
+            
      })
      .catch(console.log);
-
     this.props.getUsers(); 
     this.props.getDocument_version();
   }
@@ -70,15 +73,19 @@ OnSubmit = (e) => {
         const {document_user, document} = this.state;
         const newPermision = { document_user, document };
         this.props.newPermision(newPermision);
-        this.closeModal()
+        
+        
 }
 
     render() {
         const { activeIndex } = this.state
         const { users } = this.props.user
         const { docs_version } = this.props.doc_version
+        const { doc_count } = this.props.doc        
+        const { version_count } = this.props.doc_version
         const { open } = this.state
-        
+        const { user } = this.props.auth
+
         const docs = this.state.doc
         const perms = this.state.permision
 
@@ -86,6 +93,8 @@ OnSubmit = (e) => {
       < div >          
           {
              docs.map(doc => (  
+              perms.map(perm => (
+                doc._id === perm.document._id && user._id === perm.document_user._id ? 
 
                /**
                ACCORDION FOR MAIN DOCUMENT
@@ -99,7 +108,18 @@ OnSubmit = (e) => {
                   <MyTable padded='very' inverted>
                     <Table.Header>
                      <Table.Row>
-                        <Table.HeaderCell><Icon name='dropdown' /></Table.HeaderCell>
+                     {<Moment fromNow>{doc.createdAt}</Moment> !== "a few seconds ago" && 
+                        user._id != doc.document_user._id
+                        ? 
+                        <Table.HeaderCell><Icon name='dropdown'><Label>{version_count}</Label></Icon></Table.HeaderCell>
+                        : 
+                        <Moment fromNow>{doc.createdAt}</Moment> !== "a few seconds ago" && 
+                          user._id != doc.document_user._id
+                          ?
+                          <Table.HeaderCell><Icon name='dropdown'><Label>{version_count}</Label></Icon></Table.HeaderCell>
+                          :
+                          <Table.HeaderCell><Icon name='dropdown'/></Table.HeaderCell>
+                        }
                         <Table.HeaderCell>{doc.name}</Table.HeaderCell>
                         <Table.HeaderCell>
                           <MyLink to={"/view_document/" + doc._id}>{doc.coment}</MyLink>
@@ -122,29 +142,34 @@ OnSubmit = (e) => {
                           </MyLink>
                           <Modal  className="card-login"  open={open}  onClose={this.closeModal}>
                             <Modal.Header>Otorgar Permisos al Documento a:</Modal.Header>
-                              <Modal.Content>
-                                <Form>
-                                  { users.map(user => (
-                                    doc.document_user._id != user._id ?
-                                    <Form.Field key={user.id}>
-                                      <Radio toggle 
-                                       label= {user.name}
-                                       name = "document_user"
-                                       value = {user._id}  />
-                                    </Form.Field>
-                                  :"" ))}
-                                    <Divider/>
+                              <Modal.Content scrolling>                                
+                              { users.map(usuario => (
+                                    user._id != usuario._id ?
+                                <Form onSubmit={this.OnSubmit}>
                                     <Form.Field>
-                                    <Button
-                                     type='submit'
-                                     positive
-                                     labelPosition='right'
-                                     icon='checkmark'
-                                     content='Otorgar'
-                                     onChange={this.OnChange}
-                                    />
+                                    <List >
+                                      <List.Item>
+                                        <List.Content floated='right'>
+                                        <Popup
+                                          trigger={
+                                          <Button 
+                                          doc = {doc._id}
+                                          user = {usuario._id}
+                                          onClick = {this.OnChange}
+                                          type='submit'
+                                          icon='add' />}
+                                          content="Otorgar permisios a este usuario"
+                                          basic
+                                        />
+                                        </List.Content>
+                                        <Image avatar src= {Avatar} />
+                                        <List.Content>{usuario.name}</List.Content>
+                                      </List.Item>
+                                      <Divider/>
+                                      </List>
                                     </Form.Field>
                                 </Form>
+                                :"" ))}
                              </Modal.Content>                               
                            </Modal>
                         </Table.HeaderCell>
@@ -173,7 +198,7 @@ OnSubmit = (e) => {
                               <Table.Cell><Moment fromNow>{doc_version.createdAt}</Moment></Table.Cell>
                               <Table.Cell>
                                 <MyLink className="btn btn-warning" 
-                                  to={"/dit_document_version/" + doc_version._id}>
+                                  to={"/edit_document_version/" + doc_version._id}>
                                   <FontAwesomeIcon icon={faEdit} />
                                 </MyLink>
                               </Table.Cell>
@@ -183,7 +208,10 @@ OnSubmit = (e) => {
                                             : ""))}
                     </Accordion.Content>
                   </Accordion>
+                  :""
+              ))
             ))}
+            
             </div>
         )
     }
@@ -194,8 +222,10 @@ OnSubmit = (e) => {
 const mapStateToProps = (state) => ({
     doc_version: state.doc_version,
     doc: state.doc,
-    user: state.user,
+    count: state.count,
+    user: state.user,    
+    auth: state.auth,
     permision: state.permision
 })
 
-export default connect(mapStateToProps, { getDocument_version, getDocument, getUsers,newPermision,getPermisions }) (withRouter(Documentos))
+export default connect(mapStateToProps, { getDocument_version, getDocument, getUsers,newPermision,getPermisions, getUserAuth }) (withRouter(Documentos))

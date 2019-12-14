@@ -2,6 +2,7 @@ import {
     USER_LOADING,
     USER_LOADED,
     AUTH_ERROR,
+    GET_USER_AUTH,
     LOGIN_SUCCES,
     LOGIN_FAIL,
     REGISTER_SUCCES,
@@ -20,6 +21,18 @@ export const loadUsers = () => (dispatch, getSate) => {
 
     axios.get('/user_auth', tokenConfig(getSate)).then(res => dispatch({
         type: USER_LOADED,
+        payload: res.data
+    })).catch(err => {
+        dispatch(returnErrors(err.response.data, err.response.status));
+        dispatch({
+            type: AUTH_ERROR
+        });
+    });
+};
+
+export const getUserAuth = () => (dispatch, getSate) => {
+    axios.get('/user_auth', tokenConfig(getSate)).then(res => dispatch({
+        type: GET_USER_AUTH,
         payload: res.data
     })).catch(err => {
         dispatch(returnErrors(err.response.data, err.response.status));

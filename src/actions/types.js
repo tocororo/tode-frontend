@@ -13,6 +13,7 @@ export const GET_DOCUMENT_VERSION = 'GET_DOCUMENT_VERSION';
 export const ADD_DOCUMENT_VERSION = 'ADD_DOCUMENT_VERSION';
 
 export const GET_USERS = 'GET_USERS';
+export const GET_USER_AUTH = 'GET_USER_AUTH';
 export const ADD_USER = 'ADD_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const ITEMS_LOADING = 'ITEMS_LOADING';
