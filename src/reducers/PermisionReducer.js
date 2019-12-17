@@ -20,7 +20,7 @@ export default function (state = initialState, action) {
             case DELETE_PERMISION:
             return {
                 ...state,
-                permisions: state.users.filter(doc => doc._id !== action.payload)
+                permisions: state.permisions.filter(perm => perm._id !== action.payload)
             };
         default:
             return state;

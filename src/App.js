@@ -16,6 +16,7 @@ import Users from './components/Users'
 import Editar from './components/Editar'
 import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
+import Permisions from './components/Documentos/Permisions'
 import NewDocument from './components/Documentos/NewDocument'
 import ViewDocumentContent from './components/Documentos/ViewDocumentContent'
 import ViewDocumentVersionContent from './components/Documentos/ViewDocumentVersionContent'
@@ -145,9 +146,10 @@ class App extends Component {
                       <Route path="/users" component={Users} />
                       <Route path="/editar" component={Editar} />
                       <Route path="/document/" component={Documentos} />
-                      <Route path="/new_document/" component={NewDocument} />
+                      <Route path="/new_document/" component={NewDocument} />                      
+                      <Route path="/permisions/:id" component={Permisions} />
                       <Route path="/view_document/:id" component={ViewDocumentContent} />
-                      <Route path="/view_document_version/:id" component={ViewDocumentVersionContent} />
+                      <Route path="/view_document_version/:id" component={ViewDocumentVersionContent}/>
                       <Route path="/edit_document/:id" component={EditDocument} />
                       <Route path="/edit_document_version/:id" component={EditDocumentVersion} />
 

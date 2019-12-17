@@ -18,9 +18,7 @@ const MyLink = styled(Link)`
     color:tomato;
 }
 `
-
-
-
+        
 class NavigationBar extends Component {
 
     state = { activeIndex: -1 }
@@ -38,11 +36,9 @@ class NavigationBar extends Component {
         auth: PropTypes.object.isRequired
     }
 
-
-
-
     render() {
 
+        /** MenuItem FOR DOCUMENTS */
         const Documentos = (
             <Table basic='very' celled collapsing>
                 <Table.Header>
@@ -58,6 +54,7 @@ class NavigationBar extends Component {
             </Table>             
         )
 
+        /** MenuItem FOR USER */
         const User = (
             <Table basic='very' celled collapsing>
                 <Table.Header>
@@ -77,8 +74,9 @@ class NavigationBar extends Component {
         const { isAuthenticated } = this.props.auth
 
 
+        /** MENU FOR USERS AUTHENTICATEDS */
         const authLinks = (
-            <Fragment>
+            
 
                 <Accordion as={Menu} vertical>
                     <Menu.Item>
@@ -102,11 +100,9 @@ class NavigationBar extends Component {
                         <Accordion.Content active={activeIndex === 1} content={User} />
                     </Menu.Item>
                 </Accordion>
-
-            </Fragment >
-
         )
 
+        /** MENU FOR USERS NOT AUTHENTICATEDS */
         const gestLinks = (
 
             <Fragment >

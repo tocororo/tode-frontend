@@ -3,16 +3,11 @@ import { Link } from 'react-router-dom'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
 import { getDocument_version } from '../../actions/DocumentVersionAction'
-import { getDocument } from '../../actions/DocumentAction'
-import { getUsers  } from '../../actions/UserAction'
-import { getPermisions } from '../../actions/PermisionAction'
 import { newPermision } from '../../actions/PermisionAction'
-import {getUserAuth} from '../../actions/AuthAction'
-import { Accordion, Icon, Form, Radio, Button, Image, Modal,Table, List, Popup, Divider, Label, Message} from 'semantic-ui-react'
+import { Accordion, Icon, Table, Label} from 'semantic-ui-react'
 import { faEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Moment  from 'react-moment'
-import Avatar from '../../assets/Avatar.png'
 import '../../css/DocumentsPage.css'
 import styled from 'styled-components'
 
@@ -59,7 +54,17 @@ class Documentos extends Component {
             
      })
      .catch(console.log);
-    this.props.getUsers(); 
+    this.props.getDocument_version();
+  }
+
+  async componentDidUpdate() {
+
+    fetch('/document').then(res => res.json()).then((data) => {
+      this.setState({doc:data.docs, permision:data.perms})
+      console.log(data.docs);
+            
+     })
+     .catch(console.log);
     this.props.getDocument_version();
   }
 
@@ -137,41 +142,10 @@ OnSubmit = (e) => {
                           {/**
                            MODAL FOR ADD USER PERMISION 
                           */}
-                          <MyLink to = "#">
+                          <MyLink to = {"/permisions/" + doc._id}>
                                   <FontAwesomeIcon icon={faUserPlus} onClick={this.showModal}/>
                           </MyLink>
-                          <Modal  className="card-login"  open={open}  onClose={this.closeModal}>
-                            <Modal.Header>Otorgar Permisos al Documento a:</Modal.Header>
-                              <Modal.Content scrolling>                                
-                              { users.map(usuario => (
-                                    user._id != usuario._id ?
-                                <Form onSubmit={this.OnSubmit}>
-                                    <Form.Field>
-                                    <List >
-                                      <List.Item>
-                                        <List.Content floated='right'>
-                                        <Popup
-                                          trigger={
-                                          <Button 
-                                          doc = {doc._id}
-                                          user = {usuario._id}
-                                          onClick = {this.OnChange}
-                                          type='submit'
-                                          icon='add' />}
-                                          content="Otorgar permisios a este usuario"
-                                          basic
-                                        />
-                                        </List.Content>
-                                        <Image avatar src= {Avatar} />
-                                        <List.Content>{usuario.name}</List.Content>
-                                      </List.Item>
-                                      <Divider/>
-                                      </List>
-                                    </Form.Field>
-                                </Form>
-                                :"" ))}
-                             </Modal.Content>                               
-                           </Modal>
+                          
                         </Table.HeaderCell>
                       </Table.Row>  
                     </Table.Header>     
@@ -228,4 +202,4 @@ const mapStateToProps = (state) => ({
     permision: state.permision
 })
 
-export default connect(mapStateToProps, { getDocument_version, getDocument, getUsers,newPermision,getPermisions, getUserAuth }) (withRouter(Documentos))
+export default connect(mapStateToProps, { getDocument_version, newPermision}) (withRouter(Documentos))
