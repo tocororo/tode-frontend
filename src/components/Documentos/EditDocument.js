@@ -1,13 +1,40 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
-import { Button, Form, TextArea } from 'semantic-ui-react'
+import { Button, Form, TextArea, Sidebar, Segment } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { newDocument_version } from '../../actions/DocumentVersionAction'
 import axios from 'axios'
+import ChatPage from '../Chat/ChatPage'
+import '../../css/editpage.css'
+import '@fortawesome/react-fontawesome'
+import { MdChat } from 'react-icons/md'
+import styled from 'styled-components'
+
+const MySidebar = styled(Sidebar)`
+  &&& {
+    background-color:#1d314d;
+  }
+`
+const MyButton = styled(Button)`
+&&&{
+    background-color:#1d314d;
+    color:white;
+}
+
+&&&:hover{
+  background-color:#0f1d31;
+  color:whitesmoke;
+}
+`
+
 
 class EditDocument extends Component {
     state = {
+        animation: 'overlay',
+    direction: 'left',
+    dimmed: false,
+    visible: false,
         _id: "",
         coment: "",
         document: "",
@@ -15,10 +42,11 @@ class EditDocument extends Component {
         editing: false
     }
 
-    static propTypes = {
-        newDocument_version: PropTypes.func.isRequired,
-        auth: PropTypes.object.isRequired
-    }
+    handleChangerigth = (direction, animation) => () => {
+        this.setState({ direction })
+        this.setState((prevState) => ({ animation, visible: !prevState.visible }))
+      }
+
     async componentDidMount() {
         if (this.props.match.params.id) {
             const res = await axios.get(`/document/${this.props.match.params.id}`)
@@ -53,8 +81,42 @@ class EditDocument extends Component {
     }
 
     render() {
+        const VerticalSidebarChat = ({ animation, direction, visible }) => (
+            <Sidebar
+              animation={animation}
+              direction={direction}
+              visible={visible}
+            >
+              <ChatPage doc={this.props.match.params.id}/>
+          
+            </Sidebar>
+          )
+          
+          VerticalSidebarChat.propTypes = {
+            animation: PropTypes.string,
+            direction: PropTypes.string,
+            visible: PropTypes.bool,
+          }
+          
+        const { animation, dimmed, direction, visible } = this.state
         return (
+            <MySidebar.Pushable >
 
+            {direction != "left" ?
+                    
+              <VerticalSidebarChat
+                animation={animation}
+                direction={direction}
+                visible={visible}
+              />
+              :
+              <div />
+            }
+
+            <MySidebar.Pusher dimmed={dimmed && visible}>
+            <div className="container">
+            <div />
+            <div className="center">
             <Form onSubmit={this.OnSubmit}>
                 <Form.Field>
 
@@ -72,7 +134,20 @@ class EditDocument extends Component {
                     <Button type="submit"> Guardar </Button>
                 </Form.Field>
             </Form>
+            </div>
+            <div className="end">
+              <MyButton
+                className="button"
+                active={direction === 'right'}
+                onClick={this.handleChangerigth('right')}>
+                <MdChat className="chats" />
+              </MyButton>
+            </div>
+    
+            </div>
 
+            </MySidebar.Pusher>
+            </MySidebar.Pushable>
         )
     }
 }

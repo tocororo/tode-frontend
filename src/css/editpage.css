@@ -1,0 +1,16 @@
+.container{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.chats{
+    height: 25px;
+    width: 25px;
+}
+
+.end {
+    padding-top: 41.5vh;
+    min-height: 94.5vh;
+}

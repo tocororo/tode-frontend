@@ -5,9 +5,11 @@ import AuthReducer from './AuthReducer'
 import DocumentReducer from './DocumentReducer';
 import DocumentVersionReducer from './DocumentVersionReducer';
 import PermisionReducer from './PermisionReducer';
+import MessagesReducer from './MessagesReducer';
 
 export default combineReducers({
     user: UsersReducer,
+    message: MessagesReducer,
     error: ErrorReducer,
     auth: AuthReducer,
     doc: DocumentReducer,

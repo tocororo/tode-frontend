@@ -156,15 +156,7 @@ class App extends Component {
 
                     </Segment>
                   </div>
-                  <div className="end">
-                    <MyButton
-                      className="button"
-                      active={direction === 'right'}
-                      onClick={this.handleChangerigth('right')}>
-
-                      <MdChat className="chats" />
-                    </MyButton>
-                  </div>
+                  <div/>
                 </div>
               </MySidebar.Pusher>
             </MySidebar.Pushable>

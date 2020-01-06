@@ -3,75 +3,95 @@ import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
+import {getUsersToPermission} from '../../actions/UserAction'
 import {newPermision,deletePermision} from '../../actions/PermisionAction'
 import { Search, Grid, Header, Segment, Table, Label, Divider, List, Popup, Button, Image, Form } from 'semantic-ui-react'
 
 const initialState = { isLoading: false, results: [], value: ''}
 
 class PermisionSearch extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            document_id:props.doc,
-            permision: [],
-            document:"",
-            document_user:""
-        }
+  constructor(props){
+      super(props)
+      this.state = {
+          document_id:props.doc,
+          permision: [],
+          document:"",
+          document_user:""
+      }
+  }
+
+  state = initialState
+
+  async componentDidMount() {
+      fetch('/document').then(res => res.json()).then((data) => {
+          this.setState({permision:data.perms})
+          
+         })
+       .catch(console.log);
     }
-
-    state = initialState
-
-    async componentDidMount() {
-        fetch('/document').then(res => res.json()).then((data) => {
-            this.setState({permision:data.perms})
-            
-           })
-         .catch(console.log);
-      }
-
-    async componentDidUpdate() {
-        fetch('/document').then(res => res.json()).then((data) => {
-            this.setState({permision:data.perms})
-            
-           })
-         .catch(console.log);
-      }
-
-    handleResultSelect = (e, { result }) => this.setState({ value: result.name })
-
-    handleSearchChange = (e, { value }) => {
-        const {users} = this.props.user
-        this.setState({ isLoading: true, value })
     
-        setTimeout(() => {
-          if (this.state.value.length < 1) return this.setState(initialState)
-    
-          const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-          const isMatch = (result) => re.test(result.name)
-    
-          this.setState({
+  handleResultSelect = (e, { result }) => this.setState({ value: result.name })
+  
+  handleSearchChange = (e, { value }) => 
+    {
+      this.setState({ isLoading: true, value })
+      setTimeout(() => 
+      {
+      if (this.state.value.length < 1)
+         return this.setState(initialState)  
+            // si lo que el usuario ha escrito tiene mas de 2 letras
+      else{
+        if (this.state.value.length > 2){
+
+          const {value, document_id} = this.state;
+          this.props.getUsersToPermission({value, document_id}); 
+          
+          const {users} = this.props.user
+          console.log(value);
+          
+
+          return this.setState({
             isLoading: false,
-            results: _.filter(users, isMatch),
-          })
-        }, 300)
-      }
+            results: users
+              })
+            }
+          }
+      }, 300)        
+        
+
+        // const {users} = this.props.user
+        // this.setState({ isLoading: true, value })
+    
+        // setTimeout(() => {
+        //   if (this.state.value.length < 1) return this.setState(initialState)
+    
+        //   const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
+        //   const isMatch = (result) => re.test(result.name)
+    
+        //   this.setState({
+        //     isLoading: false,
+        //     results: _.filter(users, isMatch),
+        //   })
+        // }, 300)
+
+    }
       
-OnChange = (e, { doc,user }) => this.setState({ document:doc, document_user:user })
-
-
-OnSubmit = (e) => {
-    e.preventDefault();
-
-        const {document_user, document} = this.state;
-        const newPermision = { document_user, document };
-        this.props.newPermision(newPermision);           
-        this.props.history.push('/permisions/' + this.state.document_id);
-}
-
-Delete = (id) => {
-    this.props.deletePermision(id);
-    alert('Permiso removido');
-}
+  OnChange = (e, { doc,user }) => this.setState({ document:doc, document_user:user })
+    
+    
+  OnSubmit = (e) => {
+      e.preventDefault();
+  
+          const {document_user, document} = this.state;
+          const newPermision = { document_user, document };
+          this.props.newPermision(newPermision);           
+          this.componentDidMount();
+  }
+  
+  Delete = (id) => {
+      this.props.deletePermision(id);
+      alert('Permiso removido');
+  }
 
 
     render() {
@@ -88,7 +108,7 @@ Delete = (id) => {
                      <Divider/>
                         {permisions.map(permision => (
                             permision.document._id === this.state.document_id ?
-                            <List >
+                            <List key={permision._id}>
                                 <List.Item>
                                   <List.Content floated='right'>
                                   {permision.document.document_user != permision.document_user._id
@@ -136,15 +156,15 @@ Delete = (id) => {
                             onClick = {this.OnChange}
                             type='submit'
                             icon='add' />}
-                            content="Otorgar permisios a este usuario"
+                            scontent="Otorgar permisios a este usuario"
                             basic
                             />
                         </Grid.Column>
                         <Grid.Column width={6}>
-                            <Label content={name} />
+                            <p>{name} </p>
                         </Grid.Column>
                         <Grid.Column width={5}>
-                            <Label content={rol} />
+                            <p>{rol} </p>
                         </Grid.Column>
                       </Grid> 
                       </Form.Field>
@@ -164,4 +184,4 @@ const mapStateToProps = (state) => ({
     auth : state.auth
 })
 
-export default connect(mapStateToProps, {newPermision,deletePermision}) (withRouter(PermisionSearch))
+export default connect(mapStateToProps, {getUsersToPermission, newPermision,deletePermision}) (withRouter(PermisionSearch))

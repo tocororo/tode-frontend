@@ -3,13 +3,30 @@ import {
     GET_USERS,
     ADD_USER,
     DELETE_USER,
-    ITEMS_LOADING
+    ITEMS_LOADING,
+    GET_USERS_TOPERMISONS
 } from '../actions/types'
 import { tokenConfig } from './AuthAction'
 import { returnErrors } from './ErrorAction'
 
+export const getUsersToPermission = ({ value, document_id }) => dispatch => {
+    const params = ({
+        value,
+        document_id
+    })
+    // hacer una url nueva que reciba el string y el id del doc... y en base a esto responda la lista de usuarios correspondiente
+    axios.get('/user_topermision',{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params
+    }).then(res => dispatch({
+        type: GET_USERS,
+        payload: res.data
+    }))
+};
+
 export const getUsers = () => dispatch => {
-    dispatch(setItemsLoading());
     axios.get('/user').then(res => dispatch({
         type: GET_USERS,
         payload: res.data

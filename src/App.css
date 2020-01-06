@@ -3,12 +3,12 @@ div.center{
 }
 
 
-.end,.start {
+.start {
     padding-top: 41.5vh;
     min-height: 99.5vh;
 }
 
-.doc, .chats{
+.doc{
     height: 25px;
     width: 25px;
 }

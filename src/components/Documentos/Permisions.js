@@ -50,7 +50,7 @@ class Permisions extends Component {
            })
          .catch(console.log);
 
-        this.props.getUsers(); 
+        // this.props.getUsers(); 
       }
       
     render() {
@@ -62,12 +62,12 @@ class Permisions extends Component {
               <div>
                 {docs.map(doc => (
                     doc._id === this.state.document ?
-                    <MyTable padded='very' inverted>
+                    <MyTable key={doc._id} padded='very' inverted>
                     <Table.Header>
                      <Table.Row>
                      <Table.HeaderCell>{doc.name}</Table.HeaderCell>
                         <Table.HeaderCell>
-                          <MyLink> {doc.coment} </MyLink>
+                          <MyLink to="#"> {doc.coment} </MyLink>
                         </Table.HeaderCell>
                         <Table.HeaderCell>{doc.document_user.name}</Table.HeaderCell>
                         <Table.HeaderCell>{doc.document_user.rol}</Table.HeaderCell>

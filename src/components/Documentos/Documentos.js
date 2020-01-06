@@ -50,24 +50,13 @@ class Documentos extends Component {
 
     fetch('/document').then(res => res.json()).then((data) => {
       this.setState({doc:data.docs, permision:data.perms})
-      console.log(data.docs);
             
      })
      .catch(console.log);
     this.props.getDocument_version();
   }
 
-  async componentDidUpdate() {
-
-    fetch('/document').then(res => res.json()).then((data) => {
-      this.setState({doc:data.docs, permision:data.perms})
-      console.log(data.docs);
-            
-     })
-     .catch(console.log);
-    this.props.getDocument_version();
-  }
-
+  
 
   OnChange = (e, { doc,user }) => this.setState({ document:doc, document_user:user })
 

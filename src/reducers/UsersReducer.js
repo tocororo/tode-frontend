@@ -1,7 +1,6 @@
-import { GET_USERS, ADD_USER, DELETE_USER, ITEMS_LOADING } from '../actions/types'
+import { GET_USERS, ADD_USER, DELETE_USER, ITEMS_LOADING, GET_USERS_TOPERMISONS } from '../actions/types'
 const initialState = {
-    users: [],
-    loading: false
+    users: []
 }
 
 export default function (state = initialState, action) {
@@ -9,8 +8,7 @@ export default function (state = initialState, action) {
         case GET_USERS:
             return {
                 ...state,
-                users: action.payload,
-                loading: false
+                users: action.payload
             };
         case DELETE_USER:
             return {
