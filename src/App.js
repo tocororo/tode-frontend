@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { loadUsers } from './actions/AuthAction'
 import styled from 'styled-components'
-
+//import { useBooleanKnob } from '@stardust-ui/docs-components'
 
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Home'
@@ -44,96 +44,48 @@ const MyButton = styled(Button)`
 }
 `
 
-const VerticalSidebarDoc = ({ animation, direction, visible }) => (
-  <MySidebar
-    animation={animation}
-    direction={direction}
-    visible={visible}
-    width="thin"
-  >
-  
-    <NavigationBar />
-  </MySidebar>
-)
-VerticalSidebarDoc.propTypes = {
-  animation: PropTypes.string,
-  direction: PropTypes.string,
-  visible: PropTypes.bool,
-}
-
-const VerticalSidebarChat = ({ animation, direction, visible }) => (
-  <Sidebar
-    animation={animation}
-    direction={direction}
-    visible={visible}
-  >
-    <ChatPage />
-
-  </Sidebar>
-)
-
-VerticalSidebarChat.propTypes = {
-  animation: PropTypes.string,
-  direction: PropTypes.string,
-  visible: PropTypes.bool,
-}
-
 
 class App extends Component {
+  state = {
+    visible: false
+  }
+
+  showMenu = () => {
+    this.setState((prevState) => ({ visible: !prevState.visible }))
+  }
 
   componentDidMount() {
     store.dispatch(loadUsers())
   }
 
-  state = {
-    animation: 'overlay',
-    direction: 'left',
-    dimmed: false,
-    visible: false,
-  }
-
-  handleChangerigth = (direction, animation) => () => {
-    this.setState({ direction })
-    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-  }
-
-  handleChangeleft = (direction, animation) => () => {
-    this.setState({ direction })
-    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-  }
-
+  
   render() {
-    const { animation, dimmed, direction, visible } = this.state
-
+    
     return (
       <Router>
         <Provider store={store}>
           <div>
             <MySidebar.Pushable as={Segment}>
 
-              {direction === "left" ?
-                <VerticalSidebarDoc
-                  animation={animation}
-                  direction={direction}
-                  visible={visible}
-                />
-                :
-
-                <VerticalSidebarChat
-                  animation={animation}
-                  direction={direction}
-                  visible={visible}
-                />
-              }
+            <MySidebar
+              animation='overlay'
+              icon='labeled'
+              inverted
+              onHide={() => this.setState({ visible: false })}
+              vertical
+              visible={this.state.visible}
+              width='thin'
+            >
+            <NavigationBar />
+            </MySidebar>
 
 
-              <MySidebar.Pusher dimmed={dimmed && visible}>
+              <MySidebar.Pusher dimmed={this.state.visible}>
                 <div className="container">
                   <div className="start">
                     <MyButton
                       className="button"
-                      active={direction === 'left'}
-                      onClick={this.handleChangeleft('left')}>
+                      onClick={this.showMenu}>
 
                       <GoThreeBars className="doc" />
                     </MyButton>

@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
 import {getUsersToPermission} from '../../actions/UserAction'
 import {newPermision,deletePermision} from '../../actions/PermisionAction'
-import { Search, Grid, Header, Segment, Table, Label, Divider, List, Popup, Button, Image, Form } from 'semantic-ui-react'
+import { Search, Grid, Header, Segment, Modal, Icon, Label, Divider, List, Popup, Button, Image, Form } from 'semantic-ui-react'
 
 const initialState = { isLoading: false, results: [], value: ''}
 
@@ -13,6 +13,8 @@ class PermisionSearch extends Component {
   constructor(props){
       super(props)
       this.state = {
+          modalOpenAdd: false,
+          modalOpenRemove: false,
           document_id:props.doc,
           permision: [],
           document:"",
@@ -56,23 +58,7 @@ class PermisionSearch extends Component {
               })
             }
           }
-      }, 300)        
-        
-
-        // const {users} = this.props.user
-        // this.setState({ isLoading: true, value })
-    
-        // setTimeout(() => {
-        //   if (this.state.value.length < 1) return this.setState(initialState)
-    
-        //   const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-        //   const isMatch = (result) => re.test(result.name)
-    
-        //   this.setState({
-        //     isLoading: false,
-        //     results: _.filter(users, isMatch),
-        //   })
-        // }, 300)
+      }, 300)  
 
     }
       
@@ -84,14 +70,24 @@ class PermisionSearch extends Component {
   
           const {document_user, document} = this.state;
           const newPermision = { document_user, document };
-          this.props.newPermision(newPermision);           
+          this.props.newPermision(newPermision);  
+          this.setState({ modalOpen: false });         
           this.componentDidMount();
   }
   
   Delete = (id) => {
       this.props.deletePermision(id);
-      alert('Permiso removido');
+      this.setState({ modalOpen: false });
+      this.componentDidMount();
+      
   }
+
+  handleOpenAdd = () => this.setState({ modalOpenAdd: true })
+  handleOpenRemove = () => this.setState({ modalOpenRemove: true })
+
+  handleCloseAdd = () => this.setState({ modalOpenAdd: false })
+  handleCloseAdd = () => this.setState({ modalOpenRemove: false })
+
 
 
     render() {
@@ -113,14 +109,34 @@ class PermisionSearch extends Component {
                                   <List.Content floated='right'>
                                   {permision.document.document_user != permision.document_user._id
                                   ?    
-                                  <Popup
-                                    trigger={
-                                    <Button 
-                                    onClick={this.Delete.bind(this, permision._id)}
-                                    icon='delete' />}
-                                    content="Revocar permisios a este usuario"
-                                    basic
-                                  />
+                                  <Modal trigger={
+                                   <Button
+                                   onClick={this.handleOpenRemove}
+                                   icon='remove'
+                                   />}
+                                   dimmer='blurring' 
+                                   open={this.state.modalOpen}
+                                   onClose={this.handleClose}
+                                   content="Otorgar permisios a este usuario"
+                                   basic
+                                   basic size='small'>
+                                 <Header icon='user' content='Agregar usuario' />
+                                  <Modal.Content>
+                                    <p>
+                                      Esta seguro de querer eliminar permisos sobre el documento para el usuario {permision.document_user.name}
+                                    </p>
+                                  </Modal.Content>
+                                  <Modal.Actions>
+                                    <Button basic color='red' inverted
+                                     onClick={this.handleClose }>
+                                      <Icon name='remove' /> Cancelar
+                                    </Button>
+                                    <Button color='green' inverted 
+                                       onClick = {this.Delete.bind(this, permision._id)}>
+                                      <Icon name='checkmark'/> Aceptar
+                                    </Button>
+                                  </Modal.Actions>
+                                 </Modal>
                                   :
                                   <Label content="Propietario" />
                                   }
@@ -143,22 +159,43 @@ class PermisionSearch extends Component {
                       })}
                       results={results}
                       resultRenderer={({ name, rol, _id }) => 
-
-                      <Form onSubmit={this.OnSubmit}>    
-                      <Form.Field>    
                       <Grid >
                         <Grid.Column width={4}>                              
-                        <Popup
-                            trigger={
+                        <Modal trigger={
                             <Button 
-                            doc = {this.state.document_id}
-                            user = {_id}
-                            onClick = {this.OnChange}
-                            type='submit'
-                            icon='add' />}
-                            scontent="Otorgar permisios a este usuario"
-                            basic
-                            />
+                            onClick={this.handleOpenAdd}
+                            icon='add'
+                            />}
+                            dimmer='blurring'
+                            open={this.state.modalOpen}
+                            onClose={this.handleClose}
+                            basic size='small'>
+                          <Header icon='user' content='Agregar usuario' />
+                           <Modal.Content>
+                             <p>
+                               Esta seguro de querer otorgar permisos sobre el documento al usuario {name}
+                             </p>
+                           </Modal.Content>
+                           <Form onSubmit={this.OnSubmit}>                              <Modal.Actions>    
+                            <Form.Field> 
+                             <Button basic color='red' inverted
+                             onClick={this.handleClose }>
+                               <Icon name='remove' /> Cancelar
+                             </Button>
+                               
+                             <Button color='green' inverted 
+                                doc = {this.state.document_id}
+                                user = {_id}
+                                onClick = {this.OnChange}
+                                type='submit'>
+                               <Icon name='checkmark'/> Aceptar
+                             </Button>
+                            </Form.Field>
+                            </Modal.Actions>
+                            </Form> 
+                          
+                        </Modal>
+
                         </Grid.Column>
                         <Grid.Column width={6}>
                             <p>{name} </p>
@@ -167,8 +204,7 @@ class PermisionSearch extends Component {
                             <p>{rol} </p>
                         </Grid.Column>
                       </Grid> 
-                      </Form.Field>
-                      </Form> 
+                     
                       }
                       value={value}
                       {...this.props}

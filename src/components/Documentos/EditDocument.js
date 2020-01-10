@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 const MySidebar = styled(Sidebar)`
   &&& {
-    background-color:#1d314d;
+    background-color:#efefef;
   }
 `
 const MyButton = styled(Button)`
@@ -31,9 +31,6 @@ const MyButton = styled(Button)`
 
 class EditDocument extends Component {
     state = {
-        animation: 'overlay',
-    direction: 'left',
-    dimmed: false,
     visible: false,
         _id: "",
         coment: "",
@@ -42,10 +39,9 @@ class EditDocument extends Component {
         editing: false
     }
 
-    handleChangerigth = (direction, animation) => () => {
-        this.setState({ direction })
-        this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-      }
+    showChat = () => {
+      this.setState((prevState) => ({ visible: !prevState.visible }))
+    }
 
     async componentDidMount() {
         if (this.props.match.params.id) {
@@ -81,45 +77,27 @@ class EditDocument extends Component {
     }
 
     render() {
-        const VerticalSidebarChat = ({ animation, direction, visible }) => (
-            <Sidebar
-              animation={animation}
-              direction={direction}
-              visible={visible}
-            >
-              <ChatPage doc={this.props.match.params.id}/>
-          
-            </Sidebar>
-          )
-          
-          VerticalSidebarChat.propTypes = {
-            animation: PropTypes.string,
-            direction: PropTypes.string,
-            visible: PropTypes.bool,
-          }
-          
-        const { animation, dimmed, direction, visible } = this.state
+       
         return (
             <MySidebar.Pushable >
 
-            {direction != "left" ?
-                    
-              <VerticalSidebarChat
-                animation={animation}
-                direction={direction}
-                visible={visible}
-              />
-              :
-              <div />
-            }
+            <MySidebar
+              animation='overlay'
+              direction='right'
+              onHide={() => this.setState({ visible: false })}
+              vertical
+              visible={this.state.visible}
+              width='large'
+            >
+            <ChatPage />
+            </MySidebar>
 
-            <MySidebar.Pusher dimmed={dimmed && visible}>
+            <MySidebar.Pusher dimmed={this.state.visible}>
             <div className="container">
             <div />
             <div className="center">
             <Form onSubmit={this.OnSubmit}>
                 <Form.Field>
-
                     <TextArea
                         style={{ minHeight: 100}}
                         type="text"
@@ -130,6 +108,7 @@ class EditDocument extends Component {
                         required
                     />
                 </Form.Field>
+                
                 <Form.Field>
                     <Button type="submit"> Guardar </Button>
                 </Form.Field>
@@ -138,8 +117,8 @@ class EditDocument extends Component {
             <div className="end">
               <MyButton
                 className="button"
-                active={direction === 'right'}
-                onClick={this.handleChangerigth('right')}>
+                onClick={this.showChat}>
+
                 <MdChat className="chats" />
               </MyButton>
             </div>
