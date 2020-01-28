@@ -10,17 +10,21 @@ import { tokenConfig } from './AuthAction'
 import { returnErrors } from './ErrorAction'
 
 export const getUsersToPermission = ({ value, document_id }) => dispatch => {
-    const params = ({
+    /*  const params = ({
         value,
         document_id
     })
-    // hacer una url nueva que reciba el string y el id del doc... y en base a esto responda la lista de usuarios correspondiente
-    axios.get('/user_topermision',{
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        params
-    }).then(res => dispatch({
+    { 
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    params 
+    }
+    */
+    
+    axios.get(`/user_topermision?value=${value}&&document_id=${document_id}`,
+        
+    ).then(res => dispatch({
         type: GET_USERS,
         payload: res.data
     }))

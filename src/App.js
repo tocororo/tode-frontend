@@ -8,7 +8,6 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { loadUsers } from './actions/AuthAction'
 import styled from 'styled-components'
-//import { useBooleanKnob } from '@stardust-ui/docs-components'
 
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Home'
@@ -16,10 +15,8 @@ import Users from './components/Users'
 import Editar from './components/Editar'
 import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
-import Permisions from './components/Documentos/Permisions'
+import Permisions from './components/Permisions/Permisions'
 import NewDocument from './components/Documentos/NewDocument'
-import ViewDocumentContent from './components/Documentos/ViewDocumentContent'
-import ViewDocumentVersionContent from './components/Documentos/ViewDocumentVersionContent'
 import EditDocument from './components/Documentos/EditDocument'
 import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
 
@@ -74,7 +71,7 @@ class App extends Component {
               onHide={() => this.setState({ visible: false })}
               vertical
               visible={this.state.visible}
-              width='thin'
+              width='wide'
             >
             <NavigationBar />
             </MySidebar>
@@ -100,8 +97,6 @@ class App extends Component {
                       <Route path="/document/" component={Documentos} />
                       <Route path="/new_document/" component={NewDocument} />                      
                       <Route path="/permisions/:id" component={Permisions} />
-                      <Route path="/view_document/:id" component={ViewDocumentContent} />
-                      <Route path="/view_document_version/:id" component={ViewDocumentVersionContent}/>
                       <Route path="/edit_document/:id" component={EditDocument} />
                       <Route path="/edit_document_version/:id" component={EditDocumentVersion} />
 

@@ -43,8 +43,6 @@ class NavigationBar extends Component {
             <Table basic='very' celled collapsing>
                 <Table.Header>
                     <Table.Row>
-                    </Table.Row>
-                    <Table.Row>
                         <Table.HeaderCell><Link className="nav-link " to="/document">Biblioteca</Link></Table.HeaderCell>
                     </Table.Row> 
                     <Table.Row>
@@ -58,8 +56,6 @@ class NavigationBar extends Component {
         const User = (
             <Table basic='very' celled collapsing>
                 <Table.Header>
-                    <Table.Row>
-                    </Table.Row>
                     <Table.Row>
                         <Table.HeaderCell><Link className="nav-link " to="/user">Perfil</Link></Table.HeaderCell>
                     </Table.Row> 
@@ -78,8 +74,8 @@ class NavigationBar extends Component {
         const authLinks = (
             
 
-                <Accordion as={Menu} vertical>
-                    <Menu.Item>
+                <Accordion  fluid styled vertical>
+                    
                         <Accordion.Title
                             active={activeIndex === 0}
                             content='Documentos'
@@ -87,10 +83,7 @@ class NavigationBar extends Component {
                             onClick={this.handleClick}
                         />
                         <Accordion.Content active={activeIndex === 0} content={Documentos} />
-                    </Menu.Item>
-
-
-                    <Menu.Item>
+                    
                         <Accordion.Title
                             active={activeIndex === 1}
                             content='Usuario'
@@ -98,7 +91,7 @@ class NavigationBar extends Component {
                             onClick={this.handleClick}
                         />
                         <Accordion.Content active={activeIndex === 1} content={User} />
-                    </Menu.Item>
+                    
                 </Accordion>
         )
 

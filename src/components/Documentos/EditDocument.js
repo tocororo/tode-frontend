@@ -45,11 +45,12 @@ class EditDocument extends Component {
 
     async componentDidMount() {
         if (this.props.match.params.id) {
-            const res = await axios.get(`/document/${this.props.match.params.id}`)
+            //const res = await axios.get(`/document/${this.props.match.params.id}`)
+            const res = await axios.get(`/document_content/${this.props.match.params.id}`)
             this.setState({
                 editing: true,
                 _id: this.props.match.params.id,
-                coment: res.data.coment,
+                coment: res.data,
                 document: this.props.match.params.id,
                 document_user: res.data.document_user
             })
@@ -70,10 +71,7 @@ class EditDocument extends Component {
 
         const { coment, document_user, document } = this.state;
         const newDoc = { coment, document_user, document };
-        this.props.newDocument_version(newDoc);
-        this.props.history.push('/document');
-
-
+        this.props.newDocument_version(newDoc, this.props.history);
     }
 
     render() {

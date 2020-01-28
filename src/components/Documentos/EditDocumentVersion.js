@@ -7,6 +7,7 @@ import axios from 'axios'
 import { TextArea, Button, Form } from 'semantic-ui-react';
 
 class EditDocumentVersion extends Component {
+    
     state = {
         _id: "",
         coment: "",
@@ -21,7 +22,7 @@ class EditDocumentVersion extends Component {
     }
     async componentDidMount() {
         if (this.props.match.params.id) {
-            const res = await axios.get(`/document_version/${this.props.match.params.id}`)
+            const res = await axios.get(`/document_version_content/${this.props.match.params.id}`)
             this.setState({
                 editing: true,
                 coment: res.data.coment,
@@ -46,10 +47,7 @@ class EditDocumentVersion extends Component {
 
         const { coment, document_user, document } = this.state;
         const newDoc = { coment, document_user, document };
-        this.props.newDocument_version(newDoc);
-        this.props.history.push('/document');
-
-
+        this.props.newDocument_version(newDoc, this.props.history);
     }
 
     render() {

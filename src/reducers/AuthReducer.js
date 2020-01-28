@@ -1,7 +1,6 @@
 import {
     USER_LOADING,
     USER_LOADED,
-    GET_USER_AUTH,
     AUTH_ERROR,
     LOGIN_SUCCES,
     LOGIN_FAIL,

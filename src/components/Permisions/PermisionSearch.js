@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
 import {getUsersToPermission} from '../../actions/UserAction'
 import {newPermision,deletePermision} from '../../actions/PermisionAction'
-import { Search, Grid, Header, Segment, Modal, Icon, Label, Divider, List, Popup, Button, Image, Form } from 'semantic-ui-react'
+import { Search, Grid, Header, Segment, Modal, Icon, Label, Divider, List,  Button, Image, Form } from 'semantic-ui-react'
 
 const initialState = { isLoading: false, results: [], value: ''}
 
@@ -20,11 +20,14 @@ class PermisionSearch extends Component {
           document:"",
           document_user:""
       }
+      console.log(props);
+      
   }
 
   state = initialState
 
   async componentDidMount() {
+    
       fetch('/document').then(res => res.json()).then((data) => {
           this.setState({permision:data.perms})
           
@@ -71,8 +74,7 @@ class PermisionSearch extends Component {
           const {document_user, document} = this.state;
           const newPermision = { document_user, document };
           this.props.newPermision(newPermision);  
-          this.setState({ modalOpen: false });         
-          this.componentDidMount();
+          this.setState({ modalOpen: false });  
   }
   
   Delete = (id) => {
@@ -117,7 +119,6 @@ class PermisionSearch extends Component {
                                    dimmer='blurring' 
                                    open={this.state.modalOpen}
                                    onClose={this.handleClose}
-                                   content="Otorgar permisios a este usuario"
                                    basic
                                    basic size='small'>
                                  <Header icon='user' content='Agregar usuario' />
@@ -176,7 +177,7 @@ class PermisionSearch extends Component {
                                Esta seguro de querer otorgar permisos sobre el documento al usuario {name}
                              </p>
                            </Modal.Content>
-                           <Form onSubmit={this.OnSubmit}>                              <Modal.Actions>    
+                           <Form onSubmit={this.OnSubmit}><Modal.Actions>    
                             <Form.Field> 
                              <Button basic color='red' inverted
                              onClick={this.handleClose }>

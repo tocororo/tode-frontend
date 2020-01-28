@@ -8,3 +8,15 @@
     margin-top: 80px;
     max-width: 30rem;
 }
+.notificationContainer{
+    display: -webkit-flex;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.label{
+    position: absolute;
+    margin-top: -1vh;
+    color: red;
+    font-size: 2.5vh;
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getDocument, newDocument } from '../../actions/DocumentAction'
+import { newDocument } from '../../actions/DocumentAction'
 import { TextArea,Button, Form, Input } from 'semantic-ui-react';
 
 class NewDocument extends Component {
@@ -33,8 +33,7 @@ class NewDocument extends Component {
         e.preventDefault();
         const { name, coment, document_user } = this.state;
         const newDoc = { name, coment, document_user };
-        this.props.newDocument(newDoc);    
-        this.props.history.push('/document');
+        this.props.newDocument(newDoc, this.props.history);  
     }
 
     render() {
@@ -73,7 +72,6 @@ class NewDocument extends Component {
 
 NewDocument.propTypes = {
     newDocument: PropTypes.func.isRequired,
-    getDocument: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired
 }
@@ -83,4 +81,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { newDocument, getDocument }) (withRouter(NewDocument))
+export default connect(mapStateToProps, { newDocument }) (withRouter(NewDocument))

@@ -5,6 +5,7 @@ import AuthReducer from './AuthReducer'
 import DocumentReducer from './DocumentReducer';
 import DocumentVersionReducer from './DocumentVersionReducer';
 import PermisionReducer from './PermisionReducer';
+import NotificationReducer from './NotificationReducer';
 import MessagesReducer from './MessagesReducer';
 
 export default combineReducers({
@@ -15,4 +16,5 @@ export default combineReducers({
     doc: DocumentReducer,
     doc_version: DocumentVersionReducer,
     permision: PermisionReducer,
+    notification: NotificationReducer
 });

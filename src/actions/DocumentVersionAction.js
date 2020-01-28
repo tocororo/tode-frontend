@@ -17,9 +17,10 @@ export const getDocumentById = (id) => dispatch => {
     }))
 };
 
-export const newDocument_version = doc => dispatch => {
+export const newDocument_version = (doc, history) => dispatch => {
     axios.post('/new_document_version', doc).then(res => dispatch({
         type: ADD_DOCUMENT,
         payload: res.data
     }))
+    history.push('/document')
 };

@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
-import axios from 'axios'
-import { getUsers  } from '../../actions/UserAction'
 import Moment  from 'react-moment'
 import styled from 'styled-components'
-import { Table } from 'semantic-ui-react'
+import { Table, Container } from 'semantic-ui-react'
 import PermisionSearch from './PermisionSearch'
+import {getDocuments} from '../../actions/DocumentAction'
 
 const MyTable = styled(Table)`
   &&& {
@@ -23,44 +22,23 @@ const MyLink = styled(Link)`
 
 
 class Permisions extends Component {
-    state = { 
-        document:"",
-        document_user:"",
-        doc:[],
-        permision: [],
-        editing: false
+  constructor(props){
+    super(props)
+    this.state = { 
+        document:this.props.match.params.id
        }
-
-    async componentDidMount() {
-        if (this.props.match.params.id) {
-            const res = await axios.get(`/document/${this.props.match.params.id}`)
-            this.setState({
-                editing: true,
-                _id: this.props.match.params.id,
-                coment: res.data.coment,
-                document: this.props.match.params.id,
-                document_user: res.data.document_user
-            })
-        }
-
-        fetch('/document').then(res => res.json()).then((data) => {
-            this.setState({doc:data.docs, permision:data.perms})
-            console.log(data.docs);
-                  
-           })
-         .catch(console.log);
-
-        // this.props.getUsers(); 
       }
+    async componentDidMount() {
+      this.props.getDocuments()
+    }
       
     render() {
-        const docs = this.state.doc
-
+        const {docs, perms} = this.props.doc
         return (
-            <div>
+            <Container>
               {/** DIV FOR CURRENT DOCUMENT */}
               <div>
-                {docs.map(doc => (
+                {docs.map(doc => 
                     doc._id === this.state.document ?
                     <MyTable key={doc._id} padded='very' inverted>
                     <Table.Header>
@@ -75,20 +53,20 @@ class Permisions extends Component {
                      </Table.Row>
                      </Table.Header>
                     </MyTable>
-                : "" ))}
+                : "" )}
               </div>
               {/** DIV FOR COMPONENT PermisionSearch */}
               <div>
-                <PermisionSearch doc={this.props.match.params.id} perm={docs}/>
+                <PermisionSearch doc={this.props.match.params.id} perms={perms}/>
               </div>
-            </div>
+            </Container>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user,
+    doc: state.doc,
     auth : state.auth
 });
 
-export default connect(mapStateToProps, {getUsers}) (withRouter(Permisions))
+export default connect(mapStateToProps, {getDocuments}) (withRouter(Permisions))
