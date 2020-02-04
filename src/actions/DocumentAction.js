@@ -22,7 +22,7 @@ export const newDocument = (doc, history) => dispatch => {
         type: ADD_DOCUMENT,
         payload: res.data
     }))
-    history.push('/document')
+    history.push('/documents')
 };
 
 export const deleteDocument = id => (dispatch) => {

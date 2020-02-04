@@ -57,7 +57,7 @@ class Permisions extends Component {
               </div>
               {/** DIV FOR COMPONENT PermisionSearch */}
               <div>
-                <PermisionSearch doc={this.props.match.params.id} perms={perms}/>
+                <PermisionSearch doc={this.props.match.params.id} />
               </div>
             </Container>
         )

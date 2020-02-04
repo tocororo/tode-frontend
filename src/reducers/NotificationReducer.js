@@ -1,7 +1,7 @@
-import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER } from '../actions/types'
+import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION } from '../actions/types'
 const initialState = {
     notifications: [],
-    notificationsNumber:""
+    notificationsNumber:0
 }
 
 export default function (state = initialState, action) {
@@ -18,7 +18,12 @@ export default function (state = initialState, action) {
            return {
                ...state,
                notificationsNumber: action.payload
-           };     
+           }; 
+         case DELETE_NOTIFICATION:
+           return {
+               ...state,
+               notifications: state.notifications.filter(notify => notify._id !== action.payload)
+           };    
         default:
             return state;
     }

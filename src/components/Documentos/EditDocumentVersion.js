@@ -1,88 +1,130 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {withRouter} from 'react-router-dom';
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { newDocument_version } from '../../actions/DocumentVersionAction'
-import axios from 'axios'
-import { TextArea, Button, Form } from 'semantic-ui-react';
+import { Button, Form, TextArea, Sidebar, Segment } from 'semantic-ui-react'
+import '../../css/editpage.css'
+import '@fortawesome/react-fontawesome'
+import { MdChat } from 'react-icons/md'
+import styled from 'styled-components'
 
-class EditDocumentVersion extends Component {
-    
-    state = {
-        _id: "",
-        coment: "",
-        document: "",
-        document_user: "",
-        editing: false
+import { newDocument_version, getDocument_version_content, getDocument_versionById } from '../../actions/DocumentVersionAction'
+import ChatPage from '../Chat/ChatPage'
+
+const MySidebar = styled(Sidebar)`
+  &&& {
+    background-color:#efefef;
+  }
+`
+const MyButton = styled(Button)`
+&&&{
+    background-color:#1d314d;
+    color:white;
+}
+
+&&&:hover{
+  background-color:#0f1d31;
+  color:whitesmoke;
+}
+`
+
+
+function EditDocumentVersion(props) {
+    /* creando variables de estado y un metodo para modificarlas */
+  const [coment, setComent] = useState('');
+  const [document, setDocument] = useState('');
+  const [document_user, setDocument_user] = useState('');
+  const [visible, setVisible] = useState(false);
+
+  /* utilizando variables de los reducers.js */
+  const user = useSelector(state => state.auth.user);
+  const { document_version_content, version}  = useSelector(state => state.doc_version);
+  
+  /*  dispatch para utilizar las actions.js */
+  const dispatch = useDispatch()
+
+  // useeffect for componentDidMount, ComponentDidUpdate, componentWillUnmount    
+
+  useEffect( () =>{
+        dispatch(getDocument_versionById(props.match.params.id))
+        dispatch(getDocument_version_content(props.match.params.id))
+        setComent(document_version_content)
+        console.log(props);
+        
+  },[document_version_content])
+
+    // funcion que controla la visibilidad del chat 
+    const showChat = () => {
+      setVisible( prevState => !prevState.visible )
     }
 
-    static propTypes = {
-        newDocument_version: PropTypes.func.isRequired,
-        auth: PropTypes.object.isRequired
-    }
-    async componentDidMount() {
-        if (this.props.match.params.id) {
-            const res = await axios.get(`/document_version_content/${this.props.match.params.id}`)
-            this.setState({
-                editing: true,
-                coment: res.data.coment,
-                document: res.data.document,
-                document_user: res.data.document_user
-            })
-
-        }
-    }
-
-    OnChange = e => {
-
-
-        this.setState({ [e.target.name]: e.target.value, });
-        const { user } = this.props.auth
-        user ? this.setState({ document_user: user._id }) : this.setState({ document_user: "" })
+   
+    const OnChange = e => {
+        setComent( e.target.value, );
+        if(user)
+        setDocument_user(user._id)
+        setDocument (version.document )
 
     };
 
-    OnSubmit = (e) => {
+    const OnSubmit = (e) => {
         e.preventDefault();
 
-        const { coment, document_user, document } = this.state;
         const newDoc = { coment, document_user, document };
-        this.props.newDocument_version(newDoc, this.props.history);
+        dispatch(newDocument_version(newDoc, props.history));
     }
+       
+        return (          
+            <MySidebar.Pushable >
 
-    render() {
-        return (
+            <MySidebar
+              animation='overlay'
+              direction='right'
+              onHide={() => setVisible( false )}
+              vertical
+              visible={visible}
+              width='wide'
+            >
+            <ChatPage />
+            </MySidebar>
 
-            <Form onSubmit={this.OnSubmit}>
+            <MySidebar.Pusher dimmed={visible}>
+            <div className="container">
+            <div />
+            <div className="center">
+            <Form onSubmit={OnSubmit}>
                 <Form.Field>
-
                     <TextArea
                         style={{ minHeight: 100}}
                         type="text"
                         id="coment"
                         name="coment"
-                        onChange={this.OnChange}
-                        value={this.state.coment}
+                        onChange={OnChange}
+                        value={coment}
                         required
                     />
                 </Form.Field>
+                
                 <Form.Field>
                     <Button type="submit"> Guardar </Button>
                 </Form.Field>
             </Form>
+            </div>
 
+            <div className="end">
+              <MyButton
+                className="button"
+                onClick={showChat}>
+
+                <MdChat className="chats" />
+              </MyButton>
+            </div>
+    
+            </div>
+
+            </MySidebar.Pusher>
+            </MySidebar.Pushable>
         )
     }
-}
 
-EditDocumentVersion.propTypes = {
-    newDocument_version: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-}
 
-const mapStateToProps = (state) => ({
-    doc_version: state.doc_version,
-    auth: state.auth
-})
-
-export default connect(mapStateToProps, { newDocument_version }) (withRouter(EditDocumentVersion))
+export default (withRouter(EditDocumentVersion))

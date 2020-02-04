@@ -1,27 +1,22 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
 import {Button, Segment, Sidebar,} from 'semantic-ui-react'
 import './App.css';
 import '@fortawesome/react-fontawesome'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route ,Switch} from 'react-router-dom';
 import { Provider } from 'react-redux'
 import store from './store'
 import { loadUsers } from './actions/AuthAction'
 import styled from 'styled-components'
 
-import NavigationBar from './components/NavigationBar';
+import PrivateRoute from './components/Navigation/PrivateRoute'
+import NavigationBar from './components/Navigation/NavigationBar';
 import Home from './components/Home'
-import Users from './components/Users'
-import Editar from './components/Editar'
-import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
+import DocumentsShared from './components/Documentos/DocumentsShared'
 import Permisions from './components/Permisions/Permisions'
 import NewDocument from './components/Documentos/NewDocument'
-import EditDocument from './components/Documentos/EditDocument'
 import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
 
-
-import { MdChat } from 'react-icons/md'
 import { GoThreeBars } from 'react-icons/go'
 
 const MySidebar = styled(Sidebar)`
@@ -91,16 +86,23 @@ class App extends Component {
 
                   <div className="center">
                     <Segment basic>
-                      <Route path="/" exact component={Home} />
-                      <Route path="/users" component={Users} />
-                      <Route path="/editar" component={Editar} />
-                      <Route path="/document/" component={Documentos} />
-                      <Route path="/new_document/" component={NewDocument} />                      
-                      <Route path="/permisions/:id" component={Permisions} />
-                      <Route path="/edit_document/:id" component={EditDocument} />
-                      <Route path="/edit_document_version/:id" component={EditDocumentVersion} />
-
-
+                      <Route exact path="/" exact component={Home} />
+                     <Switch>
+                      <PrivateRoute exact path="/documents" component={Documentos} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/new_document" component={NewDocument} />
+                     </Switch> 
+                     <Switch>
+                      <PrivateRoute exact path="/permisions/:id" component={Permisions} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/edit_document_version/:id" 
+                                          component={EditDocumentVersion} />
+                      </Switch>
                     </Segment>
                   </div>
                   <div/>

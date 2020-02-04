@@ -1,84 +1,82 @@
-import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom';
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory} from 'react-router-dom';
 import { newDocument } from '../../actions/DocumentAction'
 import { TextArea,Button, Form, Input } from 'semantic-ui-react';
 
-class NewDocument extends Component {
+function NewDocument (props) {
+  const history = useHistory();
+  
+  /* creando variables de estado y un metodo para modificarlas */
+  // const [state, setState] = useState(
+  //   {
+  //    name: '',
+  //    coment: '',
+  //    document_user: '' 
+  //   });
+  
+    const [name, setName] = useState('')
+    const [coment, setComent] = useState('')
+    const [document_user, setDocument_user] = useState()
     
-    state = {
-        _id: "",
-        name: "",
-        coment: "",
-        document_user: "",
-        editing: false
-    }
 
-    static propTypes = {
-        newDocument: PropTypes.func.isRequired,
-        auth: PropTypes.object.isRequired
-    }
+  /* utilizando variables de los reducers.js */
+  const user = useSelector(state => state.auth.user); 
+  useEffect(()=>
+  user ?
+  console.log(user) : null
+  ,[])
 
-    OnChange = e => {
+  /*  dispatch para utilizar las actions.js */
+  const dispatch = useDispatch()
+  const OnChangename = (e) => {
+  setName(e.target.value );
+  };
 
-
-        this.setState({ [e.target.name]: e.target.value,});
-        const { user } = this.props.auth
-        user ? this.setState({ document_user: user._id }) : this.setState({ document_user: "" })
-
+  const OnChangecoment = (e) => {
+    setComent( e.target.value );
+    if(user)
+    setDocument_user(user._id)
     };
+    
+  const OnSubmit = (e) => {
+    e.preventDefault();
 
-    OnSubmit = (e) => {
-        e.preventDefault();
-        const { name, coment, document_user } = this.state;
-        const newDoc = { name, coment, document_user };
-        this.props.newDocument(newDoc, this.props.history);  
-    }
+    // const { name, coment, document_user } = state
+    const newDoc = { name, coment, document_user };
+    dispatch(newDocument(newDoc, history));  
+  }
+    return (
 
-    render() {
-        return (
-
-            <Form onSubmit={this.OnSubmit}>
-                <Form.Field>
-                    <Input
-                        type="text"
-                        id="name"
-                        placeholder="Nombre del documento"
-                        name="name"
-                        onChange={this.OnChange}
-                        required                     
+        <Form onSubmit={OnSubmit}>
+            <Form.Field>
+                <Input
+                    type="text"
+                    placeholder="Nombre del documento"
+                    name="name"
+                    onChange={OnChangename}
+                    value={name}
+                    required                     
+                />
+            </Form.Field>
+            <Form.Field>
+                <TextArea
+                    style={{ minHeight: 100}}
+                    placeholder="Comentario sobre el documento"
+                    name="coment"
+                    onChange={OnChangecoment} 
+                    value={coment}    
+                    required
                     />
-                </Form.Field>
-                <Form.Field>
-                    <TextArea
-                        style={{ minHeight: 100}}
-                        type="text"
-                        id="coment"
-                        placeholder="Comentario sobre el documento"
-                        name="coment"
-                        onChange={this.OnChange}
-                        required
-                    />
-                </Form.Field>
-                <Form.Field>
+             </Form.Field>
+            <Form.Field>
                     <Button type="submit"> Guardar </Button>
-                </Form.Field>
-            </Form>
+            </Form.Field>
+        </Form>
 
         )
     }
-}
 
-NewDocument.propTypes = {
-    newDocument: PropTypes.func.isRequired,
-    doc: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-}
 
-const mapStateToProps = (state) => ({
-    doc: state.doc,
-    auth: state.auth
-})
 
-export default connect(mapStateToProps, { newDocument }) (withRouter(NewDocument))
+export default  NewDocument;

@@ -1,7 +1,9 @@
-import { GET_DOCUMENT_VERSION, ADD_DOCUMENT_VERSION } from '../actions/types'
+import { GET_DOCUMENT_VERSION, ADD_DOCUMENT_VERSION,
+        GET_DOCUMENT_VERSION_ByID, GET_DOCUMENT_VERSION_CONTENT } from '../actions/types'
 const initialState = {
     docs_version: [],
-    version_count: ""
+    document_version_content: "",
+    version: ''
 }
 
 export default function (state = initialState, action) {
@@ -12,11 +14,20 @@ export default function (state = initialState, action) {
                 ...state,
                 docs_version: action.payload
             };
+        case GET_DOCUMENT_VERSION_ByID:
+        return {
+            ...state,
+            version: action.payload
+        };
+        case GET_DOCUMENT_VERSION_CONTENT:
+        return {
+            ...state,
+            document_version_content: action.payload
+        };
         case ADD_DOCUMENT_VERSION:
             return {
                 ...state,
-                docs_version: [action.payload, ...state.docs_version],
-                docs_version: state.docs_version + 1
+                docs_version: [action.payload, ...state.docs_version]
             };
         default:
             return state;
