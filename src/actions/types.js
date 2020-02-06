@@ -5,6 +5,7 @@ export const GET_DOCUMENTS = 'GET_DOCUMENTS';
 export const GET_DOCUMENT = 'GET_DOCUMENT';
 export const ADD_DOCUMENT = 'ADD_DOCUMENT';
 export const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
+export const CREATE_TEXT = 'CREATE_TEXT';
 
 export const GET_PERMISION = 'GET_PERMISION';
 export const ADD_PERMISION = 'ADD_PERMISION';

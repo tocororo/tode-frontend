@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory} from 'react-router-dom';
+import { useHistory,} from 'react-router-dom';
 import { newDocument } from '../../actions/DocumentAction'
-import { TextArea,Button, Form, Input } from 'semantic-ui-react';
+import { TextArea,Button, Form, Input, Segment, Label } from 'semantic-ui-react';
 
 function NewDocument (props) {
   const history = useHistory();
@@ -41,13 +41,13 @@ function NewDocument (props) {
     
   const OnSubmit = (e) => {
     e.preventDefault();
-
     // const { name, coment, document_user } = state
     const newDoc = { name, coment, document_user };
-    dispatch(newDocument(newDoc, history));  
+    dispatch(newDocument(newDoc,history, name));  
+
   }
     return (
-
+      <Segment color='blue' padded='very'><h1>Nuevo Documento</h1>
         <Form onSubmit={OnSubmit}>
             <Form.Field>
                 <Input
@@ -58,8 +58,18 @@ function NewDocument (props) {
                     value={name}
                     required                     
                 />
+                <br/>
+                <Input
+                    type="text"
+                    placeholder="Comentario sobre el documento"
+                    name="coment"
+                    onChange={OnChangecoment}
+                    value={coment}
+                    required                     
+                />
+                <Label pointing>El comentario sirve para identificar al primer documento entre sus versiones. Por defecto sera ( Original ) </Label>
             </Form.Field>
-            <Form.Field>
+            {/* <Form.Field>
                 <TextArea
                     style={{ minHeight: 100}}
                     placeholder="Comentario sobre el documento"
@@ -69,11 +79,19 @@ function NewDocument (props) {
                     required
                     />
              </Form.Field>
+             <Form.Field>
+                <Input
+                    type='file'
+                    placeholder="Adjuntar imagen"
+                    name="coment"
+                    onChange={OnChangecoment} 
+                    />
+             </Form.Field> */}
             <Form.Field>
                     <Button type="submit"> Guardar </Button>
             </Form.Field>
         </Form>
-
+      </Segment>        
         )
     }
 

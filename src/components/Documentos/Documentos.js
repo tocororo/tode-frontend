@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {withRouter} from 'react-router-dom';
-import { Accordion, Icon, Table, Container, Divider} from 'semantic-ui-react'
+import { Accordion, Icon, Table, Container, Divider, Segment, Header, Button} from 'semantic-ui-react'
 import { faEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Moment  from 'react-moment'
@@ -44,8 +44,8 @@ function Documentos () {
   useEffect( () =>{
     dispatch(getDocuments());
     dispatch(getDocument_version());
+    dispatch(getNotifications())    
     dispatch(getNotificationsNumber());
-    dispatch(getNotifications())
   },[notificationsNumber])
 
   /* funcion para manejar la apertura y cierre del accordion */
@@ -58,9 +58,9 @@ function Documentos () {
 
   return (
 
-    <div>
-           
-      <div className='notificationContainer' >   
+    <div>  
+      <div className='notificationContainer' >         
+        <h1 className='title'>Mi Bibilioteca</h1>          
         <Notifications count={notificationsNumber}/>
       </div> 
 
@@ -68,9 +68,10 @@ function Documentos () {
 
       <Container>       
         {
+          perms.length !== 0 ?
           //  docs.map(doc =>   
           perms.map(perm => 
-            user && /* doc._id === perm.document._id && */ user._id === perm.withPermisions._id &&user._id === perm.document.document_user ? 
+            user && user._id === perm.withPermisions._id && user._id === perm.document.document_user ? 
 
               /**
               ACCORDION FOR MAIN DOCUMENT
@@ -128,12 +129,22 @@ function Documentos () {
                          </Table.Row>
                        </Table.Header>
                      </Table>
-                : "")}
+                : null)}
               </Accordion.Content>
             </Accordion>
-               :""
+               :null
                // )
-            )}
+            )
+            :
+            
+            <Segment placeholder>
+            <Header icon>
+              <Icon name='pdf file outline' />
+              No existen documentos en la biblioteca.
+            </Header>
+            <Link className='button'  to='/new_document' >Adicionar Documento</Link>
+          </Segment>
+        }
       </Container>
     </div>
           

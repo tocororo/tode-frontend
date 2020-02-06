@@ -16,6 +16,7 @@ import DocumentsShared from './components/Documentos/DocumentsShared'
 import Permisions from './components/Permisions/Permisions'
 import NewDocument from './components/Documentos/NewDocument'
 import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
+import AddContent from './components/Documentos/AddContent'
 
 import { GoThreeBars } from 'react-icons/go'
 
@@ -96,6 +97,9 @@ class App extends Component {
                      <Switch>
                       <PrivateRoute exact path="/new_document" component={NewDocument} />
                      </Switch> 
+                     <Switch>
+                      <PrivateRoute exact path="/add-content/:name" component={AddContent} />
+                     </Switch>
                      <Switch>
                       <PrivateRoute exact path="/permisions/:id" component={Permisions} />
                      </Switch>
