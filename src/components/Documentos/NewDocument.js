@@ -2,23 +2,29 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory,} from 'react-router-dom';
 import { newDocument } from '../../actions/DocumentAction'
-import { TextArea,Button, Form, Input, Segment, Label } from 'semantic-ui-react';
+import { Container, Button, Form, Input, Segment, Label, Divider } from 'semantic-ui-react';
+import styled from 'styled-components'
+
+const MyButton = styled(Button)`
+&&&{
+    background-color:#1d314d;
+    color:white;
+}
+
+&&&:hover{
+  background-color:#0f1d31;
+  color:whitesmoke;
+}
+`
 
 function NewDocument (props) {
   const history = useHistory();
   
-  /* creando variables de estado y un metodo para modificarlas */
-  // const [state, setState] = useState(
-  //   {
-  //    name: '',
-  //    coment: '',
-  //    document_user: '' 
-  //   });
   
-    const [name, setName] = useState('')
-    const [coment, setComent] = useState('')
-    const [document_user, setDocument_user] = useState()
-    
+  const [name, setName] = useState('')
+  const [coment, setComent] = useState('Original')
+  const [document_user, setDocument_user] = useState()
+  
 
   /* utilizando variables de los reducers.js */
   const user = useSelector(state => state.auth.user); 
@@ -41,57 +47,43 @@ function NewDocument (props) {
     
   const OnSubmit = (e) => {
     e.preventDefault();
-    // const { name, coment, document_user } = state
+
     const newDoc = { name, coment, document_user };
     dispatch(newDocument(newDoc,history, name));  
 
   }
     return (
-      <Segment color='blue' padded='very'><h1>Nuevo Documento</h1>
-        <Form onSubmit={OnSubmit}>
-            <Form.Field>
-                <Input
-                    type="text"
-                    placeholder="Nombre del documento"
-                    name="name"
-                    onChange={OnChangename}
-                    value={name}
-                    required                     
-                />
-                <br/>
-                <Input
-                    type="text"
-                    placeholder="Comentario sobre el documento"
-                    name="coment"
-                    onChange={OnChangecoment}
-                    value={coment}
-                    required                     
-                />
-                <Label pointing>El comentario sirve para identificar al primer documento entre sus versiones. Por defecto sera ( Original ) </Label>
-            </Form.Field>
-            {/* <Form.Field>
-                <TextArea
-                    style={{ minHeight: 100}}
-                    placeholder="Comentario sobre el documento"
-                    name="coment"
-                    onChange={OnChangecoment} 
-                    value={coment}    
-                    required
-                    />
-             </Form.Field>
-             <Form.Field>
-                <Input
-                    type='file'
-                    placeholder="Adjuntar imagen"
-                    name="coment"
-                    onChange={OnChangecoment} 
-                    />
-             </Form.Field> */}
-            <Form.Field>
-                    <Button type="submit"> Guardar </Button>
-            </Form.Field>
-        </Form>
-      </Segment>        
+      <Container>
+        <h1 className='title'>Añadir Documento</h1>
+          <Divider />
+        <Segment color='blue' padded='very'><h2>Paso 1</h2>
+          <Form onSubmit={OnSubmit}>
+              <Form.Field>
+                  <Input
+                      type="text"
+                      placeholder="Nombre del documento"
+                      name="name"
+                      onChange={OnChangename}
+                      value={name}
+                      required                     
+                  />
+                  <br/>
+                  <Input
+                      type="text"
+                      placeholder="Comentario sobre el documento"
+                      name="coment"
+                      onChange={OnChangecoment}
+                      value={coment}
+                      required                     
+                  />
+                  <Label pointing>El comentario sirve para identificar al primer documento entre sus versiones. Por defecto sera ( Original ) </Label>
+              </Form.Field>
+              <Form.Field>
+                      <MyButton type="submit"> Guardar </MyButton>
+              </Form.Field>
+          </Form>
+        </Segment>     
+      </Container>   
         )
     }
 

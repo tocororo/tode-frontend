@@ -28,39 +28,37 @@ class Permisions extends Component {
         document:this.props.match.params.id
        }
       }
-    async componentDidMount() {
-      this.props.getDocuments()
-    }
+  componentDidMount() {
+     this.props.getDocuments()
+  }
       
-    render() {
-        const {docs, perms} = this.props.doc
-        return (
-            <Container>
-              {/** DIV FOR CURRENT DOCUMENT */}
-              <div>
-                {docs.map(doc => 
-                    doc._id === this.state.document ?
-                    <MyTable key={doc._id} padded='very' inverted>
-                    <Table.Header>
-                     <Table.Row>
-                     <Table.HeaderCell>{doc.name}</Table.HeaderCell>
-                        <Table.HeaderCell>
-                          <MyLink to="#"> {doc.coment} </MyLink>
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>{doc.document_user.name}</Table.HeaderCell>
-                        <Table.HeaderCell>{doc.document_user.rol}</Table.HeaderCell>
-                        <Table.HeaderCell><Moment fromNow>{doc.createdAt}</Moment></Table.HeaderCell>
-                     </Table.Row>
-                     </Table.Header>
-                    </MyTable>
-                : "" )}
-              </div>
-              {/** DIV FOR COMPONENT PermisionSearch */}
-              <div>
-                <PermisionSearch doc={this.props.match.params.id} />
-              </div>
-            </Container>
-        )
+  render() {
+      const {docs, perms} = this.props.doc
+    return (
+      <Container>
+        {/** DIV FOR CURRENT DOCUMENT */}
+        <div>
+          {docs.map(doc => 
+              doc._id === this.state.document ?
+              <MyTable key={doc._id} padded='very' inverted>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>{doc.name}</Table.HeaderCell>
+                  <Table.HeaderCell>{doc.coment}</Table.HeaderCell>
+                  <Table.HeaderCell>{doc.document_user.name}</Table.HeaderCell>
+                  <Table.HeaderCell>{doc.document_user.rol}</Table.HeaderCell>
+                  <Table.HeaderCell><Moment fromNow>{doc.createdAt}</Moment></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              </MyTable>
+          : "" )}
+        </div>
+        {/** DIV FOR COMPONENT PermisionSearch */}
+        <div>
+          <PermisionSearch document_id={this.props.match.params.id} />
+        </div>
+      </Container>
+    )
     }
 }
 

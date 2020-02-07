@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
-import { Button, Form, TextArea, Sidebar, Segment, Input } from 'semantic-ui-react'
+import { Button, Form, TextArea, Sidebar, Container, Input, Divider } from 'semantic-ui-react'
 import '../../css/editpage.css'
 import '@fortawesome/react-fontawesome'
-import { MdChat } from 'react-icons/md'
 import styled from 'styled-components'
 
-import { createText, getDocumentByName } from '../../actions/DocumentAction'
-import ChatPage from '../Chat/ChatPage'
+import { createText } from '../../actions/DocumentAction'
 
-const MySidebar = styled(Sidebar)`
-  &&& {
-    background-color:#efefef;
-  }
-`
 const MyButton = styled(Button)`
 &&&{
     background-color:#1d314d;
@@ -63,34 +56,38 @@ function AddContent(props) {
     }
        
         return (          
-            
-            <Form onSubmit={OnSubmit} enctype="multipart/form-data" >
-                <Form.Field>
-                    <TextArea
-                        style={{ minHeight: 100}}
-                        type="text"
-                        id="text"
-                        name="text"
-                        onChange={OnChange}
-                        value={text}
-                        required
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Input
-                        type="file"
-                        id="image"
-                        name="image"
-                        onChange={OnChangeImage}
-                        value={image}
-                        required
-                    />
-                </Form.Field>
-                
-                <Form.Field>
-                    <Button type="submit"> Guardar </Button>
-                </Form.Field>
-            </Form>
+          <Container>
+            <h1 className='title'>Añadir Documento</h1>
+            <Divider />
+            <h2 className='title'>Paso 2</h2>
+              <Form onSubmit={OnSubmit} enctype="multipart/form-data" action="/createText" method="post">
+                  <Form.Field>
+                      <TextArea
+                          style={{ minHeight: 100}}
+                          type="text"
+                          id="text"
+                          name="text"
+                          onChange={OnChange}
+                          value={text}
+                          required
+                      />
+                  </Form.Field>
+                  <Form.Field>
+                      <Input
+                          type="file"
+                          id="image"
+                          name="image"
+                          onChange={OnChangeImage}
+                          value={image}
+                          required
+                      />
+                  </Form.Field>
+                  
+                  <Form.Field>
+                      <MyButton type="submit"> Guardar </MyButton>
+                  </Form.Field>
+              </Form>
+            </Container>
         )
     }
 

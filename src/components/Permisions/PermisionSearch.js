@@ -4,45 +4,30 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
 import {deletePermision} from '../../actions/PermisionAction'
+import {getDocuments} from '../../actions/DocumentAction'
 import {  Grid, Header, Segment, Modal, Icon, Label, Divider, List,  Button, Image } from 'semantic-ui-react'
 
 import InputSearch from './InputSearch'
+import DeleteModal from '../Utils/DeleteModal'
 
 class PermisionSearch extends Component {
   constructor(props){
       super(props)
       this.state = {
           modalOpen: false,
-          document_id:props.doc,
+          document:props.document_id,
           permision: [],
-          document:"",
           withPermisions:""
       }
   }
 
-  async componentDidMount() {
-    
-    fetch('/document').then(res => res.json()).then((data) => {
-        this.setState({permision:data.perms})
-       })
+  componentDidMount() {
+    this.props.getDocuments()
   }
-
-   handleOpen = ( () => this.setState({modalOpen: true}) );
-
-   handleClose = ( () => this.setState({modalOpen: false}) )
-
-
-  
-  Delete = (id) => {
-    this.props.deletePermision(id);
-    this.setState({ modalOpen: false });
-    this.componentDidMount();
-    
-}
 
     render() {
        
-      const permisions = this.state.permision
+      const {perms} = this.props.doc
 
       return (
             
@@ -51,43 +36,31 @@ class PermisionSearch extends Component {
           <Segment>
           <Header><h2>Usuarios con permisos otorgados</h2></Header>
            <Divider/>
-              {permisions.map(permision => (
-                permision.document._id === this.state.document_id && 
-                permision.requestAcepted === true ?
+              {perms.map(permision => 
+                permision.document._id === this.state.document ?
                   <List key={permision._id}>
                       <List.Item>
                         <List.Content floated='right'>
-                        {permision.document.document_user != permision.withPermisions._id
-                        ?    
-                        <Modal trigger={
-                         <Button
-                         onClick={this.handleOpen}
-                         icon='remove'
-                         />}
-                         dimmer='blurring' 
-                         open={this.state.modalOpen}
-                         onClose={this.handleClose}
-                         basic
-                         basic size='small'>
-                       <Header icon='user' content='Agregar usuario' />
-                        <Modal.Content>
-                          <p>
-                            Esta seguro de querer eliminar permisos sobre el documento para el usuario {permision.withPermisions.name}
-                          </p>
-                        </Modal.Content>
-                        <Modal.Actions>
-                          <Button basic color='red' inverted
-                           onClick={this.handle }>
-                            <Icon name='remove' /> Cancelar
-                          </Button>
-                          <Button color='green' inverted 
-                             onClick = {this.Delete.bind(this, permision._id)}>
-                            <Icon name='checkmark'/> Aceptar
-                          </Button>
-                        </Modal.Actions>
-                       </Modal>
+                        {permision.document.document_user !== permision.withPermisions._id  && 
+                          permision.requestAcepted === false ?
+
+                          <DeleteModal 
+                            permision_id={permision._id} 
+                            name={permision.withPermisions.name} 
+                            nameLabel='Pendiente'
+                            color='orange'/>
                         :
-                        <Label content="Propietario" />
+                        permision.document.document_user !== permision.withPermisions._id  && 
+                          permision.requestAcepted === true ?
+                          <DeleteModal 
+                            permision_id={permision._id} 
+                            name={permision.withPermisions.name} 
+                            nameLabel='Invitado'
+                            color='teal'/>
+                        : 
+                        permision.document.document_user === permision.withPermisions._id ?   
+                          <Label  as='a' color='teal' tag > Propietario </Label>
+                        :null
                         }
                         </List.Content>
                         <Image avatar src= {Avatar} />
@@ -95,13 +68,13 @@ class PermisionSearch extends Component {
                       </List.Item>
                       <Divider/>
                   </List>
-              : ""))
+              : null)
               }
           </Segment>    
         </Grid.Column>
         <Grid.Column width={5}>
 
-          <InputSearch doc={this.props.doc} />
+          <InputSearch document_id={this.state.document} />
           
         </Grid.Column>
       </Grid>             
@@ -111,6 +84,7 @@ class PermisionSearch extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    doc: state.doc
 })
 
-export default connect(mapStateToProps, {deletePermision}) (withRouter(PermisionSearch))
+export default connect(mapStateToProps, {deletePermision, getDocuments}) (withRouter(PermisionSearch))

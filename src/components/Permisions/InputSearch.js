@@ -13,10 +13,10 @@ class InputSearch extends Component{
         super(props)
         this.state = {
             modalOpen: false,
-            document_id:props.doc,
-            document:"",
+            document:props.document_id,
             withPermisions:""
         }
+        
     }
 
 
@@ -37,8 +37,8 @@ class InputSearch extends Component{
       else{
         if (this.state.value.length > 2){
 
-          const {value, document_id} = this.state;
-          this.props.getUsersToPermission({value, document_id}); 
+          const {value, document} = this.state;
+          this.props.getUsersToPermission({value, document}); 
           
           const {users} = this.props.user
           console.log(value);
@@ -54,7 +54,7 @@ class InputSearch extends Component{
 
     }
       
-  OnChange = (e, { doc,user }) => this.setState({ document:doc, withPermisions:user })
+  OnChange = (e, { user }) => this.setState({ withPermisions:user })
     
     
   OnSubmit = (e) => {
@@ -81,10 +81,12 @@ class InputSearch extends Component{
         <Grid >
           <Grid.Column width={4}>                              
           <Modal trigger={
-              <Button 
+              <Icon 
               onClick={this.handleOpen}
-              icon='add'
-              />}
+              name='plus'
+              color='teal'
+              />
+            }
               dimmer='blurring'
               open={this.state.modalOpen}
               onClose={this.handleClose}
@@ -103,7 +105,6 @@ class InputSearch extends Component{
                </Button>
                  
                <Button color='green' inverted 
-                  doc = {this.state.document_id}
                   user = {_id}
                   onClick = {this.OnChange}
                   type='submit'>
@@ -116,12 +117,12 @@ class InputSearch extends Component{
           </Modal>
 
           </Grid.Column>
-          <Grid.Column width={6}>
+          {<Grid.Column width={6}>
               <p>{name} </p>
-          </Grid.Column>
-          <Grid.Column width={5}>
+          </Grid.Column>}
+          {/* <Grid.Column width={5}>
               <p>{rol} </p>
-          </Grid.Column>
+          </Grid.Column> */}
         </Grid> 
        
         }
