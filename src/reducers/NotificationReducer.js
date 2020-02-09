@@ -1,7 +1,8 @@
-import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION } from '../actions/types'
+import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION, GET_REQUEST_NUMBER } from '../actions/types'
 const initialState = {
     notifications: [],
-    notificationsNumber:0
+    notificationsNumber:0,
+    requestNumber:0
 }
 
 export default function (state = initialState, action) {
@@ -18,6 +19,12 @@ export default function (state = initialState, action) {
            return {
                ...state,
                notificationsNumber: action.payload
+           }; 
+        case GET_REQUEST_NUMBER:
+           
+           return {
+               ...state,
+               requestNumber: action.payload
            }; 
          case DELETE_NOTIFICATION:
            return {

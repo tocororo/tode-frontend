@@ -132,3 +132,7 @@ export const editUser = ({ _id, name, email, password }) => (dispatch, getSate) 
     });
 
 };
+
+export const loginOauth2 = () => (dispatch) => {
+    axios.get('/oauth2')
+};

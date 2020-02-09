@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 //import { Button, Modal, ModalBody, Form, FormGroup, Input } from 'reactstrap'
-import { Button, Form, Modal, Header } from 'semantic-ui-react'
+import { Button, Form, Modal, Header, Icon } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { login } from '../../actions/AuthAction'
 import { clearErrors } from '../../actions/ErrorAction'
-import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Avatar from '../../assets/Avatar.png'
 import '../../css/login.css';
 import '../../css/navigationBar.css';
@@ -98,7 +96,7 @@ class LoginModal extends Component {
                         <Form.Field>
                         <div className="input-group">
                            <div className="input-group-prepend">
-                               <span className="input-group-text"><FontAwesomeIcon icon={faEnvelope} /></span>
+                               <span className="input-group-text"><Icon name='envelope' /></span>
                            </div>
                           <input type="email" id="email" name='email' className="form-control" placeholder="Correo" onChange={this.OnChange} />
                           </div>
@@ -106,7 +104,7 @@ class LoginModal extends Component {
                         <Form.Field>
                         <div className="input-group">
                            <div className="input-group-prepend">
-                               <span className="input-group-text"><FontAwesomeIcon icon={faKey} /></span>
+                               <span className="input-group-text"><Icon name='key' /></span>
                            </div>
                           <input type="password" id="password" name='password' className=" form-control" placeholder="Contraseña" onChange={this.OnChange} />
                           </div>

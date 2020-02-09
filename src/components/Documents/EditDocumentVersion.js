@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {withRouter} from 'react-router-dom';
-import { Button, Form, TextArea, Sidebar, Segment } from 'semantic-ui-react'
+import { Button, Form, TextArea, Sidebar, Segment, Icon } from 'semantic-ui-react'
 import '../../css/editpage.css'
-import '@fortawesome/react-fontawesome'
-import { MdChat } from 'react-icons/md'
 import styled from 'styled-components'
 
 import { newDocument_version, getDocument_version_content, getDocument_versionById } from '../../actions/DocumentVersionAction'
@@ -115,7 +113,7 @@ function EditDocumentVersion(props) {
                 className="button"
                 onClick={showChat}>
 
-                <MdChat className="chats" />
+                <Icon name='chat' />
               </MyButton>
             </div>
     

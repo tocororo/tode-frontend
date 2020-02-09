@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
-import { Button, Form, TextArea, Sidebar, Container, Input, Divider } from 'semantic-ui-react'
+import { Button, Form, TextArea, Container, Input, Divider } from 'semantic-ui-react'
 import '../../css/editpage.css'
-import '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 
 import { createText } from '../../actions/DocumentAction'

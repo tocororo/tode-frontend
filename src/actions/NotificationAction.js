@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION } from './types'
+import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION, GET_REQUEST_NUMBER } from './types'
 import {tokenConfig} from './AuthAction'
 import {getDocuments} from './DocumentAction'
 
@@ -35,6 +35,13 @@ export const getNotificationForPermisions = ({document}) => (dispatch, getSate) 
 export const getNotificationsNumber = () => (dispatch, getSate) => {
     axios.get('/notificationNumber', tokenConfig(getSate)).then(res => dispatch({
         type: GET_NOTIFICATION_NUMBER,
+        payload: res.data
+    }))
+};
+
+export const getRequestNumber = () => (dispatch, getSate) => {
+    axios.get('/requestNumber', tokenConfig(getSate)).then(res => dispatch({
+        type: GET_REQUEST_NUMBER,
         payload: res.data
     }))
 };

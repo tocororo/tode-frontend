@@ -5,6 +5,8 @@ import { newDocument } from '../../actions/DocumentAction'
 import { Container, Button, Form, Input, Segment, Label, Divider } from 'semantic-ui-react';
 import styled from 'styled-components'
 
+import Dropzone from './Dropzone'
+
 const MyButton = styled(Button)`
 &&&{
     background-color:#1d314d;
@@ -54,9 +56,7 @@ function NewDocument (props) {
   }
     return (
       <Container>
-        <h1 className='title'>Añadir Documento</h1>
-          <Divider />
-        <Segment color='blue' padded='very'><h2>Paso 1</h2>
+        <Segment color='blue' padded='very'><h2>Añadir Documento: Paso 1</h2>
           <Form onSubmit={OnSubmit}>
               <Form.Field>
                   <Input
@@ -82,7 +82,8 @@ function NewDocument (props) {
                       <MyButton type="submit"> Guardar </MyButton>
               </Form.Field>
           </Form>
-        </Segment>     
+        </Segment>
+        <Dropzone />     
       </Container>   
         )
     }

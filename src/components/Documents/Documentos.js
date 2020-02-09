@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {withRouter} from 'react-router-dom';
-import { Accordion, Icon, Table, Container, Divider, Segment, Header, Button} from 'semantic-ui-react'
-import { faEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Accordion, Icon, Table, Container,  Segment, Header} from 'semantic-ui-react'
 import Moment  from 'react-moment'
-import '../../css/DocumentsPage.css'
 import styled from 'styled-components'
-import Notifications from '../Notifications/Notifications'
 
-import {getNotifications, getNotificationsNumber} from '../../actions/NotificationAction'
+import DocumentsOptions from './DocumentsOptions'
+
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
 
@@ -20,10 +17,9 @@ const MyTable = styled(Table)`
     background-color:#1d314d;
   }
 `
-/* estilo modificado para link */
 const MyLink = styled(Link)`
   &&& {
-    color:red;
+    background-color:#1d314d;
   }
 `
 
@@ -35,7 +31,7 @@ function Documentos () {
   const docs_version = useSelector(state => state.doc_version.docs_version);
   const perms = useSelector(state => state.doc.perms);
   const user = useSelector(state => state.auth.user); 
-  const {notifications, notificationsNumber} = useSelector(state => state.notification);
+  const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
 
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
@@ -44,9 +40,7 @@ function Documentos () {
   useEffect( () =>{
     dispatch(getDocuments());
     dispatch(getDocument_version());
-    dispatch(getNotifications())    
-    dispatch(getNotificationsNumber());
-  },[notificationsNumber])
+  },[])
 
   /* funcion para manejar la apertura y cierre del accordion */
   const handleClick = (e, titleProps) => {
@@ -57,14 +51,6 @@ function Documentos () {
   }
 
   return (
-
-    <div>  
-      <div className='notificationContainer' >         
-        <h1 className='title'>Mi Bibilioteca</h1>          
-        <Notifications count={notificationsNumber}/>
-      </div> 
-
-      <Divider />
 
       <Container>       
         {
@@ -85,22 +71,16 @@ function Documentos () {
                  <MyTable padded='very' inverted>
                    <Table.Header>
                     <Table.Row>
-                       <Table.HeaderCell><Icon name='dropdown'/></Table.HeaderCell>
-                       <Table.HeaderCell>{perm.document.name}</Table.HeaderCell>
-                       <Table.HeaderCell>{perm.document.coment}</Table.HeaderCell>
-                       <Table.HeaderCell>{perm.withPermisions.name}</Table.HeaderCell>
-                       <Table.HeaderCell>{perm.withPermisions.rol}</Table.HeaderCell>
-                       <Table.HeaderCell><Moment fromNow>{perm.document.createdAt}</Moment></Table.HeaderCell>
+                        <Table.HeaderCell><Icon name='dropdown'/></Table.HeaderCell>
+                        <Table.HeaderCell>{perm.document.name}</Table.HeaderCell>
+                        <Table.HeaderCell>{perm.document.coment}</Table.HeaderCell>
+                        <Table.HeaderCell>{perm.withPermisions.name}</Table.HeaderCell>
+                        <Table.HeaderCell>{perm.withPermisions.rol}</Table.HeaderCell>
                         <Table.HeaderCell>
-
-                          {/**
-                           MODAL FOR ADD USER PERMISION 
-                          */}
-                          <MyLink to = {"/permisions/" + perm.document._id}>
-                                  <FontAwesomeIcon icon={faUserPlus} />
-                          </MyLink>
-                          
-                      </Table.HeaderCell>
+                          <Moment fromNow>{perm.document.createdAt}</Moment></Table.HeaderCell>
+                        <Table.HeaderCell> 
+                          <DocumentsOptions permision={perm.document._id}/> 
+                        </Table.HeaderCell>
                     </Table.Row>  
                   </Table.Header>     
                 </MyTable>
@@ -121,10 +101,10 @@ function Documentos () {
                            <Table.Cell>{doc_version.document_user.rol}</Table.Cell>
                            <Table.Cell><Moment fromNow>{doc_version.createdAt}</Moment></Table.Cell>
                            <Table.Cell>
-                             <MyLink
+                             <Link
                                to={"/edit_document_version/" + doc_version._id}>
-                               <FontAwesomeIcon icon={faEdit} />
-                             </MyLink>
+                               <Icon name='pen square' color='orange' size='big'/>
+                             </Link>
                            </Table.Cell>
                          </Table.Row>
                        </Table.Header>
@@ -142,11 +122,10 @@ function Documentos () {
               <Icon name='pdf file outline' />
               No existen documentos en la biblioteca.
             </Header>
-            <Link className='button'  to='/new_document' >Adicionar Documento</Link>
+            <MyLink className='button'  to='/new_document' >Adicionar Documento</MyLink>
           </Segment>
         }
       </Container>
-    </div>
           
   )
 }

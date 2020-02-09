@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import { Button, Form, Modal, Header } from 'semantic-ui-react'
+import { Button, Form, Modal, Header, Icon } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { register } from '../../actions/AuthAction'
 import { clearErrors } from '../../actions/ErrorAction'
-import { faUser, faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../css/navigationBar.css';
 import styled from 'styled-components'
 
@@ -129,7 +127,7 @@ class RegisterModal extends Component {
                         <Form.Field>
                         <div className="input-group">
                            <div className="input-group-prepend">
-                               <span className="input-group-text"><FontAwesomeIcon icon={faUser} /></span>
+                               <span className="input-group-text"><Icon name='user' /></span>
                            </div>
                           <input type="text" id="name" name='name' className=" form-control" placeholder="Nombre Completo" onChange={this.OnChange} />
                         </div>  
@@ -137,7 +135,7 @@ class RegisterModal extends Component {
                         <Form.Field>
                         <div className="input-group">
                            <div className="input-group-prepend">
-                               <span className="input-group-text"><FontAwesomeIcon icon={faEnvelope} /></span>
+                               <span className="input-group-text"><Icon name='envelope' /></span>
                            </div>
                           <input type="email" id="email" name='email' className="form-control" placeholder="Correo" onChange={this.OnChange} />
                           </div>
@@ -145,7 +143,7 @@ class RegisterModal extends Component {
                         <Form.Field>
                         <div className="input-group">
                            <div className="input-group-prepend">
-                               <span className="input-group-text"><FontAwesomeIcon icon={faKey} /></span>
+                               <span className="input-group-text"><Icon name='key' /></span>
                            </div>
                           <input type="password" id="password" name='password' className=" form-control" placeholder="Contraseña" onChange={this.OnChange} />
                           </div>
