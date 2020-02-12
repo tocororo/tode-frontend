@@ -1,31 +1,24 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
 import {Button, Segment, Sidebar,} from 'semantic-ui-react'
 import './App.css';
 import '@fortawesome/react-fontawesome'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route ,Switch} from 'react-router-dom';
 import { Provider } from 'react-redux'
 import store from './store'
 import { loadUsers } from './actions/AuthAction'
 import styled from 'styled-components'
 
-
-import NavigationBar from './components/NavigationBar';
+import PrivateRoute from './components/Navigation/PrivateRoute'
+import NavigationBar from './components/Navigation/NavigationBar';
 import Home from './components/Home'
-import Users from './components/Users'
-import Editar from './components/Editar'
-import ChatPage from './components/Chat/ChatPage'
 import Documentos from './components/Documentos/Documentos'
-import Permisions from './components/Documentos/Permisions'
+import DocumentsShared from './components/Documentos/DocumentsShared'
+import Permisions from './components/Permisions/Permisions'
 import NewDocument from './components/Documentos/NewDocument'
-import ViewDocumentContent from './components/Documentos/ViewDocumentContent'
-import ViewDocumentVersionContent from './components/Documentos/ViewDocumentVersionContent'
-import EditDocument from './components/Documentos/EditDocument'
 import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
 import Texture from './components/Texture/Texture'
+import AddContent from './components/Documentos/AddContent'
 
-
-import { MdChat } from 'react-icons/md'
 import { GoThreeBars } from 'react-icons/go'
 
 const MySidebar = styled(Sidebar)`
@@ -45,96 +38,48 @@ const MyButton = styled(Button)`
 }
 `
 
-const VerticalSidebarDoc = ({ animation, direction, visible }) => (
-  <MySidebar
-    animation={animation}
-    direction={direction}
-    visible={visible}
-    width="thin"
-  >
-  
-    <NavigationBar />
-  </MySidebar>
-)
-VerticalSidebarDoc.propTypes = {
-  animation: PropTypes.string,
-  direction: PropTypes.string,
-  visible: PropTypes.bool,
-}
-
-const VerticalSidebarChat = ({ animation, direction, visible }) => (
-  <Sidebar
-    animation={animation}
-    direction={direction}
-    visible={visible}
-  >
-    <ChatPage />
-
-  </Sidebar>
-)
-
-VerticalSidebarChat.propTypes = {
-  animation: PropTypes.string,
-  direction: PropTypes.string,
-  visible: PropTypes.bool,
-}
-
 
 class App extends Component {
+  state = {
+    visible: false
+  }
+
+  showMenu = () => {
+    this.setState((prevState) => ({ visible: !prevState.visible }))
+  }
 
   componentDidMount() {
     store.dispatch(loadUsers())
   }
 
-  state = {
-    animation: 'overlay',
-    direction: 'left',
-    dimmed: false,
-    visible: false,
-  }
-
-  handleChangerigth = (direction, animation) => () => {
-    this.setState({ direction })
-    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-  }
-
-  handleChangeleft = (direction, animation) => () => {
-    this.setState({ direction })
-    this.setState((prevState) => ({ animation, visible: !prevState.visible }))
-  }
-
+  
   render() {
-    const { animation, dimmed, direction, visible } = this.state
-
+    
     return (
       <Router>
         <Provider store={store}>
           <div>
             <MySidebar.Pushable as={Segment}>
 
-              {direction === "left" ?
-                <VerticalSidebarDoc
-                  animation={animation}
-                  direction={direction}
-                  visible={visible}
-                />
-                :
-
-                <VerticalSidebarChat
-                  animation={animation}
-                  direction={direction}
-                  visible={visible}
-                />
-              }
+            <MySidebar
+              animation='overlay'
+              icon='labeled'
+              inverted
+              onHide={() => this.setState({ visible: false })}
+              vertical
+              visible={this.state.visible}
+              width='wide'
+            >
+            <NavigationBar />
+            </MySidebar>
 
 
-              <MySidebar.Pusher dimmed={dimmed && visible}>
+              <MySidebar.Pusher dimmed={this.state.visible}>
                 <div className="container">
                   <div className="start">
                     <MyButton
                       className="button"
-                      active={direction === 'left'}
-                      onClick={this.handleChangeleft('left')}>
+                      onClick={this.showMenu}>
 
                       <GoThreeBars className="doc" />
                     </MyButton>
@@ -156,17 +101,29 @@ class App extends Component {
                       <Route path="/texture" component={Texture} />
 
 
+                      <Route exact path="/" exact component={Home} />
+                     <Switch>
+                      <PrivateRoute exact path="/documents" component={Documentos} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/new_document" component={NewDocument} />
+                     </Switch> 
+                     <Switch>
+                      <PrivateRoute exact path="/add-content/:name" component={AddContent} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/permisions/:id" component={Permisions} />
+                     </Switch>
+                     <Switch>
+                      <PrivateRoute exact path="/edit_document_version/:id" 
+                                          component={EditDocumentVersion} />
+                      </Switch>
                     </Segment>
                   </div>
-                  <div className="end">
-                    <MyButton
-                      className="button"
-                      active={direction === 'right'}
-                      onClick={this.handleChangerigth('right')}>
-
-                      <MdChat className="chats" />
-                    </MyButton>
-                  </div>
+                  <div/>
                 </div>
               </MySidebar.Pusher>
             </MySidebar.Pushable>

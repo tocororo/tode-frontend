@@ -4,6 +4,7 @@ import MessagesContainer from './MessagesContainer';
 import InputContainer from './InputContainer';
 import '../../css/ChatPage.css';
 import openSocket from 'socket.io-client';
+import axios from 'axios';
 
 class ChatPage extends Component {
 
@@ -11,7 +12,8 @@ class ChatPage extends Component {
         super(props);
         this.state = {
             messages: [],
-            socket: openSocket("http://localhost:4000")
+            socket: openSocket("http://localhost:4000"),
+            document_id: props.doc
         };
 
         this.state.socket.on("new-message", (message) => {
@@ -24,14 +26,20 @@ class ChatPage extends Component {
     }
 
 
-    componentDidMount() {
-        fetch("/message", {
-            method: "GET"
+    async componentDidMount() {
+        const {document_id} = this.state
+        const params = ({
+            document_id
+        })
+        await axios.get("/message", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params
         }).then((res) => {
-            return res.json();
-        }).then((resJson) => {
             this.setState({
-                messages: resJson
+                messages: res.data
             });
         }).catch((err) => {
             console.log(err);
@@ -71,7 +79,8 @@ class ChatPage extends Component {
 
         let reqBody = {
             sender: sender,
-            content: content
+            content: content,
+            document: this.state.document_id
         }
 
         fetch("/message", {

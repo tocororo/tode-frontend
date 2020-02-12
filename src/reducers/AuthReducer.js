@@ -1,7 +1,6 @@
 import {
     USER_LOADING,
     USER_LOADED,
-    GET_USER_AUTH,
     AUTH_ERROR,
     LOGIN_SUCCES,
     LOGIN_FAIL,
@@ -14,10 +13,9 @@ import {
 
 export const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: null,
-    isLoading: null,
-    user: null,
-    msg: ""
+    isAuthenticated: false,
+    isLoading: false,
+    user: {}
 }
 
 export default function (state = initialState, action) {
@@ -54,19 +52,6 @@ export default function (state = initialState, action) {
                 user: null,
                 isAuthenticated: false,
                 isLoading: false
-            };
-
-        case EDIT_FAIL:
-            return {
-                msg: "erororor"
-            };
-        case EDIT_SUCCES:
-            return {
-                ...state,
-                ...action.payload,
-                isAuthenticated: true,
-                isLoading: false,
-                msg: "successs"
             };
 
         default:

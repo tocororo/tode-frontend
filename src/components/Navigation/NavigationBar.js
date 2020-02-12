@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Accordion, Menu, Table} from 'semantic-ui-react'
-import RegisterModal from './User/Register'
-import LoginModal from './User/Login'
-import '../css/navigationBar.css';
+import RegisterModal from '../User/Register'
+import LoginModal from '../User/Login'
+import '../../css/navigationBar.css';
 import PropTypes from 'prop-types'
-import { logout } from '../actions/AuthAction'
+import { logout } from '../../actions/AuthAction'
 import styled from 'styled-components'
 
 const MyLink = styled(Link)`
@@ -43,9 +43,10 @@ class NavigationBar extends Component {
             <Table basic='very' celled collapsing>
                 <Table.Header>
                     <Table.Row>
-                    </Table.Row>
+                        <Table.HeaderCell><Link className="nav-link " to="/documents">Mi Biblioteca</Link></Table.HeaderCell>
+                    </Table.Row>                     
                     <Table.Row>
-                        <Table.HeaderCell><Link className="nav-link " to="/document">Biblioteca</Link></Table.HeaderCell>
+                        <Table.HeaderCell><Link className="nav-link " to="/documents-shared">Biblioteca Compartida</Link></Table.HeaderCell>
                     </Table.Row> 
                     <Table.Row>
                          <Table.HeaderCell><Link className="nav-link " to="/new_document">Nuevo Documento</Link></Table.HeaderCell>
@@ -62,6 +63,7 @@ class NavigationBar extends Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.HeaderCell><Link className="nav-link " to="/texture">Perfil</Link></Table.HeaderCell>
+                        <Table.HeaderCell><Link className="nav-link " to="/user">Perfil</Link></Table.HeaderCell>
                     </Table.Row> 
                     <Table.Row>
                          <Table.HeaderCell><Link className="nav-link " onClick={this.props.logout} to="/">Salir</Link></Table.HeaderCell>
@@ -78,8 +80,8 @@ class NavigationBar extends Component {
         const authLinks = (
             
 
-                <Accordion as={Menu} vertical>
-                    <Menu.Item>
+                <Accordion  fluid styled vertical>
+                    
                         <Accordion.Title
                             active={activeIndex === 0}
                             content='Documentos'
@@ -87,10 +89,7 @@ class NavigationBar extends Component {
                             onClick={this.handleClick}
                         />
                         <Accordion.Content active={activeIndex === 0} content={Documentos} />
-                    </Menu.Item>
-
-
-                    <Menu.Item>
+                    
                         <Accordion.Title
                             active={activeIndex === 1}
                             content='Usuario'
@@ -98,7 +97,7 @@ class NavigationBar extends Component {
                             onClick={this.handleClick}
                         />
                         <Accordion.Content active={activeIndex === 1} content={User} />
-                    </Menu.Item>
+                    
                 </Accordion>
         )
 

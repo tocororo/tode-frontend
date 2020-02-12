@@ -1,86 +1,92 @@
-import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom';
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { getDocument, newDocument } from '../../actions/DocumentAction'
-import { TextArea,Button, Form, Input } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory,} from 'react-router-dom';
+import { newDocument } from '../../actions/DocumentAction'
+import { Container, Button, Form, Input, Segment, Label, Divider } from 'semantic-ui-react';
+import styled from 'styled-components'
 
-class NewDocument extends Component {
-    
-    state = {
-        _id: "",
-        name: "",
-        coment: "",
-        document_user: "",
-        editing: false
-    }
+const MyButton = styled(Button)`
+&&&{
+    background-color:#1d314d;
+    color:white;
+}
 
-    static propTypes = {
-        newDocument: PropTypes.func.isRequired,
-        auth: PropTypes.object.isRequired
-    }
+&&&:hover{
+  background-color:#0f1d31;
+  color:whitesmoke;
+}
+`
 
-    OnChange = e => {
+function NewDocument (props) {
+  const history = useHistory();
+  
+  
+  const [name, setName] = useState('')
+  const [coment, setComent] = useState('Original')
+  const [document_user, setDocument_user] = useState()
+  
 
+  /* utilizando variables de los reducers.js */
+  const user = useSelector(state => state.auth.user); 
+  useEffect(()=>
+  user ?
+  console.log(user) : null
+  ,[])
 
-        this.setState({ [e.target.name]: e.target.value,});
-        const { user } = this.props.auth
-        user ? this.setState({ document_user: user._id }) : this.setState({ document_user: "" })
+  /*  dispatch para utilizar las actions.js */
+  const dispatch = useDispatch()
+  const OnChangename = (e) => {
+  setName(e.target.value );
+  };
 
+  const OnChangecoment = (e) => {
+    setComent( e.target.value );
+    if(user)
+    setDocument_user(user._id)
     };
+    
+  const OnSubmit = (e) => {
+    e.preventDefault();
 
-    OnSubmit = (e) => {
-        e.preventDefault();
-        const { name, coment, document_user } = this.state;
-        const newDoc = { name, coment, document_user };
-        this.props.newDocument(newDoc);    
-        this.props.history.push('/document');
-    }
+    const newDoc = { name, coment, document_user };
+    dispatch(newDocument(newDoc,history, name));  
 
-    render() {
-        return (
-
-            <Form onSubmit={this.OnSubmit}>
-                <Form.Field>
-                    <Input
-                        type="text"
-                        id="name"
-                        placeholder="Nombre del documento"
-                        name="name"
-                        onChange={this.OnChange}
-                        required                     
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <TextArea
-                        style={{ minHeight: 100}}
-                        type="text"
-                        id="coment"
-                        placeholder="Comentario sobre el documento"
-                        name="coment"
-                        onChange={this.OnChange}
-                        required
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Button type="submit"> Guardar </Button>
-                </Form.Field>
-            </Form>
-
+  }
+    return (
+      <Container>
+        <h1 className='title'>Añadir Documento</h1>
+          <Divider />
+        <Segment color='blue' padded='very'><h2>Paso 1</h2>
+          <Form onSubmit={OnSubmit}>
+              <Form.Field>
+                  <Input
+                      type="text"
+                      placeholder="Nombre del documento"
+                      name="name"
+                      onChange={OnChangename}
+                      value={name}
+                      required                     
+                  />
+                  <br/>
+                  <Input
+                      type="text"
+                      placeholder="Comentario sobre el documento"
+                      name="coment"
+                      onChange={OnChangecoment}
+                      value={coment}
+                      required                     
+                  />
+                  <Label pointing>El comentario sirve para identificar al primer documento entre sus versiones. Por defecto sera ( Original ) </Label>
+              </Form.Field>
+              <Form.Field>
+                      <MyButton type="submit"> Guardar </MyButton>
+              </Form.Field>
+          </Form>
+        </Segment>     
+      </Container>   
         )
     }
-}
 
-NewDocument.propTypes = {
-    newDocument: PropTypes.func.isRequired,
-    getDocument: PropTypes.func.isRequired,
-    doc: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-}
 
-const mapStateToProps = (state) => ({
-    doc: state.doc,
-    auth: state.auth
-})
 
-export default connect(mapStateToProps, { newDocument, getDocument }) (withRouter(NewDocument))
+export default  NewDocument;
