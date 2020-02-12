@@ -22,6 +22,7 @@ import ViewDocumentContent from './components/Documentos/ViewDocumentContent'
 import ViewDocumentVersionContent from './components/Documentos/ViewDocumentVersionContent'
 import EditDocument from './components/Documentos/EditDocument'
 import EditDocumentVersion from './components/Documentos/EditDocumentVersion'
+import Texture from './components/Texture/Texture'
 
 
 import { MdChat } from 'react-icons/md'
@@ -152,6 +153,7 @@ class App extends Component {
                       <Route path="/view_document_version/:id" component={ViewDocumentVersionContent}/>
                       <Route path="/edit_document/:id" component={EditDocument} />
                       <Route path="/edit_document_version/:id" component={EditDocumentVersion} />
+                      <Route path="/texture" component={Texture} />
 
 
                     </Segment>

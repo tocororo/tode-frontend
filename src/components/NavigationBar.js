@@ -61,7 +61,7 @@ class NavigationBar extends Component {
                     <Table.Row>
                     </Table.Row>
                     <Table.Row>
-                        <Table.HeaderCell><Link className="nav-link " to="/user">Perfil</Link></Table.HeaderCell>
+                        <Table.HeaderCell><Link className="nav-link " to="/texture">Perfil</Link></Table.HeaderCell>
                     </Table.Row> 
                     <Table.Row>
                          <Table.HeaderCell><Link className="nav-link " onClick={this.props.logout} to="/">Salir</Link></Table.HeaderCell>
