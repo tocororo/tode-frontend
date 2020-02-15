@@ -1,54 +1,81 @@
 import axios from 'axios'
-import {  GET_NOTIFICATION, GET_NOTIFICATION_NUMBER, DELETE_NOTIFICATION, GET_REQUEST_NUMBER } from './types'
-import {tokenConfig} from './AuthAction'
-import {getDocuments} from './DocumentAction'
+import {
+    GET_NOTIFICATION,
+    GET_NOTIFICATION_NUMBER,
+    DELETE_NOTIFICATION,
+    GET_REQUEST_NUMBER
+} from './types'
+import {
+    tokenConfig
+} from './OAuth2Action'
 
 export const getNotifications = () => (dispatch, getSate) => {
     axios.get('/notifications', tokenConfig(getSate)).then(res => dispatch({
-        type: GET_NOTIFICATION,
-        payload: res.data
-    }))
+            type: GET_NOTIFICATION,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-export const getNotificationDocVersion = ({document, document_version}) => (dispatch, getSate) => {
+export const getNotificationDocVersion = ({
+    document,
+    document_version
+}) => (dispatch, getSate) => {
     axios.get(
-    `/notificationDocVersion?document=${document}&&document_version=${document_version}`,
-    tokenConfig(getSate))
-    .then(() => {
-        dispatch(getNotificationsNumber());
-        dispatch(getNotifications());
-        dispatch(getDocuments());
-  })
+        `/notificationDocVersion?document=${document}&&document_version=${document_version}`,
+        tokenConfig(getSate))
+    /* 
+        .then(() => {
+            dispatch(getNotificationsNumber());
+            dispatch(getNotifications());
+            dispatch(getDocuments());
+      }) */
 };
 
-export const getNotificationForPermisions = ({document}) => (dispatch, getSate) => {
+export const getNotificationForPermisions = ({
+    document
+}) => (dispatch, getSate) => {
     axios.get(
-    `/notificationForPermisions?document=${document}`,
-    tokenConfig(getSate))
-    .then(() => {
-          dispatch(getNotificationsNumber());
-          dispatch(getNotifications());
-          dispatch(getDocuments());
-    })
+        `/notificationForPermisions?document=${document}`,
+        tokenConfig(getSate))
+    /* 
+        .then(() => {
+              dispatch(getNotificationsNumber());
+              dispatch(getNotifications());
+              dispatch(getDocuments());
+        }) */
 };
 
 export const getNotificationsNumber = () => (dispatch, getSate) => {
     axios.get('/notificationNumber', tokenConfig(getSate)).then(res => dispatch({
-        type: GET_NOTIFICATION_NUMBER,
-        payload: res.data
-    }))
+            type: GET_NOTIFICATION_NUMBER,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 export const getRequestNumber = () => (dispatch, getSate) => {
     axios.get('/requestNumber', tokenConfig(getSate)).then(res => dispatch({
-        type: GET_REQUEST_NUMBER,
-        payload: res.data
-    }))
+            type: GET_REQUEST_NUMBER,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-export const deleteNotification = ({id}) => (dispatch, getSate) => {
+export const deleteNotification = ({
+    id
+}) => (dispatch, getSate) => {
     axios.delete(`/delete_notification/${id}`, tokenConfig(getSate)).then(res => dispatch({
-        type: DELETE_NOTIFICATION,
-        payload: id
-    }))
+            type: DELETE_NOTIFICATION,
+            payload: id
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };

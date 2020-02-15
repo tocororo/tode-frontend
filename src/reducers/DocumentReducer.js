@@ -35,7 +35,7 @@ export default function (state = initialState, action) {
         case DELETE_DOCUMENT:
             return {
                 ...state,
-                docs: state.users.filter(doc => doc._id !== action.payload)
+                docs: state.docs.filter(doc => doc.document._id !== action.payload)
             };
         default:
             return state;

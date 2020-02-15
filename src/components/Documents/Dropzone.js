@@ -1,7 +1,11 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useState, useEffect} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone'
 import { Segment, Icon, Header } from 'semantic-ui-react';
 import styled from 'styled-components'
+
+import { createText, getDocumentByName } from '../../actions/DocumentAction'
 
 const MyIcon = styled(Icon)`
   &&& {
@@ -9,7 +13,17 @@ const MyIcon = styled(Icon)`
   }
 `
 
-function Dropzone() {
+function Dropzone(props) {
+  const history = useHistory()
+  const dispatch = useDispatch()
+
+  const [document, setDocument] = useState('');
+  const { doc}  = useSelector(state => state.doc);
+
+  useEffect(()=>
+    dispatch(getDocumentByName(props.match.params.name))
+  ,[])
+
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
@@ -18,8 +32,12 @@ function Dropzone() {
       reader.onerror = () => console.log('file reading has failed')
       reader.onload = () => {
       // Do whatever you want with the file contents
-        const binaryStr = reader.result
-        console.log(binaryStr)
+        const binaryStr = reader.result 
+
+        setDocument (doc._id )
+
+        const newText = {binaryStr,document}
+        dispatch(createText(props.match.params.name, newText, history));
       }
       reader.readAsBinaryString(file)
     })

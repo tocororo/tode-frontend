@@ -1,41 +1,89 @@
 import axios from 'axios'
-import {  GET_DOCUMENTS, GET_DOCUMENT, ADD_DOCUMENT, DELETE_DOCUMENT, CREATE_TEXT } from './types'
-import {tokenConfig} from './AuthAction'
+import {
+    GET_DOCUMENTS,
+    GET_DOCUMENT,
+    ADD_DOCUMENT,
+    DELETE_DOCUMENT,
+    CREATE_TEXT
+} from './types'
+import {
+    tokenConfig
+} from './OAuth2Action'
 
 
 export const getDocuments = () => (dispatch, getSate) => {
-    axios.get('/document',tokenConfig(getSate)).then(res => dispatch({
-        type: GET_DOCUMENTS,
-        payload: res.data
-    }))
+    axios.get('/document', tokenConfig(getSate)).then(res => {
+            dispatch({
+                type: GET_DOCUMENTS,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-export const getDocumentById= (id) => dispatch => {
-    axios.get(`/document/${id}`).then(res => dispatch({
-        type: GET_DOCUMENT,
-        payload: res.data
-    }))
+export const getDocumentById = (id) => (dispatch, getSate) => {
+    axios.get(`/document/${id}`, tokenConfig(getSate)).then(res => dispatch({
+            type: GET_DOCUMENT,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-export const newDocument = (doc, history, name) => dispatch => {
-    axios.post('/new_document',doc).then(res => dispatch({
-        type: ADD_DOCUMENT,
-        payload: res.data
-    }))
-    history.push(`/add-content/${name}`)
+export const getDocumentByName = (name) => dispatch => {
+    axios.get(`/document_ByName/${name}`).then(res => dispatch({
+            type: GET_DOCUMENT,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
-export const deleteDocument = id => (dispatch) => {
-    axios.delete(`/delete_document/${id}`).then(res => dispatch({
-        type: DELETE_DOCUMENT,
-        payload: id
-    }))
+export const newDocument = (doc, history, url) => dispatch => {
+    axios.post('/new_document', doc).then(res => dispatch({
+            type: ADD_DOCUMENT,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
+    history.push(url)
+};
+
+export const deleteDocument = (id) => (dispatch, getSate) => {
+    axios.delete(`/delete_document/${id}`, tokenConfig(getSate)).then(res => dispatch({
+            type: DELETE_DOCUMENT,
+            payload: id
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 export const createText = (name, text, history) => (dispatch) => {
     axios.post(`/createText?name=${name}`, text).then(res => dispatch({
-        type: CREATE_TEXT,
-        payload: text
-    }))
+            type: CREATE_TEXT,
+            payload: text
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
     history.push(`/documents`)
+};
+
+export const updateDocumentName = (id, name) => dispatch => {
+    axios.get(`/updateDocumentName?id=${id}&&name=${name}`).then(res => {
+            dispatch({
+                type: GET_DOCUMENT,
+                payload: res.data
+            });
+            dispatch(getDocuments())
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };

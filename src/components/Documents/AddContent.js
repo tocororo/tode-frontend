@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
-import { Button, Form, TextArea, Container, Input, Divider } from 'semantic-ui-react'
+import { Button, Form, TextArea, Container, Input, Radio, Segment } from 'semantic-ui-react'
 import '../../css/editpage.css'
 import styled from 'styled-components'
 
-import { createText } from '../../actions/DocumentAction'
+import Dropzone from './Dropzone'
+
+import { createText, getDocumentByName } from '../../actions/DocumentAction'
 
 const MyButton = styled(Button)`
 &&&{
@@ -27,14 +29,18 @@ function AddContent(props) {
   const [text, setText] = useState('');
   const [document, setDocument] = useState('');
   const [image, setImage] = useState('');
+  /* const [checkedForm, setCheckedForm] = useState(true);
+  const [chekedDropzone, setChekedDropzone] =  useState(false); */
 
   /* utilizando variables de los reducers.js */
-  const user = useSelector(state => state.auth.user);
   const { doc}  = useSelector(state => state.doc);
   
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
 
+  useEffect(()=>
+    dispatch(getDocumentByName(props.match.params.name))
+  ,[])
    
     const OnChange = e => {
         setText( e.target.value, );        
@@ -45,7 +51,10 @@ function AddContent(props) {
     const OnChangeImage = e => {
       setImage( e.target.value, ); 
       
-  };
+    };
+
+    /* const toggleForm = () => {setCheckedForm(!checkedForm); setChekedDropzone(!chekedDropzone)}
+    const toggleDropzone = () => {setChekedDropzone(!chekedDropzone); setCheckedForm(!checkedForm)} */
 
     const OnSubmit = (e) => {
         e.preventDefault();
@@ -54,12 +63,29 @@ function AddContent(props) {
         dispatch(createText(props.match.params.name, newText, history));
     }
        
-        return (          
-          <Container>
-            <h1 className='title'>Añadir Documento</h1>
-            <Divider />
-            <h2 className='title'>Paso 2</h2>
-              <Form onSubmit={OnSubmit} enctype="multipart/form-data" action="/createText" method="post">
+      return (          
+        <Container>
+          <Segment >
+            <h2 className='title'>Añadir Documento: Paso 2</h2>{/* 
+            <Segment.Group horizontal>
+            <Segment>
+              <Radio
+                label='No tengo un articulo preparado'
+                onClick={toggleForm}
+                checked={checkedForm}
+              />
+            </Segment>
+            <Segment >
+              <Radio
+                label='Tengo un articulo preparado'
+                onClick={toggleDropzone}
+                checked={chekedDropzone}
+              />
+            </Segment>
+            </Segment.Group>
+            {
+              checkedForm === true ?  */}
+              <Form onSubmit={OnSubmit} encType="multipart/form-data" action="/createText" method="post">
                   <Form.Field>
                       <TextArea
                           style={{ minHeight: 100}}
@@ -86,7 +112,13 @@ function AddContent(props) {
                       <MyButton type="submit"> Guardar </MyButton>
                   </Form.Field>
               </Form>
-            </Container>
+              {/* :
+            chekedDropzone === true ?
+            <Dropzone name={props.match.params.name} doc_id={doc._id}/>
+            :null
+            } */}
+            </Segment>
+        </Container>
         )
     }
 

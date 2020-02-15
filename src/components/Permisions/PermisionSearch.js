@@ -1,11 +1,11 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
 import {deletePermision} from '../../actions/PermisionAction'
 import {getDocuments} from '../../actions/DocumentAction'
-import {  Grid, Header, Segment, Modal, Icon, Label, Divider, List,  Button, Image } from 'semantic-ui-react'
+import {  Grid, Header, Segment, Label, Divider, List, Image } from 'semantic-ui-react'
 
 import InputSearch from './InputSearch'
 import DeleteModal from '../Utils/DeleteModal'

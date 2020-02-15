@@ -23,14 +23,14 @@ class InputContainer extends Component {
 
     render() {
 
-        const { user } = this.props.auth
+        const { oauth2User } = this.props.oauth2
         return (
             <Form className="input" onSubmit={this.handleSubmit}>
 
                 <Form.Input
                     placeholder="Escribe aqui..."
                     value={this.state.content}
-                    onChange={(e) => { user ? this.setState({ content: e.target.value, sender: user.name }) : this.setState({ content: "", sender: "" }) }}
+                    onChange={(e) => { oauth2User ? this.setState({ content: e.target.value, sender: oauth2User.name }) : this.setState({ content: "", sender: "" }) }}
                     required
                 />
             </Form>
@@ -51,7 +51,7 @@ class InputContainer extends Component {
 
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    oauth2: state.oauth2
 });
 
 export default connect(mapStateToProps, null)(InputContainer);

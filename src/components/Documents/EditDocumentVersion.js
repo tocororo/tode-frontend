@@ -34,7 +34,8 @@ function EditDocumentVersion(props) {
   const [visible, setVisible] = useState(false);
 
   /* utilizando variables de los reducers.js */
-  const user = useSelector(state => state.auth.user);
+  // const users = useSelector(state => state.auth.user);
+  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
   const { document_version_content, version}  = useSelector(state => state.doc_version);
   
   /*  dispatch para utilizar las actions.js */
@@ -45,9 +46,7 @@ function EditDocumentVersion(props) {
   useEffect( () =>{
         dispatch(getDocument_versionById(props.match.params.id))
         dispatch(getDocument_version_content(props.match.params.id))
-        setComent(document_version_content)
-        console.log(props);
-        
+        setComent(document_version_content)        
   },[document_version_content])
 
     // funcion que controla la visibilidad del chat 
@@ -58,8 +57,8 @@ function EditDocumentVersion(props) {
    
     const OnChange = e => {
         setComent( e.target.value, );
-        if(user)
-        setDocument_user(user._id)
+        if(oauth2IsAuthenticated)
+        setDocument_user(oauth2Users._id)
         setDocument (version.document )
 
     };

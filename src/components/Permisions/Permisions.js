@@ -63,8 +63,7 @@ class Permisions extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    doc: state.doc,
-    auth : state.auth
+    doc: state.doc
 });
 
 export default connect(mapStateToProps, {getDocuments}) (withRouter(Permisions))

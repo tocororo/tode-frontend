@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, {Fragment} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {Icon, Dropdown, Message } from 'semantic-ui-react'
-import { getNotificationDocVersion, getNotificationForPermisions, deleteNotification} from '../../actions/NotificationAction'
+import {Icon, Dropdown, Message, Label } from 'semantic-ui-react'
+import { getNotificationDocVersion} from '../../actions/NotificationAction'
 import MessagesForVersions from './MessagesForVersions'
 import styled from 'styled-components'
 
@@ -11,13 +11,14 @@ const MyIcon = styled(Icon)`
    color: grey;
 
    &&&:hover{
-    color: #1d314d;
+    color: white;
   }
 `
 function Notifications(props)  { 
 
   const {notifications} = useSelector(state => state.notification);
-  const  user  = useSelector(state => state.auth.user); 
+  // const {users, isAuthenticated} = useSelector(state => state.auth); 
+  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
   
   const dispatch = useDispatch()
 
@@ -26,9 +27,14 @@ function Notifications(props)  {
   }
 
   const trigger =  (
-    <span>
-      <MyIcon name='bell' size='big' /> 
-    </span>
+    <Fragment>
+        <MyIcon name='bell' size='big' /> 
+        {
+        props.count !== 0 ?
+        <Label color='red' size='mini' floating ><strong>{props.count}</strong></Label>
+        : null
+        }
+      </Fragment>
   )
 
         return (
@@ -39,7 +45,7 @@ function Notifications(props)  {
                 notifications.map(notify => (
 
                 // NOTIFICACIONS FOR VERSIONS
-                user && notify.toUser === user._id  ?                  
+                oauth2IsAuthenticated && notify.toUser === oauth2Users._id  ?                  
                 <Dropdown.Item active key={notify._id}
                     document = {notify.document._id}
                     document_version = {notify.document_version._id}                
@@ -62,7 +68,7 @@ function Notifications(props)  {
 
               </Dropdown.Menu>
             </Dropdown>
-            <label className='label' ><strong>{props.count}</strong></label>
+            
             </div>
         )
     }

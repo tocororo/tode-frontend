@@ -1,6 +1,6 @@
 import React from 'react';
 import { Segment, Sidebar,} from 'semantic-ui-react'
-import { BrowserRouter as  Route ,Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route ,Switch} from 'react-router-dom';
 import styled from 'styled-components'
 
 import PrivateRoute from './PrivateRoute'
@@ -13,10 +13,13 @@ import NewDocument from '../Documents/NewDocument'
 import EditDocumentVersion from '../Documents/EditDocumentVersion'
 import AddContent from '../Documents/AddContent'
 import LoginOauth2 from '../User/LoginOauth2'
+import Dropzone from '../Documents/Dropzone'
+import Texture from '../Texture/Texture'
+import URLNotFound from './URLNotFound'
 
 const MySidebar = styled(Sidebar)`
   &&& {
-    background-color:#1d314d;
+    background-color:grey;
   }
 `
 const MySegment = styled(Segment)`
@@ -45,28 +48,30 @@ function NavigationSideBar (props) {
 
         <MySidebar.Pusher dimmed={props.visibility}>
                 <MySegment basic>
+                <Route exact path="/" component={Home} />
                 <Route exact path="/login-oauth2" component={LoginOauth2} />
+                <Route exact path="/texture" component={Texture} />
                 <Switch>
-                <PrivateRoute exact path="/" component={Home} />
+                  <PrivateRoute exact path="/documents" component={Documentos} />
                 </Switch>
                 <Switch>
-                <PrivateRoute exact path="/documents" component={Documentos} />
+                  <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
                 </Switch>
                 <Switch>
-                <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
+                  <PrivateRoute exact path="/new_document" component={NewDocument} />
                 </Switch>
                 <Switch>
-                <PrivateRoute exact path="/new_document" component={NewDocument} />
-                </Switch> 
-                <Switch>
-                <PrivateRoute exact path="/add-content/:name" component={AddContent} />
+                  <PrivateRoute exact path="/dropzone/:name" component={Dropzone} />
                 </Switch>
                 <Switch>
-                <PrivateRoute exact path="/permisions/:id" component={Permisions} />
+                  <PrivateRoute exact path="/add-content/:name" component={AddContent} />
                 </Switch>
                 <Switch>
-                <PrivateRoute exact path="/edit_document_version/:id" 
-                                    component={EditDocumentVersion} />
+                  <PrivateRoute exact path="/permisions/:id" component={Permisions} />
+                </Switch>
+                <Switch>
+                  <PrivateRoute exact path="/edit_document_version/:id" 
+                                    component={EditDocumentVersion} /> 
                 </Switch>
                 </MySegment>
         </MySidebar.Pusher>
