@@ -8,14 +8,11 @@ import NavigationBar from './components/Navigation/NavigationBar'
 
 function App()  {
 
-  const sceibaId =localStorage.getItem('sceibaId');/*     
-  const name = localStorage.getItem('name');
-  const email = localStorage.getItem('email'); */
+  const sceibaId =localStorage.getItem('sceibaId')
   const token = localStorage.getItem('token');
   const expires_in = localStorage.getItem('expires_in');  
 
   useEffect(() =>{    
-    /* const user = {_id, sceibaId, name, email}; */
     store.dispatch(OAuth2Loaded(sceibaId));
     
     if(token){
