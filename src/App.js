@@ -4,7 +4,8 @@ import {  BrowserRouter as Router } from 'react-router-dom';
 import { Provider} from 'react-redux'
 import store from './store'
 import { OAuth2Loaded, logout } from './actions/OAuth2Action'
-import NavigationBar from './components/Navigation/NavigationBar'
+import NavigationBar from './components/Navigation/NavigationBar'  
+import { getNotificationsNumber, getRequestNumber} from './actions/NotificationAction'
 
 function App()  {
 
@@ -13,7 +14,7 @@ function App()  {
   const expires_in = localStorage.getItem('expires_in');  
 
   useEffect(() =>{    
-    store.dispatch(OAuth2Loaded(sceibaId));
+    store.dispatch(OAuth2Loaded(sceibaId));    
     
     if(token){
     const timer = setTimeout(() => {  

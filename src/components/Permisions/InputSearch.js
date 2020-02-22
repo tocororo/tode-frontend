@@ -105,8 +105,8 @@ class InputSearch extends Component{
                </Button>
                  
                <Button color='green' inverted 
-                  user = {_id}
-                  onClick = {this.OnChange}
+                  // user = {_id}
+                  onClick = {this.OnChange.bind(this, _id)}
                   type='submit'>
                  <Icon name='checkmark'/> Aceptar
                </Button>

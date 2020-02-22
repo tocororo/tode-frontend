@@ -1,8 +1,9 @@
-import React, {Fragment} from 'react'
+import React, {Fragment,} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {Icon, Dropdown, Message, Label } from 'semantic-ui-react'
 import { getNotificationDocVersion} from '../../actions/NotificationAction'
 import MessagesForVersions from './MessagesForVersions'
+import Moment  from 'react-moment'
 import styled from 'styled-components'
 
 
@@ -24,6 +25,7 @@ function Notifications(props)  {
 
   const NotificationCheckedForVersion = (e, { document, document_version }) => {
     dispatch(getNotificationDocVersion({document, document_version}) );
+
   }
 
   const trigger =  (
@@ -45,13 +47,16 @@ function Notifications(props)  {
                 notifications.map(notify => (
 
                 // NOTIFICACIONS FOR VERSIONS
-                oauth2IsAuthenticated && notify.toUser === oauth2Users._id  ?                  
-                <Dropdown.Item active key={notify._id}
+                oauth2IsAuthenticated && notify.toUser && notify.toUser._id === oauth2Users._id  ?                  
+                <Dropdown.Item active = {notify.notificationSied === false ? true : false }
                     document = {notify.document._id}
-                    document_version = {notify.document_version._id}                
-                    onClick={NotificationCheckedForVersion}>
+                    document_version = {notify.document_version._id}       
+                    onClick={NotificationCheckedForVersion} 
+                    content= {notify.notification}
+                    description = {<Moment>{notify.createdAt}</Moment>}
+                    />
 
-                  <MessagesForVersions 
+                  /* <MessagesForVersions 
                     notification={notify.notification} 
                     name={notify.document.name} 
                     date={notify.createdAt}  
@@ -59,9 +64,14 @@ function Notifications(props)  {
                 </Dropdown.Item>
                 : 
                 <Message
+                  key={notify._id}
                   size='small'
                   color='grey'
                   header='Sin notificaciones aun'
+                /> */
+                :
+                <Dropdown.Header 
+                content='Sin notificaciones aun'
                 />
                 ))
               }

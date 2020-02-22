@@ -61,9 +61,11 @@ function NavigationBar ()  {
   
 
   useEffect(() => {
-    dispatch(getNotifications())    
-    dispatch(getNotificationsNumber());    
-    dispatch(getRequestNumber());
+    if (oauth2IsAuthenticated) {      
+      dispatch(getNotifications())    
+      dispatch(getNotificationsNumber());    
+      dispatch(getRequestNumber());
+    }
   },[notificationsNumber, requestNumber])
 
   const trigger = (

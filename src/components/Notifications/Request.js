@@ -1,6 +1,6 @@
 import React, {Fragment, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {Icon, Dropdown, Modal, Button, Message, Label} from 'semantic-ui-react'
+import {Icon, Dropdown, Modal, Button, Message, Label, Table} from 'semantic-ui-react'
 import {  getNotificationForPermisions, deleteNotification} from '../../actions/NotificationAction'
 import MessagesForVersions from './MessagesForVersions'
 import styled from 'styled-components'
@@ -16,7 +16,7 @@ const MyIcon = styled(Icon)`
 `
 function Request(props)  { 
 
-  const [modalOpen, setModalOpen] =useState(false)
+  // const [modalOpen, setModalOpen] =useState(false)
 
   const {notifications} = useSelector(state => state.notification);
   // const {users, isAuthenticated} = useSelector(state => state.auth); 
@@ -24,16 +24,16 @@ function Request(props)  {
   
   const dispatch = useDispatch()
 
-  const handleOpen = () => setModalOpen(true) ;
+  //const handleOpen = () => setModalOpen(true) ;
 
   const OnCancel = (e, {id}) => {
     dispatch(deleteNotification({id}))
-    setModalOpen(false);    
+    // setModalOpen(false);    
   }
 
-  const NotificationCheckedForPermision = (e, { document }) => {
-    dispatch(getNotificationForPermisions({document}) );
-    setModalOpen(false)
+  const NotificationCheckedForPermision = (e, { document, forPermisions }) => {
+    dispatch(getNotificationForPermisions({document, forPermisions}) );
+    // setModalOpen(false)
   }
 
   const trigger =  (
@@ -47,16 +47,39 @@ function Request(props)  {
   )
 
         return (
-                <Dropdown trigger={trigger}  pointing='top right'  icon={null}> 
+                <Dropdown trigger={trigger}  pointing='top right' icon={null}> 
                 <Dropdown.Menu >
+                <Dropdown.Menu scrolling>
                 {
                 notifications.map(notify => (
 
                 // NOTIFICACIONS FOR PERMISIONS
-                oauth2IsAuthenticated && notify.forPermisions === oauth2Users._id ?
-                <Modal 
+                oauth2IsAuthenticated && notify.forPermisions && notify.forPermisions._id === oauth2Users._id ?
+               <Fragment>
+               <Dropdown.Header  
+               children ={notify.notification}
+               />
+               <Dropdown.Header                      
+                content= {
+                  <Button.Group size='mini' >
+                    <Button  type='submit'
+                      document = {notify.document._id}    
+                      onClick = {NotificationCheckedForPermision} >
+                      <Icon name='checkmark'/> Aceptar
+                    </Button>
+                  <Button.Or />
+                    <Button 
+                      // id = {notify.document._id}   
+                      onClick={OnCancel.bind(this, notify.document._id) }>
+                      <Icon name='remove' /> Cancelar
+                    </Button>
+                  </Button.Group>
+                }            
+                /> 
+                </Fragment>
+                /* <Modal 
                   trigger={
-                  <Dropdown.Item active key={notify._id}           
+                  <Dropdown.Item active     
                       onClick={handleOpen}>
 
                     <MessagesForVersions 
@@ -66,6 +89,7 @@ function Request(props)  {
                       notificationSied={notify.notificationSied}/>
                   </Dropdown.Item>
                 }
+                key={notify._id}
                   dimmer='blurring' 
                   open={modalOpen}
                   basic
@@ -87,16 +111,20 @@ function Request(props)  {
                       <Icon name='checkmark'/> Aceptar
                     </Button>
                   </Modal.Actions>
-                </Modal>
+                </Modal> */
                 : 
-                <Message
+                /* <Message
                   size='small'
                   color='grey'
                   header='Sin solicitudes aun'
+                /> */
+                <Dropdown.Header  
+                children = 'Sin solicitudes aun'
                 />
                 ))
               }
 
+              </Dropdown.Menu>
               </Dropdown.Menu>
             </Dropdown>
         )

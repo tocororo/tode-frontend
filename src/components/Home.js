@@ -9,8 +9,6 @@ export default class Home extends Component {
     componentDidMount(){
         console.log(qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).sceibaId);
         localStorage.setItem('sceibaId', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).sceibaId);
-       /*  localStorage.setItem('name', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).name);
-        localStorage.setItem('email', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).email); */
         localStorage.setItem('token', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).token);
         localStorage.setItem('expires_in', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).expires_in);
     }

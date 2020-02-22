@@ -2,6 +2,7 @@ import {USER_LOADING, OAUT2_LOADED, OAUT2_ERROR, LOGOUT_SUCCES} from '../actions
 
 export const initialState = {
     token: localStorage.getItem('token'),
+    sceibaId: localStorage.getItem('sceibaId'),
     oauth2IsAuthenticated: false,
     isLoading: false,
     oauth2Users: {}
@@ -30,9 +31,11 @@ export default function (state = initialState, action) {
             };
         case LOGOUT_SUCCES:
             localStorage.removeItem('token');
+            localStorage.removeItem('sceibaId');
+            localStorage.removeItem('expires_in');
             return {
                 ...state,
-                users: null,
+                oauth2Users: null,
                 oauth2IsAuthenticated: false,
                 isLoading: false
             };
