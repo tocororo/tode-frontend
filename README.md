@@ -1,4 +1,5 @@
-Iniciar con el comando npm start
+Instalar de pendencias con el comando **npm install** 
+Iniciar con el comando **npm start**
 
 Para conectar con el servidor ir al **package.json** y cambiar la ruta **https** para el proxy.
 
