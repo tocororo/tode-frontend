@@ -56,7 +56,7 @@ function EditDocumentVersion(props) {
 
    
     const OnChange = e => {
-        setComent( e.target.value, );
+      setComent( e.target.value, );
         if(oauth2IsAuthenticated)
         setDocument_user(oauth2Users._id)
         setDocument (version.document )
@@ -77,7 +77,6 @@ function EditDocumentVersion(props) {
               animation='overlay'
               direction='right'
               onHide={() => setVisible( false )}
-              vertical
               visible={visible}
               width='wide'
             >

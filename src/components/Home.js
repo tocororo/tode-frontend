@@ -1,17 +1,30 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom';
+import {PropTypes} from 'prop-types'
 import ProyectoTocororo from '../assets/ProyectoTocororo.png'
 import CRAI from '../assets/CRAI.png'
 import '../css/home.css'
 import qs from 'qs'
-//import 'bootstrap/dist/css/bootstrap.min.css'
 
-export default class Home extends Component {
-    componentDidMount(){
-        console.log(qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).sceibaId);
-        localStorage.setItem('sceibaId', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).sceibaId);
-        localStorage.setItem('token', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).token);
-        localStorage.setItem('expires_in', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).expires_in);
+class Home extends Component {
+    
+    UNSAFE_componentWillMount(){        
+        if (qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).token) {
+            localStorage.setItem('sceibaId', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).sceibaId);
+            localStorage.setItem('token', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).token);
+            localStorage.setItem('expires_in', qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).expires_in);
+        }
+
     }
+
+    componentDidMount(){
+        var uri = window.location.toString();
+        if (uri.indexOf("?") > 0) {
+            var clean_uri = uri.substring(0, uri.indexOf("?"));
+            window.history.replaceState({}, document.title, clean_uri);
+        }
+    }
+     
     render() {
         return (
             <div >
@@ -23,3 +36,5 @@ export default class Home extends Component {
         )
     }
 }
+
+export default withRouter(Home)

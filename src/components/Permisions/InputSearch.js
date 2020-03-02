@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom';
+import PropTypes from "prop-types";
 import _ from 'lodash'
 import {newPermision} from '../../actions/PermisionAction'
 import {getUsersToPermission} from '../../actions/UserAction'
@@ -16,7 +17,7 @@ class InputSearch extends Component{
             document:props.document_id,
             withPermisions:""
         }
-        
+        this.OnChange = this.OnChange.bind(this);        
     }
 
 
@@ -105,8 +106,8 @@ class InputSearch extends Component{
                </Button>
                  
                <Button color='green' inverted 
-                  // user = {_id}
-                  onClick = {this.OnChange.bind(this, _id)}
+                  user = {_id}
+                  onClick={this.OnChange}
                   type='submit'>
                  <Icon name='checkmark'/> Aceptar
                </Button>
@@ -132,6 +133,12 @@ class InputSearch extends Component{
     )
     }
 }
+
+InputSearch.propTypes = {
+  newPermision: PropTypes.func.isRequired,
+  getUsersToPermission: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
+};
 
 const mapStateToProps = (state) => ({
     user: state.user

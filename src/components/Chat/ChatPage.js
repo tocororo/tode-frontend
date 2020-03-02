@@ -12,7 +12,7 @@ class ChatPage extends Component {
         super(props);
         this.state = {
             messages: [],
-            socket: openSocket("http://localhost:4000"),
+            socket: openSocket("https://10.2.64.4:4000"),
             document_id: props.doc
         };
 

@@ -60,12 +60,10 @@ function NavigationBar ()  {
   const onHide = () => setState({...state, visible: false})
   
 
-  useEffect(() => {
-    if (oauth2IsAuthenticated) {      
+  useEffect(() => {    
       dispatch(getNotifications())    
       dispatch(getNotificationsNumber());    
       dispatch(getRequestNumber());
-    }
   },[notificationsNumber, requestNumber])
 
   const trigger = (

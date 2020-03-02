@@ -1,7 +1,7 @@
 import React, {Fragment, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Accordion, Icon, Table, Container,  Segment, Header, Grid, Divider} from 'semantic-ui-react'
+import { Accordion, Icon, Container,  Segment, Header, Grid} from 'semantic-ui-react'
 import Moment  from 'react-moment'
 import styled from 'styled-components'
 
@@ -9,6 +9,7 @@ import DocumentsOptions from './DocumentsOptions'
 
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
+import Confirm from '../Notifications/Confirm';
 
 const MyLink = styled(Link)`
   &&& {
@@ -18,11 +19,12 @@ const MyLink = styled(Link)`
 
 function Documentos () {
   /* creando variables de estado y un metodo para modificarlas */
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);  
+  const [documentLengt, setDocumentLengt] = useState({});  
 
   /* utilizando variables de los reducers.js */
   const docs_version = useSelector(state => state.doc_version.docs_version);
-  const perms = useSelector(state => state.doc.perms);
+  const {docs, perms} = useSelector(state => state.doc);
   // const {users, isAuthenticated} = useSelector(state => state.auth)
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
@@ -32,8 +34,8 @@ function Documentos () {
   // useeffect for componentDidMount, ComponentDidUpdate, componentWillUnmount  
   useEffect( () =>{
     dispatch(getDocuments());
-    dispatch(getDocument_version());    
-  },[])
+    dispatch(getDocument_version()); 
+  },[docs.length])
 
   /* funcion para manejar la apertura y cierre del accordion */
   const handleClick = (e, titleProps) => {
@@ -47,9 +49,10 @@ function Documentos () {
 
       <Container> 
         {
-          perms.length !== 0 ?
+          
+          docs.length !== 0 ?
 
-          <Grid columns={6} divided>
+          <Grid columns={6} columns='equal' divided>
             <Grid.Row>
               <h2>Mi Biblioteca</h2>
             </Grid.Row>
@@ -71,22 +74,22 @@ function Documentos () {
               </Grid.Column>
             </Grid.Row> 
             {
-          //  docs.map(doc =>   
+          //docs.map(doc =>   
           perms.map(perm => 
             oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ? 
             
               /**
               ACCORDION FOR MAIN DOCUMENT
                */
-          <Grid.Row >
-            <Accordion fluid styled key={perm._id}>
+          <Grid.Row key={perm._id}>
+            <Accordion fluid styled >
                <Accordion.Title
                  active={activeIndex === perm._id}
                  index={perm._id}
                  onClick={handleClick}
                >
                 <Fragment>
-                  <Grid columns={6} divided>
+                  <Grid columns={6} columns='equal' divided>
                     <Grid.Row color='blue'>
                         <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
                         <Grid.Column>{perm.document.coment}</Grid.Column>
@@ -107,8 +110,8 @@ function Documentos () {
               <Accordion.Content active={activeIndex === perm._id}>
                 {docs_version.map(doc_version => 
                    perm.document._id === doc_version.document._id ?
-                    <Fragment>
-                      <Grid columns={6} celled>
+                    <Fragment key={doc_version._id}>
+                      <Grid columns={6} columns='equal' celled>
                         <Grid.Row color='teal'>
                            <Grid.Column>{doc_version.document.name}</Grid.Column>
                            <Grid.Column>{doc_version.coment}</Grid.Column>
@@ -141,10 +144,11 @@ function Documentos () {
             </Header>
             <MyLink className='button'  to='/new_document' >Adicionar Documento</MyLink>
           </Segment>
-        }        
+        } 
         
-      </Container>
-          
+        {/* LLamando al componente con el mensaje de cofirmacion del documento creado */}
+        <Confirm />
+      </Container>          
   )
 }
 

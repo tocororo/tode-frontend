@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch} from 'react-redux'
 import {Button} from 'semantic-ui-react'
 import styled from 'styled-components'
 
@@ -14,9 +13,7 @@ const MyButton = styled(Button)`
 }
 `
 
-function LoginOauth2(props){
-
-    const dispatch = useDispatch()
+function LoginOauth2(){
 
     const _handleSignInClick = () => {
         // Authenticate using via passport api in the backend

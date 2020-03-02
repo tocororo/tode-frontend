@@ -8,6 +8,9 @@ import {
 import {
     tokenConfig
 } from './OAuth2Action'
+import {
+    getDocuments
+} from './DocumentAction'
 
 export const getNotifications = () => (dispatch, getSate) => {
     axios.get('/notifications', tokenConfig(getSate)).then(res => dispatch({
@@ -23,29 +26,21 @@ export const getNotificationDocVersion = ({
     document,
     document_version
 }) => (dispatch, getSate) => {
-    axios.get(
-        `/notificationDocVersion?document=${document}&&document_version=${document_version}`,
+    axios.get(`/notificationDocVersion?document=${document}&&document_version=${document_version}`,
         tokenConfig(getSate))
-    /* 
-        .then(() => {
-            dispatch(getNotificationsNumber());
-            dispatch(getNotifications());
-            dispatch(getDocuments());
-      }) */
+
+    dispatch(getNotificationsNumber());
+    dispatch(getNotifications());
 };
 
 export const getNotificationForPermisions = ({
     document
 }) => (dispatch, getSate) => {
-    axios.get(
-        `/notificationForPermisions?document=${document}`,
-        tokenConfig(getSate))
-    /* 
-        .then(() => {
-              dispatch(getNotificationsNumber());
-              dispatch(getNotifications());
-              dispatch(getDocuments());
-        }) */
+    axios.get(`/notificationForPermisions?document=${document}`, tokenConfig(getSate))
+
+    dispatch(getRequestNumber());
+    dispatch(getNotifications());
+    dispatch(getDocuments())
 };
 
 export const getNotificationsNumber = () => (dispatch, getSate) => {
@@ -69,11 +64,11 @@ export const getRequestNumber = () => (dispatch, getSate) => {
 };
 
 export const deleteNotification = ({
-    id
+    document
 }) => (dispatch, getSate) => {
-    axios.delete(`/delete_notification/${id}`, tokenConfig(getSate)).then(res => dispatch({
+    axios.delete(`/delete_notification/${document}`, tokenConfig(getSate)).then(res => dispatch({
             type: DELETE_NOTIFICATION,
-            payload: id
+            payload: document
         }))
         .catch((err) => {
             console.log(err);

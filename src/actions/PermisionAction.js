@@ -21,8 +21,8 @@ export const getPermisions = () => (dispatch, getSate) => {
         });
 };
 
-export const newPermision = permision => dispatch => {
-    axios.post('/new_permision', permision).then(res => {
+export const newPermision = newPermision => dispatch => {
+    axios.post('/new_permision', newPermision).then(res => {
             dispatch({
                 type: ADD_PERMISION,
                 payload: res.data

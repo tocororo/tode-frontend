@@ -15,7 +15,7 @@ function SideBar (props) {
 
     const handleItemClickGest= (e, { name }) => {
       setState({ activeItem: name })
-      window.open("https://10.2.64.4/oauth2", "_self")
+      window.open("https://10.2.64.4:4000/oauth2", "_self")
       }
 
     // const isAuthenticated = useSelector(state => state.auth.isAuthenticated)

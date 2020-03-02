@@ -29,8 +29,6 @@ function AddContent(props) {
   const [text, setText] = useState('');
   const [document, setDocument] = useState('');
   const [image, setImage] = useState('');
-  /* const [checkedForm, setCheckedForm] = useState(true);
-  const [chekedDropzone, setChekedDropzone] =  useState(false); */
 
   /* utilizando variables de los reducers.js */
   const { doc}  = useSelector(state => state.doc);
@@ -43,13 +41,11 @@ function AddContent(props) {
   ,[])
    
     const OnChange = e => {
-        setText( e.target.value, );        
-        setDocument (doc._id )
-        
+        setText( e.target.value, );         
     };
 
     const OnChangeImage = e => {
-      setImage( e.target.value, ); 
+      setImage( e.target.files[0], ); 
       
     };
 
@@ -59,33 +55,17 @@ function AddContent(props) {
     const OnSubmit = (e) => {
         e.preventDefault();
 
-        const newText = { text,  document };
-        dispatch(createText(props.match.params.name, newText, history));
+        let formData = new FormData();
+        formData.append('text', text);
+        formData.append('image', image);
+        dispatch(createText(props.match.params.name, formData, history));
     }
        
       return (          
         <Container>
           <Segment >
-            <h2 className='title'>Añadir Documento: Paso 2</h2>{/* 
-            <Segment.Group horizontal>
-            <Segment>
-              <Radio
-                label='No tengo un articulo preparado'
-                onClick={toggleForm}
-                checked={checkedForm}
-              />
-            </Segment>
-            <Segment >
-              <Radio
-                label='Tengo un articulo preparado'
-                onClick={toggleDropzone}
-                checked={chekedDropzone}
-              />
-            </Segment>
-            </Segment.Group>
-            {
-              checkedForm === true ?  */}
-              <Form onSubmit={OnSubmit} encType="multipart/form-data" action="/createText" method="post">
+            <h2 className='title'>Añadir Documento: Paso 2</h2>
+              <Form onSubmit={OnSubmit} >
                   <Form.Field>
                       <TextArea
                           style={{ minHeight: 100}}
@@ -100,11 +80,8 @@ function AddContent(props) {
                   <Form.Field>
                       <Input
                           type="file"
-                          id="image"
-                          name="image"
+                          name='image'
                           onChange={OnChangeImage}
-                          value={image}
-                          required
                       />
                   </Form.Field>
                   
@@ -112,11 +89,6 @@ function AddContent(props) {
                       <MyButton type="submit"> Guardar </MyButton>
                   </Form.Field>
               </Form>
-              {/* :
-            chekedDropzone === true ?
-            <Dropzone name={props.match.params.name} doc_id={doc._id}/>
-            :null
-            } */}
             </Segment>
         </Container>
         )
