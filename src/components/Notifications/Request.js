@@ -26,8 +26,8 @@ function Request(props)  {
 
   //const handleOpen = () => setModalOpen(true) ;
 
-  const OnCancel = (e, {id}) => {
-    dispatch(deleteNotification({id}))
+  const OnCancel = (e, {document}) => {
+    dispatch(deleteNotification({document}))
     // setModalOpen(false);    
   }
 
@@ -55,28 +55,35 @@ function Request(props)  {
 
                 // NOTIFICACIONS FOR PERMISIONS
                 oauth2IsAuthenticated && notify.forPermisions && notify.forPermisions._id === oauth2Users._id ?
-               <Fragment>
+               <Fragment  key={notify._id}>
                <Dropdown.Header  
                children ={notify.notification}
                />
-               <Dropdown.Header                      
-                content= {
-                  <Button.Group size='mini' >
-                    <Button  type='submit'
-                      document = {notify.document._id}    
-                      onClick = {NotificationCheckedForPermision} >
-                      <Icon name='checkmark'/> Aceptar
-                    </Button>
-                  <Button.Or />
-                    <Button 
-                      // id = {notify.document._id}   
-                      onClick={OnCancel.bind(this, notify.document._id) }>
-                      <Icon name='remove' /> Cancelar
-                    </Button>
-                  </Button.Group>
-                }            
-                /> 
+                {
+                  notify.notificationSied === false ?
+                    <Fragment>
+                      <Dropdown.Header                      
+                        content= {
+                          <Button.Group size='mini' >
+                            <Button  type='submit'
+                              document = {notify.document._id}    
+                              onClick = {NotificationCheckedForPermision} >
+                              <Icon name='checkmark'/> Aceptar
+                            </Button>
+                          <Button.Or />
+                            <Button 
+                              // id = {notify.document._id}   
+                              onClick={OnCancel.bind(this, notify.document._id) }>
+                              <Icon name='remove' /> Cancelar
+                            </Button>
+                          </Button.Group>                    
+                        }                        
+                      /> 
+                    </Fragment>
+                  :null
+                } 
                 </Fragment>
+
                 /* <Modal 
                   trigger={
                   <Dropdown.Item active     

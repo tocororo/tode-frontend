@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory,} from 'react-router-dom';
 import { newDocument } from '../../actions/DocumentAction'
 import { Container, Button, Form, Input, Segment, Label, Radio } from 'semantic-ui-react';
 import styled from 'styled-components'
 import classnames from 'classnames'
+import {ConfirmContext} from '../contexts/ConfirmContext'
 
 const MyButton = styled(Button)`
 &&&{
@@ -19,16 +20,17 @@ const MyButton = styled(Button)`
 `
 
 function NewDocument (props) {
-  const history = useHistory();
-  
+  const history = useHistory();  
+  const {toogleOpen} = useContext(ConfirmContext)
   
   const [name, setName] = useState('');
   const [coment, setComent] = useState('Original');
   const [document_user, setDocument_user] = useState('');
-  const [checkedForm, setCheckedForm] = useState(false);
+  const [checkedContent, setCheckedContent] = useState(false);
   const [chekedDropzone, setChekedDropzone] =  useState(false);
   const [url, setUrl] =  useState('');  
-  const [error, setError] = useState('');
+  const [errorContent, setErrorContent] = useState('');
+  const [errorDropzone, setErrorDropzone] = useState('');
 
   /* utilizando variables de los reducers.js */
   // const {user, isAuthenticated} = useSelector(state => state.auth)
@@ -36,43 +38,55 @@ function NewDocument (props) {
   const {errorsMessages} = useSelector(state => state.error)
   
   useEffect(() =>{
-    console.log(errorsMessages, error);
-  },[errorsMessages, error])
+  },[errorsMessages, errorContent, errorDropzone])
 
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
   const OnChangename = (e) => {
-  setName(e.target.value );
-  if(oauth2IsAuthenticated){
-  setDocument_user(oauth2Users._id)   } 
+    setName(e.target.value );
+    if(oauth2IsAuthenticated){
+      setDocument_user(oauth2Users._id)  
+     }     
   };
 
   const OnChangecoment = (e) => {
     setComent( e.target.value );
-    };
+  };
 
-  const toggleForm = () => {
-    setCheckedForm(!checkedForm);
+  const toggleContent = () => {
+    if(name !== ''){
+    setCheckedContent(!checkedContent);
     setChekedDropzone(false); 
-    setError('') ;   
     setUrl(`/add-content/${name}`)
-     
+    setErrorDropzone('') ;   
+    }else{      
+      setErrorContent('Introduzca antes un nombre para el documento')
+      setErrorDropzone('')
+    }
   }
   const toggleDropzone = () => {
+    if (name !== '') {      
     setChekedDropzone(!chekedDropzone);
-    setCheckedForm(false); 
-    setError('') ;  
-    setUrl(`/dropzone/${name}`)
+    setCheckedContent(false); 
+    setUrl(`/dropzone/${name}`)    
+    setErrorContent('') ;  
+    }else{
+      setErrorDropzone('Introduzca antes un nombre para el documento')
+      setErrorContent('')
+    }
   } 
 
   const OnSubmit = (e) => {
     e.preventDefault();     
 
-    if(checkedForm === true || chekedDropzone === true){
-    const newDoc = { name, coment, document_user };
-    dispatch(newDocument(newDoc, history, url));  
+    if(checkedContent === true || chekedDropzone === true ){      
+      const newDoc = { name, coment, document_user };
+      dispatch(newDocument(newDoc, history, url));
+      setErrorContent('')
+      setErrorDropzone('')
     }else{
-      setError('Seleccione una opcion')
+      setErrorContent('Seleccione una opcion')
+      setErrorDropzone('Seleccione una opcion')
     }
   }
 
@@ -118,23 +132,23 @@ function NewDocument (props) {
                 <Form.Field 
                   control={Radio}
                   error={
-                    error !== '' &&
+                    errorContent !== '' &&
                     {
-                    content: error,
+                    content: errorContent,
                     pointing: 'below',
                   }}
                   label='No tengo un articulo preparado'
-                  onClick={toggleForm}
-                  checked={checkedForm}
+                  onClick={toggleContent}
+                  checked={checkedContent}
                   />
                 </Segment>
                 <Segment >
                 <Form.Field 
                   control={Radio}
                   error={
-                    error !== '' &&
+                    errorDropzone !== '' &&
                     {
-                    content: error,
+                    content: errorDropzone,
                     pointing: 'below',
                   }}
                   label='Tengo un articulo preparado'
@@ -144,7 +158,7 @@ function NewDocument (props) {
                 </Segment>
                 </Segment.Group>
               <Form.Field>
-                      <MyButton type="submit"> Guardar </MyButton>
+                      <MyButton onClick={toogleOpen} type="submit"> Guardar </MyButton>
               </Form.Field>
           </Form>
         </Segment>   

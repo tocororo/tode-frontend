@@ -30,9 +30,7 @@ export default function (state = initialState, action) {
                 isLoading: false
             };
         case LOGOUT_SUCCES:
-            localStorage.removeItem('token');
-            localStorage.removeItem('sceibaId');
-            localStorage.removeItem('expires_in');
+            localStorage.clear();
             return {
                 ...state,
                 oauth2Users: null,

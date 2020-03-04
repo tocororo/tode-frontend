@@ -70,7 +70,7 @@ function Notifications(props)  {
                   header='Sin notificaciones aun'
                 /> */
                 :
-                <Dropdown.Header 
+                <Dropdown.Header key={notify._id}
                 content='Sin notificaciones aun'
                 />
                 ))

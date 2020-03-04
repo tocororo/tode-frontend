@@ -28,7 +28,6 @@ const MySegment = styled(Segment)`
   }
 `
 
-
 function NavigationSideBar (props) {
  return(
     <MySidebar.Pushable >
@@ -36,9 +35,7 @@ function NavigationSideBar (props) {
         <MySidebar
         animation='overlay'
         icon='labeled'
-        inverted
-        onHide={props.onHide}
-        vertical
+        onHide={props.onHide}        
         visible={props.visibility}
         width='wide'
         >
@@ -48,31 +45,30 @@ function NavigationSideBar (props) {
 
         <MySidebar.Pusher dimmed={props.visibility}>
                 <MySegment basic>
+
+                <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login-oauth2" component={LoginOauth2} />
                 <Route exact path="/texture" component={Texture} />
-                <Switch>
+                  
                   <PrivateRoute exact path="/documents" component={Documentos} />
-                </Switch>
-                <Switch>
+                 
                   <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
-                </Switch>
-                <Switch>
+                
                   <PrivateRoute exact path="/new_document" component={NewDocument} />
-                </Switch>
-                <Switch>
+                
                   <PrivateRoute exact path="/dropzone/:name" component={Dropzone} />
-                </Switch>
-                <Switch>
+                               
                   <PrivateRoute exact path="/add-content/:name" component={AddContent} />
-                </Switch>
-                <Switch>
+                
                   <PrivateRoute exact path="/permisions/:id" component={Permisions} />
-                </Switch>
-                <Switch>
+               
                   <PrivateRoute exact path="/edit_document_version/:id" 
                                     component={EditDocumentVersion} /> 
+               
+                  <Route component={URLNotFound} />
                 </Switch>
+                
                 </MySegment>
         </MySidebar.Pusher>
     </MySidebar.Pushable>

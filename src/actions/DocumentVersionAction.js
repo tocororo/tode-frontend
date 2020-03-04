@@ -31,10 +31,13 @@ export const getDocument_versionById = (id) => (dispatch) => {
 };
 
 export const getDocument_version_content = (id) => (dispatch) => {
-    axios.get(`/document_version_content/${id}`).then(res => dispatch({
+    axios.get(`/document_version_content/${id}`).then(res => {
+        console.log(JSON.stringify(res.data));
+        
+        dispatch({
             type: GET_DOCUMENT_VERSION_CONTENT,
             payload: res.data
-        }))
+        })})
         .catch((err) => {
             console.log(err);
         });

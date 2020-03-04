@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Input } from 'semantic-ui-react';
 import '../../css/ChatPage.css'
 
 
@@ -18,19 +18,19 @@ class InputContainer extends Component {
     }
 
     static propTypes = {
-        auth: PropTypes.object.isRequired
+        oauth2: PropTypes.object.isRequired
     }
 
     render() {
 
-        const { oauth2User } = this.props.oauth2
+        const { oauth2Users, oauth2IsAuthenticated } = this.props.oauth2
         return (
             <Form className="input" onSubmit={this.handleSubmit}>
 
                 <Form.Input
                     placeholder="Escribe aqui..."
                     value={this.state.content}
-                    onChange={(e) => { oauth2User ? this.setState({ content: e.target.value, sender: oauth2User.name }) : this.setState({ content: "", sender: "" }) }}
+                    onChange={(e) => { oauth2IsAuthenticated ? this.setState({ content: e.target.value, sender: oauth2Users.name }) : this.setState({ content: "", sender: "" }) }}
                     required
                 />
             </Form>

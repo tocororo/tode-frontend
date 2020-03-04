@@ -4,33 +4,34 @@ import {  BrowserRouter as Router } from 'react-router-dom';
 import { Provider} from 'react-redux'
 import store from './store'
 import { OAuth2Loaded, logout } from './actions/OAuth2Action'
-import NavigationBar from './components/Navigation/NavigationBar'  
-import { getNotificationsNumber, getRequestNumber} from './actions/NotificationAction'
+import NavigationBar from './components/Navigation/NavigationBar'
+import ConfirmContextProvider from './components/contexts/ConfirmContext';
+import LoginContextProvider from './components/contexts/LoginContext';
 
 function App()  {
-
-  const sceibaId =localStorage.getItem('sceibaId')
-  const token = localStorage.getItem('token');
-  const expires_in = localStorage.getItem('expires_in');  
-
-  useEffect(() =>{    
-    store.dispatch(OAuth2Loaded(sceibaId));    
-    
-    if(token){
-    const timer = setTimeout(() => {  
-      store.dispatch(logout());
-    }, 1000 * 60 * 60);
-    return () => {
-      clearTimeout(timer)
-    }; 
-   };
-},[expires_in])
+  
+  useEffect(() =>{     
+  if (localStorage.getItem('token')) {
+    store.dispatch(OAuth2Loaded())
+   /*  setTimeout(() => 
+      {
+        store.dispatch(logout()) 
+      }, localStorage.getItem('expires_in'))  */
+  } else {
+    store.dispatch(logout())
+  }   
+       
+},[localStorage.getItem('expires_in')])
   
     return (
       <Router>
-        <Provider store={store}>
-          <NavigationBar/>
-        </Provider>
+          <Provider store={store}>
+            <LoginContextProvider>
+              <ConfirmContextProvider>
+                <NavigationBar/>
+              </ConfirmContextProvider>
+            </LoginContextProvider>
+          </Provider>
       </Router>
     );
   }

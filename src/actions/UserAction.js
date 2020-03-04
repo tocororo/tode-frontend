@@ -14,10 +14,10 @@ import {
 
 export const getUsersToPermission = ({
     value,
-    document_id
+    document
 }) => (dispatch, getState) => {
 
-    axios.get(`/user_topermision?value=${value}&&document_id=${document_id}`, tokenConfig(getState)
+    axios.get(`/user_topermision?value=${value}&&document=${document}`, tokenConfig(getState)
 
         ).then(res => dispatch({
             type: GET_USERS,

@@ -6,12 +6,12 @@ import {
 } from './types';
 import axios from 'axios'
 
-export const OAuth2Loaded = (sceibaId) => (dispatch, getSate) => {
+export const OAuth2Loaded = () => async (dispatch) => {
     dispatch({
         type: USER_LOADING
     })
-    if (sceibaId) {
-        axios.get(`/user/${sceibaId}`, tokenConfig(getSate)).then(res => dispatch({
+    
+        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => dispatch({
             type: OAUT2_LOADED,
             payload: res.data
         })
@@ -22,15 +22,17 @@ export const OAuth2Loaded = (sceibaId) => (dispatch, getSate) => {
                 type: OAUT2_ERROR
             });
         }); 
-    }
 };
 
 export const logout = (history) => dispatch =>{
+    axios.get(`/logout`).then(
     dispatch ({
-        type: LOGOUT_SUCCES
-        
-    });
-    history.push(`/`)    
+        type: LOGOUT_SUCCES        
+    })
+)/* 
+    if (history) {        
+        history.push(`/`)    
+    } */
 }
 
 export const tokenConfig = getSate => {
@@ -47,9 +49,9 @@ export const tokenConfig = getSate => {
     }
 
     //if token add to headers
-    if (token) { 
-        config.headers['Autorizacion'] = token; 
-        config.headers['sceibaId'] = sceibaId;
+    if (localStorage.getItem('token')) { 
+        config.headers['Autorizacion'] = localStorage.getItem('token'); 
+        config.headers['sceibaId'] = localStorage.getItem('sceibaId');
     }
 
     return config

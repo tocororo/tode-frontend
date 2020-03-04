@@ -35,11 +35,14 @@
 }
 
 .button{
-    border: 1px solid;
     border-radius: 4px;
     padding: 10px;
     color: white;
     background-color: #1d314d; 
-    font-size: 15px;
+    font-size: 15px;    
+}
 
+.button:hover{
+    color: white;
+    background-color: teal; 
 }
