@@ -5,9 +5,8 @@ import { Button, Form, TextArea, Container, Input, Radio, Segment } from 'semant
 import '../../css/editpage.css'
 import styled from 'styled-components'
 
-import Dropzone from './Dropzone'
-
-import { createText, getDocumentByName } from '../../actions/DocumentAction'
+import { newDocument_version} from '../../actions/DocumentVersionAction'
+import DocumentModal from '../Utils/DocumentModal'
 
 const MyButton = styled(Button)`
 &&&{
@@ -21,7 +20,6 @@ const MyButton = styled(Button)`
 }
 `
 
-
 function AddContent(props) {
 
   const history = useHistory()  
@@ -29,40 +27,49 @@ function AddContent(props) {
   const [text, setText] = useState('');
   const [document, setDocument] = useState('');
   const [image, setImage] = useState('');
+  const [comment, setComment] = useState('Original');
+  const [document_user, setDocument_user] = useState('');
 
   /* utilizando variables de los reducers.js */
   const { doc}  = useSelector(state => state.doc);
+  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
+  const {errorsMessages} = useSelector(state => state.error)
   
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
 
   useEffect(()=>
-    dispatch(getDocumentByName(props.match.params.name))
-  ,[])
+    console.log(errorsMessages)    
+  ,[doc._id, errorsMessages]) 
    
     const OnChange = e => {
-        setText( e.target.value, );         
+        setText( e.target.value, );  
+        if (oauth2IsAuthenticated) {
+          setDocument_user(oauth2Users._id)    
+          setDocument(doc._id)     
+      }        
     };
 
     const OnChangeImage = e => {
       setImage( e.target.files[0], ); 
       
-    };
-
-    /* const toggleForm = () => {setCheckedForm(!checkedForm); setChekedDropzone(!chekedDropzone)}
-    const toggleDropzone = () => {setChekedDropzone(!chekedDropzone); setCheckedForm(!checkedForm)} */
+    };    
 
     const OnSubmit = (e) => {
-        e.preventDefault();
-
-        let formData = new FormData();
-        formData.append('text', text);
-        formData.append('image', image);
-        dispatch(createText(props.match.params.name, formData, history));
-    }
+      e.preventDefault();
+      let formData = new FormData();
+      formData.append('comment', comment);
+      formData.append('document_user', document_user);
+      formData.append('document', document);
+      formData.append('text', text);
+      formData.append('image', image);
+      dispatch(newDocument_version(formData, history));
+  }
        
       return (          
         <Container>
+
+          <DocumentModal type='new_document' />
           <Segment >
             <h2 className='title'>Añadir Documento: Paso 2</h2>
               <Form onSubmit={OnSubmit} >

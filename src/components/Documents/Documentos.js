@@ -23,7 +23,7 @@ function Documentos () {
   const [documentLengt, setDocumentLengt] = useState({});  
 
   /* utilizando variables de los reducers.js */
-  const docs_version = useSelector(state => state.doc_version.docs_version);
+  const {docs_version, document_version_content, version} = useSelector(state => state.doc_version);
   const {docs, perms} = useSelector(state => state.doc);
   // const {users, isAuthenticated} = useSelector(state => state.auth)
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
@@ -35,7 +35,7 @@ function Documentos () {
   useEffect( () =>{
     dispatch(getDocuments());
     dispatch(getDocument_version()); 
-  },[docs.length])
+  },[docs.length, docs_version.length])
 
   /* funcion para manejar la apertura y cierre del accordion */
   const handleClick = (e, titleProps) => {
@@ -50,7 +50,7 @@ function Documentos () {
       <Container> 
         {
           
-          docs.length !== 0 ?
+          docs.length > 0 ?
 
           <Grid columns={6} columns='equal' divided>
             <Grid.Row>

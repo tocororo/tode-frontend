@@ -1,15 +1,19 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useContext } from 'react'
 import {  useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Menu} from 'semantic-ui-react'
+import { SideBarContext } from '../contexts/SideBar';
         
 function SideBar (props) {
     const history = useHistory()
 
     const [state, setState] = useState({activeItem: 'a'})
+
+    const {open,toogleOpen} = useContext(SideBarContext)
     
     const handleItemClick = (e, { name, url }) => {
     setState({ activeItem: name })
+    toogleOpen()
     history.push(url)
     }
 

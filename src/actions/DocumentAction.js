@@ -3,6 +3,7 @@ import {
     GET_DOCUMENTS,
     GET_DOCUMENT,
     GET_ERRORS,
+    ADD_DOCUMENT,
     CLEAR_ERRORS,
     DELETE_DOCUMENT,
     CREATE_TEXT
@@ -19,7 +20,10 @@ export const getDocuments = () => (dispatch, getSate) => {
             })
         })
         .catch((err) => {
-            console.log(err);
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
         });
 };
 
@@ -43,11 +47,15 @@ export const getDocumentByName = (name) => dispatch => {
         });
 };
 
-export const newDocument = (newDoc, history, url) => dispatch => {
+export const newDocument = (newDoc/* , history, url */) => dispatch => {
     axios.post('/new_document', newDoc)
         .then(res => {
             if (newDoc) {
-                history.push(url)
+                /* history.push(url) */
+                dispatch({
+                    type: ADD_DOCUMENT,
+                    payload: res.data
+                })
                 dispatch({
                     type: CLEAR_ERRORS
                 })

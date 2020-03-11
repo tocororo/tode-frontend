@@ -2,7 +2,8 @@ import {
     USER_LOADING,
     OAUT2_LOADED,
     OAUT2_ERROR,
-    LOGOUT_SUCCES
+    LOGOUT_SUCCES,
+    GET_ERRORS
 } from './types';
 import axios from 'axios'
 
@@ -16,11 +17,16 @@ export const OAuth2Loaded = () => async (dispatch) => {
             payload: res.data
         })
         )
-        .catch(err => {
-            console.log(err);            
+        .catch(err => {         
             dispatch({
                 type: OAUT2_ERROR
             });
+            console.log(err);
+            
+           /*  dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            }); */
         }); 
 };
 

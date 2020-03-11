@@ -6,17 +6,13 @@ import store from './store'
 import { OAuth2Loaded, logout } from './actions/OAuth2Action'
 import NavigationBar from './components/Navigation/NavigationBar'
 import ConfirmContextProvider from './components/contexts/ConfirmContext';
-import LoginContextProvider from './components/contexts/LoginContext';
+import SideBarContextProvider from './components/contexts/SideBar';
 
 function App()  {
   
-  useEffect(() =>{     
-  if (localStorage.getItem('token')) {
+  useEffect(() =>{    
+  if (localStorage.getItem('token') ) {
     store.dispatch(OAuth2Loaded())
-   /*  setTimeout(() => 
-      {
-        store.dispatch(logout()) 
-      }, localStorage.getItem('expires_in'))  */
   } else {
     store.dispatch(logout())
   }   
@@ -26,11 +22,11 @@ function App()  {
     return (
       <Router>
           <Provider store={store}>
-            <LoginContextProvider>
+            <SideBarContextProvider>
               <ConfirmContextProvider>
                 <NavigationBar/>
               </ConfirmContextProvider>
-            </LoginContextProvider>
+            </SideBarContextProvider>
           </Provider>
       </Router>
     );

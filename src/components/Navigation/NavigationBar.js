@@ -1,8 +1,9 @@
-import React, {Fragment, useState, useEffect } from 'react';
+import React, {Fragment, useState, useEffect, useContext } from 'react';
 import { Menu, Icon, Dropdown} from 'semantic-ui-react'
 import { useHistory, Link} from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { SideBarContext } from '../contexts/SideBar';
 
 import NavigationSideBar from './NavigationSideBar';
 import Request from '../Notifications/Request'
@@ -40,9 +41,6 @@ const MyMenu = styled(Menu)`
 
 
 function NavigationBar ()  {
-  const [state, setState] = useState({
-    visible: false
-  })
 
   const dispatch = useDispatch()
   const history = useHistory()
@@ -51,14 +49,8 @@ function NavigationBar ()  {
     const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
     const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
-
-  const showMenu = () => {
-    setState( state => ({...state, visible: !state.visible }))   
-     
-  }
-
-  const onHide = () => setState({...state, visible: false})
-  
+    
+    const {open,toogleOpen} = useContext(SideBarContext)  
 
   useEffect(() => {    
       dispatch(getNotifications())    
@@ -78,7 +70,7 @@ function NavigationBar ()  {
   /** MENU FOR USERS AUTHENTICATEDS */
   const authLinks = (
     <MyMenu color='teal' inverted size='small'>
-            <MyMenu.Item onClick={showMenu} >
+            <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name='bars' />
             </MyMenu.Item>
         <MyMenu.Item>
@@ -113,7 +105,7 @@ const gestLinks = (
 
     <Fragment >
         <MyMenu color='teal' inverted size='small'>
-            <MyMenu.Item onClick={showMenu} >
+            <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name="bars" />
             </MyMenu.Item>
             <MyMenu.Item>
@@ -132,7 +124,7 @@ const gestLinks = (
     return (
           <div>
             {oauth2IsAuthenticated ? authLinks : gestLinks}
-            <NavigationSideBar onHide={onHide} visibility={state.visible}/>
+            <NavigationSideBar />
           </div>
     );
   }

@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory,} from 'react-router-dom';
 import { newDocument } from '../../actions/DocumentAction'
-import { Container, Button, Form, Input, Segment, Label, Radio } from 'semantic-ui-react';
+import { Container, Button, Form, Input, Segment, Label, Radio, TextArea } from 'semantic-ui-react';
 import styled from 'styled-components'
 import classnames from 'classnames'
 import {ConfirmContext} from '../contexts/ConfirmContext'
+import DocumentModal from '../Utils/DocumentModal'
+import AddContent from './AddContent';
 
 const MyButton = styled(Button)`
 &&&{
@@ -23,14 +25,15 @@ function NewDocument (props) {
   const history = useHistory();  
   const {toogleOpen} = useContext(ConfirmContext)
   
+  const [open, setOpen] = useState(true);
   const [name, setName] = useState('');
-  const [coment, setComent] = useState('Original');
+  //const [coment, setComent] = useState('Original');
   const [document_user, setDocument_user] = useState('');
-  const [checkedContent, setCheckedContent] = useState(false);
-  const [chekedDropzone, setChekedDropzone] =  useState(false);
-  const [url, setUrl] =  useState('');  
-  const [errorContent, setErrorContent] = useState('');
-  const [errorDropzone, setErrorDropzone] = useState('');
+  //const [checkedContent, setCheckedContent] = useState(false);
+  //const [chekedDropzone, setChekedDropzone] =  useState(false);
+  //const [url, setUrl] =  useState('');  
+  //const [errorContent, setErrorContent] = useState('');
+  //const [errorDropzone, setErrorDropzone] = useState('');
 
   /* utilizando variables de los reducers.js */
   // const {user, isAuthenticated} = useSelector(state => state.auth)
@@ -38,10 +41,10 @@ function NewDocument (props) {
   const {errorsMessages} = useSelector(state => state.error)
   
   useEffect(() =>{
-  },[errorsMessages, errorContent, errorDropzone])
+  },[errorsMessages/* , errorContent, errorDropzone */])
 
   /*  dispatch para utilizar las actions.js */
-  const dispatch = useDispatch()
+  /* const dispatch = useDispatch()
   const OnChangename = (e) => {
     setName(e.target.value );
     if(oauth2IsAuthenticated){
@@ -51,9 +54,9 @@ function NewDocument (props) {
 
   const OnChangecoment = (e) => {
     setComent( e.target.value );
-  };
+  }; */
 
-  const toggleContent = () => {
+  /* const toggleContent = () => {
     if(name !== ''){
     setCheckedContent(!checkedContent);
     setChekedDropzone(false); 
@@ -74,24 +77,33 @@ function NewDocument (props) {
       setErrorDropzone('Introduzca antes un nombre para el documento')
       setErrorContent('')
     }
-  } 
+  }  */
 
-  const OnSubmit = (e) => {
+  /* const OnSubmit = (e) => {
     e.preventDefault();     
 
     if(checkedContent === true || chekedDropzone === true ){      
-      const newDoc = { name, coment, document_user };
-      dispatch(newDocument(newDoc, history, url));
+      const newDoc = { name, document_user };
+      dispatch(newDocument(newDoc , history, url ));
       setErrorContent('')
       setErrorDropzone('')
     }else{
       setErrorContent('Seleccione una opcion')
       setErrorDropzone('Seleccione una opcion')
     }
+  } */
+  const handleOpen = () => {
+    setOpen( prev => !prev.open )
+    console.log(open);
+    
   }
-
     return (
+      
       <Container>
+      <DocumentModal type='new_document' handleOpen={handleOpen} create={open} />
+      <AddContent />
+            </Container>
+      /* <Container>
         <Segment color='blue' padded='very'><h2>Añadir Documento: Paso 1</h2>
           <Form onSubmit={OnSubmit}>
               <Form.Field
@@ -162,7 +174,7 @@ function NewDocument (props) {
               </Form.Field>
           </Form>
         </Segment>   
-      </Container>   
+      </Container>    */
         )
     }
 

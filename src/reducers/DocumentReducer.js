@@ -2,7 +2,7 @@ import {  GET_DOCUMENTS, GET_DOCUMENT,ADD_DOCUMENT, DELETE_DOCUMENT, CREATE_TEXT
 const initialState = {
     docs: [],
     perms:[],
-    doc: "",
+    doc: {},
     text:""
 }
 
@@ -24,8 +24,8 @@ export default function (state = initialState, action) {
             };
         case ADD_DOCUMENT:
             return {
-             ...state,
-             docs: [action.payload, ...state.docs]
+                ...state,
+                doc: action.payload
             };
         case CREATE_TEXT:
             return {
