@@ -12,7 +12,8 @@ const store = createStore(
     compose(
         applyMiddleware(...middleware),
         (process.env.NODE_ENV === "development")?
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__():null || compose
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({trace: true, 
+            traceLimit: 25}):null || compose
     ));
 
 export default store;

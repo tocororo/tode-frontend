@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
 import { Button, Form, TextArea, Container, Input, Radio, Segment } from 'semantic-ui-react'
 import '../../css/editpage.css'
 import styled from 'styled-components'
+import { ConfirmContext } from '../contexts/ConfirmContext';
 
 import { newDocument_version} from '../../actions/DocumentVersionAction'
-import DocumentModal from '../Utils/DocumentModal'
+import DocumentModal from './DocumentModal'
 
 const MyButton = styled(Button)`
 &&&{
@@ -37,6 +38,8 @@ function AddContent(props) {
   
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
+  const fileInputRef = useRef()
+  const {open,toogleOpen} = useContext(ConfirmContext)
 
   useEffect(()=>
     console.log(errorsMessages)    
@@ -63,6 +66,7 @@ function AddContent(props) {
       formData.append('document', document);
       formData.append('text', text);
       formData.append('image', image);
+      toogleOpen()
       dispatch(newDocument_version(formData, history));
   }
        
@@ -71,26 +75,33 @@ function AddContent(props) {
 
           <DocumentModal type='new_document' />
           <Segment >
-            <h2 className='title'>Añadir Documento: Paso 2</h2>
               <Form onSubmit={OnSubmit} >
-                  <Form.Field>
-                      <TextArea
-                          style={{ minHeight: 100}}
-                          type="text"
-                          id="text"
-                          name="text"
-                          onChange={OnChange}
-                          value={text}
-                          required
-                      />
-                  </Form.Field>
-                  <Form.Field>
-                      <Input
-                          type="file"
-                          name='image'
-                          onChange={OnChangeImage}
-                      />
-                  </Form.Field>
+                  <Form.Field
+                    control={TextArea}
+                    style={{ minHeight: 100}}
+                    type="text"
+                    id="text"
+                    name="text"
+                    onChange={OnChange}
+                    value={text}
+                    required
+                  />
+                  <Form.Field
+                    control={Input}
+                    input={{ multiple: true }}
+                    //ref={fileInputRef}
+                    type="file"
+                    hidden
+                    name='image'
+                    onChange={OnChangeImage}
+                    multiple
+                  />
+                  {/* <Button
+                  content="Choose File"
+                  labelPosition="left"
+                  icon="file"
+                  onClick={() => fileInputRef.current.click()}
+                /> */}
                   
                   <Form.Field>
                       <MyButton type="submit"> Guardar </MyButton>

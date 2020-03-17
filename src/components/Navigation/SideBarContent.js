@@ -15,6 +15,7 @@ function SideBar (props) {
     setState({ activeItem: name })
     toogleOpen()
     history.push(url)
+    localStorage.setItem('doc_chat', '')
     }
 
     const handleItemClickGest= (e, { name }) => {

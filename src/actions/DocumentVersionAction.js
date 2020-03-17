@@ -31,9 +31,7 @@ export const getDocument_versionById = (id) => (dispatch) => {
 };
 
 export const getDocument_version_content = (id) => (dispatch) => {
-    axios.get(`/document_version_content/${id}`).then(res => {
-        console.log(JSON.stringify(res.data));
-        
+    axios.get(`/document_version_content/${id}`).then(res => {        
         dispatch({
             type: GET_DOCUMENT_VERSION_CONTENT,
             payload: res.data
@@ -43,9 +41,7 @@ export const getDocument_version_content = (id) => (dispatch) => {
         });
 };
 
-export const newDocument_version = (formData, history) => dispatch => { 
-    console.log(formData);
-       
+export const newDocument_version = (formData, history) => dispatch => {        
     axios.post('/new_document_version', formData).then(res => dispatch({
             type: ADD_DOCUMENT_VERSION,
             payload: res.data
@@ -56,9 +52,7 @@ export const newDocument_version = (formData, history) => dispatch => {
     history.push('/documents')
 };
 
-export const editDocument_version = (formData, history) => dispatch => { 
-    console.log(formData);
-       
+export const editDocument_version = (formData, history) => dispatch => {        
     axios.post('/put_document_version', formData).then(res => dispatch({
             type: ADD_DOCUMENT_VERSION,
             payload: res.data

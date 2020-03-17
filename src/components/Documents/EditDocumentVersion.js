@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect } from 'react'
+import React, {Fragment, useState, useEffect, createRef, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
 import { Button, Form, TextArea, Sidebar, Segment, Container, Input, Table } from 'semantic-ui-react'
@@ -7,8 +7,10 @@ import styled from 'styled-components'
 import Moment  from 'react-moment'
 
 import { editDocument_version, getDocument_version_content, getDocument_versionById} from '../../actions/DocumentVersionAction'
-import ChatPage from '../Chat/ChatPage'
-import DocumentModal from '../Utils/DocumentModal';
+import Chat from '../ChatRoom/index'
+import DocumentModal from './DocumentModal';
+import { ChatContext } from '../contexts/ChatContext';
+import {getMessages} from '../../actions/MessageAction'
 
 
 const MyTable = styled(Table)`
@@ -17,10 +19,14 @@ const MyTable = styled(Table)`
     margin-bottom: 10vh;
   }
 `
-
 const MySidebar = styled(Sidebar)`
   &&& {
-    background-color:#efefef;
+    background-color:teal;
+  }
+  `
+const MySegment = styled(Segment)`
+  &&& {
+    min-height: 90vh;
   }
 `
 const MyButton = styled(Button)`
@@ -38,38 +44,34 @@ const MyButton = styled(Button)`
 
 function EditDocumentVersion(props) {
     /* creando variables de estado y un metodo para modificarlas */
-  /* const [coment, setComent] = useState('');
-  const [document, setDocument] = useState('');
-  const [document_user, setDocument_user] = useState('');
-  const [visible, setVisible] = useState(false); */
   const [text, setText] = useState('');
   const [image, setImage] = useState('');
   const [document, setDocument] = useState('');
   const [document_user, setDocument_user] = useState('');
   const [open, setOpen] = useState(false);
+  const {visible,toogleVisible} = useContext(ChatContext)
+  
 
   /* utilizando variables de los reducers.js */
   // const users = useSelector(state => state.auth.user);
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2);
-  const {document_version_content, version}  = useSelector(state => state.doc_version);
+  const {document_version_content, version}  = useSelector(state => state.doc_version); 
+  const {messages} = useSelector(state => state.message)
 
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
   const history = useHistory()
+  //const fileInputRef = createRef(null)
 
   // useeffect for componentDidMount, ComponentDidUpdate, componentWillUnmount    
-
+  let id = props.match.params.id
   useEffect( () =>{
     dispatch(getDocument_versionById(props.match.params.id));
-    dispatch(getDocument_version_content(props.match.params.id));    
-    setText(document_version_content);        
-  },[document_version_content, version._id])
-
-    // funcion que controla la visibilidad del chat 
-    /* const showChat = () => {
-      setVisible( prevState => !prevState.visible )
-    } */
-
+    dispatch(getDocument_version_content(props.match.params.id)); 
+    dispatch(getMessages({id}))   
+    setText(document_version_content);    
+    localStorage.setItem('doc_chat', props.match.params.id)    
+  },[document_version_content, version._id, messages.length])
 
     const handleOpen = () => {
       setOpen( true )  
@@ -87,7 +89,9 @@ function EditDocumentVersion(props) {
       setImage( e.target.files[0], ); 
       
     };
-
+    /* function handleClick() {
+      fileInputRef.current.click();
+    } */
 
     const OnSubmitVersion = (comment) => (e) => {
       e.preventDefault();
@@ -98,11 +102,25 @@ function EditDocumentVersion(props) {
       formData.append('text', text);
       formData.append('image', image);
       dispatch(editDocument_version(formData, history));
+      localStorage.removeItem('doc_chat')
   }
        
-      return (          
-        <Container>
-        <DocumentModal type='new_version' edit={open} OnSubmitVersion={OnSubmitVersion}/>
+  return (  
+    <div style={{margin:-14}}>
+    <MySidebar.Pushable> 
+        <MySidebar
+          animation='overlay'
+          direction='right'
+          //onHide={toogleVisible}
+          visible={visible}
+          width='wide'
+          >
+          <Chat doc={props.match.params.id} messages={messages}/>           
+        </MySidebar> 
+
+      <MySidebar.Pusher dimmed={false/* visible */}>
+        <MySegment basic>
+          <DocumentModal type='new_version' edit={open} OnSubmitVersion={OnSubmitVersion}/>
           <Segment > 
           { version.document ?
             <MyTable key={version._id} padded='very' inverted>
@@ -117,91 +135,49 @@ function EditDocumentVersion(props) {
             </MyTable>
             : null
           }
+
               <Form /* onSubmit={OnSubmit} */ >
-                  <Form.Field>
-                      <TextArea
-                          style={{ minHeight: 100}}
-                          type="text"
-                          id="text"
-                          name="text"
-                          onChange={OnChange}
-                          value={text}
-                          required
-                      />
-                  </Form.Field>
-                  <Form.Field>
-                      <Input
-                          type="file"
-                          name='image'
-                          onChange={OnChangeImage}
-                      />
-                  </Form.Field>
+                  <Form.Field
+                  control={TextArea}
+                  style={{ minHeight: 100}}
+                  type="text"
+                  id="text"
+                  name="text"
+                  onChange={OnChange}
+                  value={text}
+                  required
+                />
+                <Form.Field
+                  control={Input}
+                  input={
+                    <input 
+                    multiple
+                    type="file"
+                    //hidden
+                    name='image'
+                    onChange={OnChangeImage}
+                    //ref={fileInputRef}
+                    />}
+                />
+                 {/* <Button
+                content="Choose File"
+                labelPosition="left"
+                icon="file"
+                onClick={handleClick}
+              />   */}
                   
                   <Form.Field>
                       <MyButton onClick={handleOpen}> Guardar </MyButton>
                   </Form.Field>
               </Form>
             </Segment>
-        </Container>
+        </MySegment>
+        </MySidebar.Pusher> 
+        </MySidebar.Pushable>
+        </div>
         )
     }
-   /*  const newVersion = { coment, document_user, document }
    
-        return (   
-          <Fragment>
-            <MySidebar.Pushable >
-
-            <MySidebar
-              animation='overlay'
-              direction='right'
-              onHide={() => setVisible( false )}
-              visible={visible}
-              width='wide'
-            >
-            <ChatPage />
-            </MySidebar>
-
-            <MySidebar.Pusher dimmed={visible}>
-           {<div className="container">
-            <div />
-            <div className="center"> 
-            <Form  onSubmit={ OnSubmit } >
-                <Form.Field>
-                    <TextArea
-                        style={{ minHeight: 100}}
-                        type="text"
-                        id="coment"
-                        name="coment"
-                        onChange={OnChange}
-                        value={coment}
-                        required
-                    />
-                </Form.Field>
-                
-                <Form.Field>
-                    <Button onClick={handleOpen}> Guardar </Button>
-                </Form.Field>
-            </Form>
-             </div>
-
-            <div className="end">
-              <MyButton
-                className="button"
-                onClick={showChat}>
-
-                <Icon name='chat' />
-              </MyButton>
-            </div>
-    
-            </div> 
- }
-            </MySidebar.Pusher>
-            </MySidebar.Pushable>
-
-            <DocumentModal type='new_version' handleOpen={handleOpen} open={open} newVersion={newVersion}/>
-          </Fragment>
-        )
-    } */
 
 
 export default EditDocumentVersion

@@ -5,7 +5,7 @@ import {useDropzone} from 'react-dropzone'
 import { Segment, Icon, Header } from 'semantic-ui-react';
 import styled from 'styled-components'
 
-import { createText, getDocumentByName } from '../../actions/DocumentAction'
+import {newDocument_version } from '../../actions/DocumentVersionAction'
 
 const MyIcon = styled(Icon)`
   &&& {
@@ -20,9 +20,6 @@ function Dropzone(props) {
   const [document, setDocument] = useState('');
   const { doc}  = useSelector(state => state.doc);
 
-  useEffect(()=>
-    dispatch(getDocumentByName(props.match.params.name))
-  ,[])
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -37,7 +34,7 @@ function Dropzone(props) {
         setDocument (doc._id )
 
         const newText = {binaryStr,document}
-        dispatch(createText(props.match.params.name, newText, history));
+        dispatch(newDocument_version(newText, history));
       }
       reader.readAsBinaryString(file)
     })

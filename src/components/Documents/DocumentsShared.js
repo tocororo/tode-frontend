@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {Link} from 'react-router-dom';
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
-import { Accordion, Icon, Container, Grid} from 'semantic-ui-react'
+import { Accordion, Icon, Container, Grid, Header, Segment} from 'semantic-ui-react'
 import Moment  from 'react-moment'
 import '../../css/DocumentsPage.css'
 import styled from 'styled-components'
@@ -35,9 +35,17 @@ function DocumentsShared () {
     setActiveIndex(newIndex )    
   }
 
-  return (
+  var permisos = new Array()
+  perms.forEach((perm, index) => {
+    if(oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id) {
+    permisos[index] = perm
+    }
+  });
 
+  return (
+     permisos.length > 0 ?
     <Container> 
+   
         <Grid columns={6} columns='equal' divided>
           <Grid.Row>
             <h2>Biblioteca Compartida</h2>
@@ -60,9 +68,9 @@ function DocumentsShared () {
             </Grid.Column>
           </Grid.Row> 
           {
-        //docs.map(doc =>   
+        docs.map(doc =>   
         perms.map(perm => 
-           oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true ?  
+           oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id === doc._id ?  
           
             /**
             ACCORDION FOR MAIN DOCUMENT
@@ -79,7 +87,8 @@ function DocumentsShared () {
                   <Grid.Row color='blue'>
                       <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
                       <Grid.Column>{perm.document.coment}</Grid.Column>
-                      <Grid.Column>{perm.withPermisions.name}</Grid.Column>
+                      {perm.document._id === doc._id ?
+                        <Grid.Column>{ doc.document_user.name }</Grid.Column> : null}
                       <Grid.Column>
                         <Moment fromNow>{perm.document.createdAt}</Moment>
                       </Grid.Column>
@@ -117,13 +126,23 @@ function DocumentsShared () {
           </Accordion>
           </Grid.Row>
              :null
-             // )
+             )
           )
               }
-          </Grid>      
+          </Grid>  
+         
         </Container>
-            
-        )
+        : 
+        <div style={{marginTop:100}}>
+        <Segment placeholder>
+          <Header as='h2' icon textAlign='center'>
+            <Icon name='file pdf outline' size='big' />
+            <Header.Content> Ups lo sentimos</Header.Content>
+            <Header.Content>Aun no se ha compartido un artículo contigo</Header.Content>
+          </Header>
+        </Segment>
+        </div>
+      )
     }
 
 export default DocumentsShared

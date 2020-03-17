@@ -25,7 +25,6 @@ function Documentos () {
   /* utilizando variables de los reducers.js */
   const {docs_version, document_version_content, version} = useSelector(state => state.doc_version);
   const {docs, perms} = useSelector(state => state.doc);
-  // const {users, isAuthenticated} = useSelector(state => state.auth)
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
   /*  dispatch para utilizar las actions.js */
@@ -36,6 +35,7 @@ function Documentos () {
     dispatch(getDocuments());
     dispatch(getDocument_version()); 
   },[docs.length, docs_version.length])
+  
 
   /* funcion para manejar la apertura y cierre del accordion */
   const handleClick = (e, titleProps) => {
@@ -45,12 +45,21 @@ function Documentos () {
     setActiveIndex(newIndex )
   }
 
+  var permisos = new Array()
+  perms.forEach((perm, index) => {
+    if(oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user) {
+    permisos[index] = perm
+    }
+  });
+
+  
+
   return (
 
       <Container> 
         {
           
-          docs.length > 0 ?
+          permisos.length > 0 ?
 
           <Grid columns={6} columns='equal' divided>
             <Grid.Row>
@@ -75,14 +84,14 @@ function Documentos () {
             </Grid.Row> 
             {
           //docs.map(doc =>   
-          perms.map(perm => 
-            oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ? 
+          permisos.map((perm) => 
+            /* oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ?  */
             
               /**
               ACCORDION FOR MAIN DOCUMENT
                */
           <Grid.Row key={perm._id}>
-            <Accordion fluid styled >
+            <Accordion fluid  >
                <Accordion.Title
                  active={activeIndex === perm._id}
                  index={perm._id}
@@ -120,7 +129,9 @@ function Documentos () {
                            <Grid.Column>
                              <Link
                                to={"/edit_document_version/" + doc_version._id}>
-                               <Icon name='pen square' color='orange' size='big'/>
+                               <Icon name='pen square' color='orange' size='big'
+                               //onClick={localStorage.setItem('doc_chat', doc_version._id)}
+                               />
                              </Link>
                            </Grid.Column>
                          </Grid.Row>
@@ -130,13 +141,14 @@ function Documentos () {
               </Accordion.Content>
             </Accordion>
             </Grid.Row>
-               :null
+               /* :null */
                // )
             )
                 }
             </Grid>      
 
             :
+            <div style={{marginTop:100}}>
             <Segment placeholder>
             <Header icon>
               <Icon name='pdf file outline' />
@@ -144,6 +156,7 @@ function Documentos () {
             </Header>
             <MyLink className='button'  to='/new_document' >Adicionar Documento</MyLink>
           </Segment>
+          </div>
         } 
         
         {/* LLamando al componente con el mensaje de cofirmacion del documento creado */}

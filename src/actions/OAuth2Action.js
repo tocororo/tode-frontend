@@ -12,7 +12,8 @@ export const OAuth2Loaded = () => async (dispatch) => {
         type: USER_LOADING
     })
     
-        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => dispatch({
+        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => 
+            dispatch({
             type: OAUT2_LOADED,
             payload: res.data
         })

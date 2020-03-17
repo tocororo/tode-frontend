@@ -103,7 +103,6 @@ export const updateDocumentName = (id, name) => dispatch => {
         })
         .catch((err) => {
             console.log(err);
-        });
-        
+        });        
         dispatch(getDocuments())
 };

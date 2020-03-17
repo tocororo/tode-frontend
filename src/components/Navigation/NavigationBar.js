@@ -9,11 +9,19 @@ import NavigationSideBar from './NavigationSideBar';
 import Request from '../Notifications/Request'
 import Notifications from '../Notifications/Notifications'
 import LoginOauth2 from '../User/LoginOauth2'
-// import RegisterModal from '../User/Register'
-// import LoginModal from '../User/Login'
+import { ChatContext } from '../contexts/ChatContext';
 
 import {logout} from '../../actions/OAuth2Action'
 import {getNotifications, getNotificationsNumber, getRequestNumber} from '../../actions/NotificationAction'
+
+const ChatIcon = styled(Icon)`
+  &&& {
+   color: grey;
+
+   &&&:hover{
+    color: white;
+  }
+`
 
 const MyLink = styled(Link)`
 &&&{
@@ -50,13 +58,14 @@ function NavigationBar ()  {
 
     const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
     
-    const {open,toogleOpen} = useContext(SideBarContext)  
+    const {open,toogleOpen} = useContext(SideBarContext) 
+    const {visible,toogleVisible} = useContext(ChatContext) 
 
   useEffect(() => {    
       dispatch(getNotifications())    
       dispatch(getNotificationsNumber());    
       dispatch(getRequestNumber());
-  },[notificationsNumber, requestNumber])
+  },[notificationsNumber, requestNumber, localStorage.getItem('doc_chat')])
 
   const trigger = (
     oauth2IsAuthenticated ?
@@ -76,7 +85,12 @@ function NavigationBar ()  {
         <MyMenu.Item>
             <MyLink className="navbar-brand" to='/'> <h1>TODE</h1></MyLink>
         </MyMenu.Item>
-        <MyMenu.Menu position='right'>
+        <MyMenu.Menu position='right'>        
+        { localStorage.getItem('doc_chat') != '' ?
+            <MyMenu.Item>
+                <ChatIcon name='wechat' size='big' onClick={toogleVisible}/>
+            </MyMenu.Item>
+        : null}
             <MyMenu.Item>
                 <Request count={requestNumber}/>
             </MyMenu.Item>
