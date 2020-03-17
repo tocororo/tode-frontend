@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect } from 'react'
+import React, {Fragment, useState, useEffect, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Accordion, Icon, Container,  Segment, Header, Grid} from 'semantic-ui-react'
@@ -10,6 +10,7 @@ import DocumentsOptions from './DocumentsOptions'
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
 import Confirm from '../Notifications/Confirm';
+import { ChatContext } from '../contexts/ChatContext';
 
 const MyLink = styled(Link)`
   &&& {
@@ -20,7 +21,8 @@ const MyLink = styled(Link)`
 function Documentos () {
   /* creando variables de estado y un metodo para modificarlas */
   const [activeIndex, setActiveIndex] = useState(0);  
-  const [documentLengt, setDocumentLengt] = useState({});  
+  
+  const {falseDisabled} = useContext(ChatContext)   
 
   /* utilizando variables de los reducers.js */
   const {docs_version, document_version_content, version} = useSelector(state => state.doc_version);
@@ -130,7 +132,7 @@ function Documentos () {
                              <Link
                                to={"/edit_document_version/" + doc_version._id}>
                                <Icon name='pen square' color='orange' size='big'
-                               //onClick={localStorage.setItem('doc_chat', doc_version._id)}
+                               onClick={falseDisabled}
                                />
                              </Link>
                            </Grid.Column>

@@ -49,7 +49,7 @@ function EditDocumentVersion(props) {
   const [document, setDocument] = useState('');
   const [document_user, setDocument_user] = useState('');
   const [open, setOpen] = useState(false);
-  const {visible,toogleVisible} = useContext(ChatContext)
+  const {visible,trueDisabled} = useContext(ChatContext)
   
 
   /* utilizando variables de los reducers.js */
@@ -65,13 +65,15 @@ function EditDocumentVersion(props) {
 
   // useeffect for componentDidMount, ComponentDidUpdate, componentWillUnmount    
   let id = props.match.params.id
+     
+  //localStorage.setItem('doc_chat', props.match.params.id) 
   useEffect( () =>{
     dispatch(getDocument_versionById(props.match.params.id));
     dispatch(getDocument_version_content(props.match.params.id)); 
     dispatch(getMessages({id}))   
     setText(document_version_content);    
-    localStorage.setItem('doc_chat', props.match.params.id)    
-  },[document_version_content, version._id, messages.length])
+    //localStorage.setItem('doc_chat', props.match.params.id)    
+  },[document_version_content, version._id, messages.length]);
 
     const handleOpen = () => {
       setOpen( true )  
@@ -102,7 +104,8 @@ function EditDocumentVersion(props) {
       formData.append('text', text);
       formData.append('image', image);
       dispatch(editDocument_version(formData, history));
-      localStorage.removeItem('doc_chat')
+      trueDisabled()
+      //localStorage.removeItem('doc_chat')
   }
        
   return (  

@@ -14,27 +14,21 @@ import { ChatContext } from '../contexts/ChatContext';
 import {logout} from '../../actions/OAuth2Action'
 import {getNotifications, getNotificationsNumber, getRequestNumber} from '../../actions/NotificationAction'
 
-const ChatIcon = styled(Icon)`
-  &&& {
-   color: grey;
-
-   &&&:hover{
-    color: white;
-  }
-`
-
 const MyLink = styled(Link)`
 &&&{
     color:#df3e32;
-}
 
 &&&:hover{
-    color:tomato;
+    color:grey;
+    
 }
 `
 const MyIcon = styled(Icon)`
   &&& {
    color: white;
+
+   &&&:hover{
+    color: grey;
   }
 `
 
@@ -59,13 +53,15 @@ function NavigationBar ()  {
     const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
     
     const {open,toogleOpen} = useContext(SideBarContext) 
-    const {visible,toogleVisible} = useContext(ChatContext) 
+    const {visible,toogleVisible, disabled} = useContext(ChatContext) 
+
+    //let chat = localStorage.getItem('doc_chat')
 
   useEffect(() => {    
       dispatch(getNotifications())    
       dispatch(getNotificationsNumber());    
       dispatch(getRequestNumber());
-  },[notificationsNumber, requestNumber, localStorage.getItem('doc_chat')])
+  },[notificationsNumber, requestNumber])
 
   const trigger = (
     oauth2IsAuthenticated ?
@@ -86,11 +82,17 @@ function NavigationBar ()  {
             <MyLink className="navbar-brand" to='/'> <h1>TODE</h1></MyLink>
         </MyMenu.Item>
         <MyMenu.Menu position='right'>        
-        { localStorage.getItem('doc_chat') != '' ?
+        { //chat !== '' ?
             <MyMenu.Item>
-                <ChatIcon name='wechat' size='big' onClick={toogleVisible}/>
+               { disabled === false ?
+                <MyIcon disabled={disabled} name='wechat' size='big' onClick={toogleVisible}/>
+                :
+                <Icon disabled={disabled} name='wechat' size='big' onClick={toogleVisible}
+                      color = 'grey'/>                
+                }
             </MyMenu.Item>
-        : null}
+        //: null
+        }
             <MyMenu.Item>
                 <Request count={requestNumber}/>
             </MyMenu.Item>

@@ -8,10 +8,10 @@ import styled from 'styled-components'
 
 const MyIcon = styled(Icon)`
   &&& {
-   color: grey;
+   color: white;
 
    &&&:hover{
-    color: white;
+    color: grey;
   }
 `
 function Notifications(props)  { 
