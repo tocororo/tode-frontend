@@ -1,7 +1,7 @@
 import {  GET_DOCUMENTS, GET_DOCUMENT,ADD_DOCUMENT, DELETE_DOCUMENT, CREATE_TEXT } from '../actions/types'
 const initialState = {
-    docs: [],
     perms:[],
+    docs:[],
     doc: {},
     text:""
 }

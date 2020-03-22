@@ -1,7 +1,7 @@
 import { GET_DOCUMENT_VERSION, ADD_DOCUMENT_VERSION,
         GET_DOCUMENT_VERSION_ByID, GET_DOCUMENT_VERSION_CONTENT, createVersionFile } from '../actions/types'
 const initialState = {
-    docs_version: [],
+    docs_version:[],
     document_version_content: "",
     version: {}
 }

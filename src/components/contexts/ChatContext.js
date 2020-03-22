@@ -5,15 +5,19 @@ export const ChatContext = createContext();
 class ChatContextProvider extends Component {
     state = {
         visible:false,
-        disabled: true
+        disabled: true,
+        iconVisible:false
     }
 
     toogleVisible = () => this.setState({visible:!this.state.visible})
-    trueDisabled = () => this.setState({disabled:true})
-    falseDisabled = () => this.setState({disabled:false})
+    showIcon = () =>
+    this.setState({ iconVisible: true })
+    hideIcon = () =>
+    this.setState({ iconVisible: false })
+
     render(){
         return(
-            <ChatContext.Provider value={{...this.state, toogleVisible:this.toogleVisible, trueDisabled:this.trueDisabled, falseDisabled:this.falseDisabled}}>
+            <ChatContext.Provider value={{...this.state, toogleVisible:this.toogleVisible, showIcon: this.showIcon, hideIcon: this.hideIcon}}>
                 {this.props.children}
             </ChatContext.Provider>
         )

@@ -12,18 +12,20 @@ import {
     tokenConfig
 } from './OAuth2Action'
 
-export const getDocuments = () => (dispatch, getSate) => {
-    axios.get('/document', tokenConfig(getSate)).then(res => {
+export const getDocuments = () => async (dispatch) => {
+    await axios.get('/document', tokenConfig()).then(res => {
             dispatch({
                 type: GET_DOCUMENTS,
                 payload: res.data
             })
         })
         .catch((err) => {
-            dispatch({
+           /*  dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
-            })
+            }) */
+            console.log(err);
+            
         });
 };
 

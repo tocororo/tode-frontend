@@ -2,8 +2,8 @@ import React, {useContext} from 'react';
 import { Segment, Sidebar,} from 'semantic-ui-react'
 import { BrowserRouter as Router, Route ,Switch} from 'react-router-dom';
 import styled from 'styled-components'
-import { SideBarContext } from '../contexts/SideBar';
 
+import { SideBarContext } from '../contexts/SideBar';
 import PrivateRoute from './PrivateRoute'
 import SideBarContent from './SideBarContent';
 import Home from '../Home'
@@ -33,6 +33,7 @@ function NavigationSideBar (props) {
   const {open,toogleOpen} = useContext(SideBarContext)
 
  return(
+   
     <MySidebar.Pushable >
 
         <MySidebar
@@ -60,7 +61,7 @@ function NavigationSideBar (props) {
                 
                   <PrivateRoute exact path="/new_document" component={AddContent} />
                 
-                  <PrivateRoute exact path="/dropzone/:name" component={Dropzone} />
+                  <PrivateRoute exact path="/dropzone" component={Dropzone} />
                 
                   <PrivateRoute exact path="/permisions/:id" component={Permisions} />
                

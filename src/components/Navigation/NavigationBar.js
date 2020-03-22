@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useEffect, useContext } from 'react';
-import { Menu, Icon, Dropdown} from 'semantic-ui-react'
+import { Menu, Icon, Dropdown, Transition} from 'semantic-ui-react'
 import { useHistory, Link} from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -53,7 +53,7 @@ function NavigationBar ()  {
     const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
     
     const {open,toogleOpen} = useContext(SideBarContext) 
-    const {visible,toogleVisible, disabled} = useContext(ChatContext) 
+    const {visible,toogleVisible, iconVisible} = useContext(ChatContext) 
 
     //let chat = localStorage.getItem('doc_chat')
 
@@ -74,7 +74,7 @@ function NavigationBar ()  {
 
   /** MENU FOR USERS AUTHENTICATEDS */
   const authLinks = (
-    <MyMenu color='teal' inverted size='small'>
+    <MyMenu color='teal' inverted size='tiny'>
             <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name='bars' />
             </MyMenu.Item>
@@ -83,14 +83,13 @@ function NavigationBar ()  {
         </MyMenu.Item>
         <MyMenu.Menu position='right'>        
         { //chat !== '' ?
-            <MyMenu.Item>
-               { disabled === false ?
-                <MyIcon disabled={disabled} name='wechat' size='big' onClick={toogleVisible}/>
-                :
-                <Icon disabled={disabled} name='wechat' size='big' onClick={toogleVisible}
-                      color = 'grey'/>                
-                }
-            </MyMenu.Item>
+            <Transition.Group animation='fade' duration={100}>
+                {iconVisible && (
+                <MyMenu.Item>
+                    <MyIcon  name='wechat' size='big' onClick={toogleVisible}/>
+                </MyMenu.Item>
+                )}   
+            </Transition.Group>
         //: null
         }
             <MyMenu.Item>
@@ -120,7 +119,7 @@ function NavigationBar ()  {
 const gestLinks = (
 
     <Fragment >
-        <MyMenu color='teal' inverted size='small'>
+        <MyMenu color='teal' inverted size='tiny'>
             <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name="bars" />
             </MyMenu.Item>

@@ -32,22 +32,18 @@ export const OAuth2Loaded = () => async (dispatch) => {
 };
 
 export const logout = (history) => dispatch =>{
-    axios.get(`/logout`).then(
+    //axios.get(`/logout`).then(
     dispatch ({
         type: LOGOUT_SUCCES        
     })
-)/* 
+//)
+/* 
     if (history) {        
         history.push(`/`)    
     } */
 }
 
-export const tokenConfig = getSate => {
-    //get token del localStorage
-    const token = getSate().oauth2.token
-    const sceibaId = getSate().oauth2.sceibaId   
-    
-
+export const tokenConfig = () => {
     //headers
     const config = {
         headers: {

@@ -8,17 +8,14 @@ import NavigationBar from './components/Navigation/NavigationBar'
 import ConfirmContextProvider from './components/contexts/ConfirmContext';
 import SideBarContextProvider from './components/contexts/SideBar';
 import ChatContextProvider from './components/contexts/ChatContext'
+import { getDocument_version } from './actions/DocumentVersionAction';
+import { getDocuments } from './actions/DocumentAction';
 
 function App()  {
   
-  useEffect(() =>{    
-  if (localStorage.getItem('token') ) {
-    store.dispatch(OAuth2Loaded())
-  } else {
-    store.dispatch(logout())
-  }   
-       
-},[localStorage.getItem('expires_in')])
+  useEffect(() =>{      
+    store.dispatch(OAuth2Loaded());
+},[])
   
     return (
       <Router>
@@ -26,7 +23,7 @@ function App()  {
             <SideBarContextProvider>
               <ConfirmContextProvider>
                 <ChatContextProvider>
-                  <NavigationBar/>
+                    <NavigationBar/>
                 </ChatContextProvider>
               </ConfirmContextProvider>
             </SideBarContextProvider>

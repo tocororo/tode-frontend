@@ -27,7 +27,6 @@ function AddContent(props) {
     /* creando variables de estado y un metodo para modificarlas */
   const [text, setText] = useState('');
   const [document, setDocument] = useState('');
-  const [image, setImage] = useState('');
   const [comment, setComment] = useState('Original');
   const [document_user, setDocument_user] = useState('');
 
@@ -52,20 +51,23 @@ function AddContent(props) {
           setDocument(doc._id)     
       }        
     };
+    
+    let formData = new FormData();
 
-    const OnChangeImage = e => {
-      setImage( e.target.files[0], ); 
+    const OnChangeImage = e => {      
+      let files = e.target.files
+      for (let index = 0; index < files.length; index++) {
+        formData.append('image', files[index]) ;        
+      }
       
     };    
 
     const OnSubmit = (e) => {
       e.preventDefault();
-      let formData = new FormData();
       formData.append('comment', comment);
       formData.append('document_user', document_user);
       formData.append('document', document);
       formData.append('text', text);
-      formData.append('image', image);
       toogleOpen()
       dispatch(newDocument_version(formData, history));
   }

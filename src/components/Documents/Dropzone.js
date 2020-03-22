@@ -34,7 +34,7 @@ function Dropzone(props) {
         setDocument (doc._id )
 
         const newText = {binaryStr,document}
-        dispatch(newDocument_version(newText, history));
+        //dispatch(newDocument_version(newText, history));
       }
       reader.readAsBinaryString(file)
     })
