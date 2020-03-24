@@ -10,6 +10,7 @@ import '../../css/DocumentsPage.css'
 import DocumentsOptions from './DocumentsOptions'
 import Confirm from '../Notifications/Confirm';
 import { ChatContext } from '../contexts/ChatContext';
+import { log } from 'util';
 
 function DocumentsShared () {
   /* creando variables de estado y un metodo para modificarlas */
@@ -18,8 +19,8 @@ function DocumentsShared () {
   const [showDocuments, setShowDocuments] = useState(false);
 
   /* utilizando variables de los reducers.js */
-  const docs_version = useSelector(state => state.doc_version.docs_version);
-  const {docs, perms} = useSelector(state => state.doc);
+  const {docs_version, lastShared} = useSelector(state => state.doc_version.docs_version);
+  const {docs, permsShared} = useSelector(state => state.doc);
   // const {users, isAuthenticated} = useSelector(state => state.auth)
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
@@ -49,7 +50,7 @@ function DocumentsShared () {
     setActiveIndex(newIndex )    
   }
 
-  var permisos = new Array(perms.length);
+  /* var permisos = new Array(perms.length);
   if (perms.length > 0 && docs.length > 0) {
   docs.forEach((doc, doc_index) =>{
   perms.forEach((perm, perm_index) => {
@@ -72,10 +73,10 @@ function DocumentsShared () {
     }) 
     last[perm_index] = versiones[versiones.length-1];
   })  
-} 
+}  */
 
   return (
-     permisos.length > 0 ?
+    permsShared.length > 0 && permsShared[0] !== null ?
      <Container>       
      <Transition  animation='fade' duration={100} visible={showLoader}>
        <Transition.Group as={Container}>                    
@@ -111,7 +112,7 @@ function DocumentsShared () {
           <div style={{overflowY:'scroll', maxHeight:400}}>
           {
         //docs.map(doc =>  
-        permisos.map(perm => 
+        permsShared.map(perm => 
           /*  oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id === doc._id ?   */
           
             /**
@@ -125,8 +126,8 @@ function DocumentsShared () {
                index={perm._id}
                onClick={handleClick}
              >
-             {last.map(last_version => 
-              last_version && perm.document._id === last_version.document._id ?
+             {lastShared.map(last_version => 
+              //last_version && perm.document._id === last_version.document._id ?
                 <Grid columns={6} columns='equal' divided key={last_version._id}>
                   <Grid.Row color='blue'>
                       <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
@@ -135,24 +136,11 @@ function DocumentsShared () {
                       <Grid.Column>
                         <Moment fromNow>{last_version.document.createdAt}</Moment></Grid.Column>
                       <Grid.Column> 
-                        <Grid columns={2} >
-                        <Grid.Row>
-                        <Grid.Column>
                         <DocumentsOptions document={perm.document._id}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                        <Link
-                             to={"/edit_document_version/" + last_version._id}>
-                             <Icon name='write' color='red' size='large' onClick={showIcon}
-                             />
-                           </Link> 
-                        </Grid.Column>
-                        </Grid.Row>
-                        </Grid>
                       </Grid.Column>
                   </Grid.Row>  
                 </Grid>   
-              :null
+             // :null
             )}
             </Accordion.Title>
 
@@ -171,10 +159,9 @@ function DocumentsShared () {
                          <Grid.Column>{doc_version.document_user.name}</Grid.Column>
                          <Grid.Column><Moment fromNow>{doc_version.createdAt}</Moment></Grid.Column>
                          <Grid.Column>
-                           <Link
-                             to={"/edit_document_version/" + doc_version._id}>
-                             <Icon name='pen square' color='orange' size='big'/>
-                           </Link>
+                         <Icon.Group size='large'>
+                         <Icon name='eye' color='red' size='small' circular inverted/>
+                         </Icon.Group>
                          </Grid.Column>
                        </Grid.Row>
                     </Grid>

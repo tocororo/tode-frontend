@@ -25,7 +25,7 @@ function Documentos () {
   
 
   /* utilizando variables de los reducers.js */
-  const {docs_version} = useSelector(state => state.doc_version);
+  const {docs_version, last} = useSelector(state => state.doc_version);
   const {docs, perms} = useSelector(state => state.doc);
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
@@ -56,16 +56,16 @@ function Documentos () {
     setActiveIndex(newIndex )
   }
 
-  var permisos = new Array(perms.length);
+  /* var permisos = new Array(perms.length);
   if (perms.length > 0) {
   perms.forEach((perm, index) => {
     if(oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user) {
     permisos[index] = perm;
     }
   });
-}
+} */
 
-  var versiones 
+  /* var versiones 
   var last = new Array(permisos.length);
   if (docs_version.length > 0) {
     permisos.forEach((perm, perm_index) => {
@@ -77,10 +77,10 @@ function Documentos () {
     }) 
     last[perm_index] = versiones[versiones.length-1];
   })  
-}  
+}   */
 
   return (
-    permisos.length > 0 ?
+    perms.length > 0 && perms[0] != null ?
     <Container>       
     <Transition  animation='fade' duration={100} visible={showLoader}>
       <Transition.Group as={Container}>                    
@@ -117,7 +117,7 @@ function Documentos () {
           <div style={{overflowY:'scroll', maxHeight:400}}>
             {
           //docs.map(doc =>   
-          permisos.map((perm) => 
+          perms.map((perm) => 
             /* oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ?  */
             
               /**
@@ -132,7 +132,7 @@ function Documentos () {
             onClick={handleClick}
           >
           {last.map(last_version => 
-           last_version && perm.document._id === last_version.document._id ?
+           //last_version && perm.document._id === last_version.document._id ?
              <Grid columns={6} columns='equal' divided key={last_version._id}>
                <Grid.Row color='blue'>
                    <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
@@ -141,24 +141,11 @@ function Documentos () {
                    <Grid.Column>
                      <Moment fromNow>{last_version.document.createdAt}</Moment></Grid.Column>
                    <Grid.Column> 
-                     <Grid columns={2} >
-                     <Grid.Row>
-                     <Grid.Column>
-                     <DocumentsOptions document={perm.document._id}/>
-                     </Grid.Column>
-                     <Grid.Column>
-                     <Link
-                          to={"/edit_document_version/" + last_version._id}>
-                          <Icon name='write' color='red' size='large' onClick={showIcon}
-                          />
-                        </Link> 
-                     </Grid.Column>
-                     </Grid.Row>
-                     </Grid>
+                     <DocumentsOptions document={perm.document._id} version={last_version._id}/>
                    </Grid.Column>
                </Grid.Row>  
              </Grid>   
-           :null
+           //:null
          )}
          </Accordion.Title>
 
@@ -177,12 +164,9 @@ function Documentos () {
                       <Grid.Column>{doc_version.document_user.name}</Grid.Column>
                       <Grid.Column><Moment fromNow>{doc_version.createdAt}</Moment></Grid.Column>
                       <Grid.Column>
-                        {/* <Link
-                          to={"/edit_document_version/" + doc_version._id}>
-                          <Icon name='pen square' color='orange' size='big'
-                          onClick={falseDisabled}
-                          />
-                        </Link> */}
+                      <Icon.Group size='large'>
+                      <Icon name='eye' color='red' size='small' circular inverted/>
+                      </Icon.Group>
                       </Grid.Column>
                     </Grid.Row>
                  </Grid>
