@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useHistory} from 'react-router-dom';
 import { Button, Form, TextArea, Container, Input, Radio, Segment } from 'semantic-ui-react'
 import '../../css/editpage.css'
 import styled from 'styled-components'
+import { ConfirmContext } from '../contexts/ConfirmContext';
 
-import Dropzone from './Dropzone'
-
-import { createText, getDocumentByName } from '../../actions/DocumentAction'
+import { newDocument_version} from '../../actions/DocumentVersionAction'
+import DocumentModal from './DocumentModal'
 
 const MyButton = styled(Button)`
 &&&{
@@ -21,69 +21,89 @@ const MyButton = styled(Button)`
 }
 `
 
-
 function AddContent(props) {
 
   const history = useHistory()  
     /* creando variables de estado y un metodo para modificarlas */
   const [text, setText] = useState('');
   const [document, setDocument] = useState('');
-  const [image, setImage] = useState('');
+  const [comment, setComment] = useState('Original');
+  const [document_user, setDocument_user] = useState('');
 
   /* utilizando variables de los reducers.js */
   const { doc}  = useSelector(state => state.doc);
+  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
+  const {errorsMessages} = useSelector(state => state.error)
   
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
+  const fileInputRef = useRef()
+  const {open,toogleOpen} = useContext(ConfirmContext)
 
   useEffect(()=>
-    dispatch(getDocumentByName(props.match.params.name))
-  ,[])
+    console.log(errorsMessages)    
+  ,[doc._id, errorsMessages]) 
    
     const OnChange = e => {
-        setText( e.target.value, );         
+        setText( e.target.value, );  
+        if (oauth2IsAuthenticated) {
+          setDocument_user(oauth2Users._id)    
+          setDocument(doc._id)     
+      }        
     };
+    
+    let formData = new FormData();
 
-    const OnChangeImage = e => {
-      setImage( e.target.files[0], ); 
+    const OnChangeImage = e => {      
+      let files = e.target.files
+      for (let index = 0; index < files.length; index++) {
+        formData.append('image', files[index]) ;        
+      }
       
-    };
-
-    /* const toggleForm = () => {setCheckedForm(!checkedForm); setChekedDropzone(!chekedDropzone)}
-    const toggleDropzone = () => {setChekedDropzone(!chekedDropzone); setCheckedForm(!checkedForm)} */
+    };    
 
     const OnSubmit = (e) => {
-        e.preventDefault();
-
-        let formData = new FormData();
-        formData.append('text', text);
-        formData.append('image', image);
-        dispatch(createText(props.match.params.name, formData, history));
-    }
+      e.preventDefault();
+      formData.append('comment', comment);
+      formData.append('document_user', document_user);
+      formData.append('document', document);
+      formData.append('text', text);
+      toogleOpen()
+      dispatch(newDocument_version(formData, history));
+  }
        
       return (          
         <Container>
+
+          <DocumentModal type='new_document' />
           <Segment >
-            <h2 className='title'>Añadir Documento: Paso 2</h2>
               <Form onSubmit={OnSubmit} >
-                  <Form.Field>
-                      <TextArea
-                          style={{ minHeight: 100}}
-                          type="text"
-                          id="text"
-                          name="text"
-                          onChange={OnChange}
-                          value={text}
-                          required
-                      />
-                  </Form.Field>
-                  <Form.Field>
-                      <Input
-                          type="file"
-                          name='image'
-                          onChange={OnChangeImage}
-                      />
-                  </Form.Field>
+                  <Form.Field
+                    control={TextArea}
+                    style={{ minHeight: 100}}
+                    type="text"
+                    id="text"
+                    name="text"
+                    onChange={OnChange}
+                    value={text}
+                    required
+                  />
+                  <Form.Field
+                    control={Input}
+                    input={{ multiple: true }}
+                    //ref={fileInputRef}
+                    type="file"
+                    hidden
+                    name='image'
+                    onChange={OnChangeImage}
+                    multiple
+                  />
+                  {/* <Button
+                  content="Choose File"
+                  labelPosition="left"
+                  icon="file"
+                  onClick={() => fileInputRef.current.click()}
+                /> */}
                   
                   <Form.Field>
                       <MyButton type="submit"> Guardar </MyButton>

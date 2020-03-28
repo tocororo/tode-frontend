@@ -2,7 +2,8 @@ import {
     USER_LOADING,
     OAUT2_LOADED,
     OAUT2_ERROR,
-    LOGOUT_SUCCES
+    LOGOUT_SUCCES,
+    GET_ERRORS
 } from './types';
 import axios from 'axios'
 
@@ -11,36 +12,38 @@ export const OAuth2Loaded = () => async (dispatch) => {
         type: USER_LOADING
     })
     
-        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => dispatch({
+        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => 
+            dispatch({
             type: OAUT2_LOADED,
             payload: res.data
         })
         )
-        .catch(err => {
-            console.log(err);            
+        .catch(err => {         
             dispatch({
                 type: OAUT2_ERROR
             });
+            console.log(err);
+            
+           /*  dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            }); */
         }); 
 };
 
 export const logout = (history) => dispatch =>{
-    axios.get(`/logout`).then(
+    //axios.get(`/logout`).then(
     dispatch ({
         type: LOGOUT_SUCCES        
     })
-)/* 
+//)
+/* 
     if (history) {        
         history.push(`/`)    
     } */
 }
 
-export const tokenConfig = getSate => {
-    //get token del localStorage
-    const token = getSate().oauth2.token
-    const sceibaId = getSate().oauth2.sceibaId   
-    
-
+export const tokenConfig = () => {
     //headers
     const config = {
         headers: {

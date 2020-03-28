@@ -4,21 +4,27 @@ import {
     ADD_MESSAGE
 } from '../actions/types'
 
-export const getMessages = ({ document_id }) => dispatch => {
-    const params = ({
-        document_id
-    })
+export const getMessages = ({id}) => dispatch => {
+    const params = {id}
     axios.get("/message", {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        params
-    }).then(res => dispatch({
-        type: GET_MESSAGES,
-        payload: res.data
-    })).catch((err) => {
-        console.log(err);
-    });
+          method: "GET",
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          params
+        }).then((res) => {       
+          dispatch({
+            type: GET_MESSAGES,
+            payload: res.data  
+          }) 
+          /* socketRef.current.on(
+            "newChatMessage",(message) => {
+              setMessages(messages => [...messages, res.data]);
+            }
+          );  */
+        }).catch((err) => {
+            console.log(err);
+        });
 }
 
 export const addMessage = (reqBody) => dispatch => {

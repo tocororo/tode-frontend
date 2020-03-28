@@ -1,8 +1,9 @@
 import {  GET_DOCUMENTS, GET_DOCUMENT,ADD_DOCUMENT, DELETE_DOCUMENT, CREATE_TEXT } from '../actions/types'
 const initialState = {
-    docs: [],
     perms:[],
-    doc: "",
+    permsShared:[],
+    docs:[],
+    doc: {},
     text:""
 }
 
@@ -14,7 +15,8 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 docs: action.payload.docs,
-                perms: action.payload.perms
+                perms: action.payload.perms,
+                permsShared: action.payload.permsShared
             };
         case GET_DOCUMENT:
             
@@ -24,8 +26,8 @@ export default function (state = initialState, action) {
             };
         case ADD_DOCUMENT:
             return {
-             ...state,
-             docs: [action.payload, ...state.docs]
+                ...state,
+                doc: action.payload
             };
         case CREATE_TEXT:
             return {

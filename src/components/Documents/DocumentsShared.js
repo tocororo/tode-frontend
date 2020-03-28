@@ -1,30 +1,45 @@
-import React, {Fragment, useState, useEffect } from 'react'
+import React, {Fragment, useState, useEffect, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {Link} from 'react-router-dom';
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
-import { Accordion, Icon, Container, Grid} from 'semantic-ui-react'
+import { Accordion, Icon, Container, Grid, Header, Segment, Transition, Dimmer, Loader, Divider} from 'semantic-ui-react'
 import Moment  from 'react-moment'
 import '../../css/DocumentsPage.css'
-import styled from 'styled-components'
+
+import DocumentsOptions from './DocumentsOptions'
+import Confirm from '../Notifications/Confirm';
+import { ChatContext } from '../contexts/ChatContext';
+import { log } from 'util';
 
 function DocumentsShared () {
   /* creando variables de estado y un metodo para modificarlas */
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showLoader, setShowLoader] = useState(true);
+  const [showDocuments, setShowDocuments] = useState(false);
 
   /* utilizando variables de los reducers.js */
-  const docs_version = useSelector(state => state.doc_version.docs_version);
-  const {docs, perms} = useSelector(state => state.doc);
+  const {docs_version, lastShared} = useSelector(state => state.doc_version.docs_version);
+  const {docs, permsShared} = useSelector(state => state.doc);
   // const {users, isAuthenticated} = useSelector(state => state.auth)
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
+  const {showIcon} = useContext(ChatContext)     
+
+  const handleLoader = () => {
+    setTimeout(() =>{
+      setShowLoader(false)
+      setShowDocuments(true)
+    },2000)
+  }
 
   // useeffect for componentDidMount, ComponentDidUpdate, componentWillUnmount  
   useEffect( () =>{
     dispatch(getDocuments());
     dispatch(getDocument_version());
+    handleLoader();
   },[])
 
   /* funcion para manejar la apertura y cierre del accordion */
@@ -35,9 +50,44 @@ function DocumentsShared () {
     setActiveIndex(newIndex )    
   }
 
-  return (
+  /* var permisos = new Array(perms.length);
+  if (perms.length > 0 && docs.length > 0) {
+  docs.forEach((doc, doc_index) =>{
+  perms.forEach((perm, perm_index) => {
+    if(oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id === doc._id) {
+    permisos[perm_index] = perm;
+    }
+  })
+})
+}
 
-    <Container> 
+  var versiones 
+  var last = new Array(permisos.length);
+  if (docs_version.length > 0) {
+    permisos.forEach((perm, perm_index) => {
+      versiones = new Array(); 
+    docs_version.forEach((vers, vers_index) => {    
+      if(perm.document._id === vers.document._id){
+      versiones[vers_index] = vers;
+      }
+    }) 
+    last[perm_index] = versiones[versiones.length-1];
+  })  
+}  */
+
+  return (
+    permsShared.length > 0 && permsShared[0] !== null ?
+     <Container>       
+     <Transition  animation='fade' duration={100} visible={showLoader}>
+       <Transition.Group as={Container}>                    
+         <Dimmer active={showLoader}>
+           <Loader size='massive'>Loading</Loader>
+         </Dimmer>
+       </Transition.Group>
+      </Transition>
+   
+      <Transition animation='fade' duration={100} visible={showDocuments}>
+      <Transition.Group as={Container}>
         <Grid columns={6} columns='equal' divided>
           <Grid.Row>
             <h2>Biblioteca Compartida</h2>
@@ -59,14 +109,16 @@ function DocumentsShared () {
               Opciones
             </Grid.Column>
           </Grid.Row> 
+          <div style={{overflowY:'scroll', maxHeight:400}}>
           {
-        //docs.map(doc =>   
-        perms.map(perm => 
-           oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true ?  
+        //docs.map(doc =>  
+        permsShared.map(perm => 
+          /*  oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id === doc._id ?   */
           
             /**
             ACCORDION FOR MAIN DOCUMENT
              */
+        <Fragment>
         <Grid.Row key={perm._id}>
           <Accordion fluid styled >
              <Accordion.Title
@@ -74,28 +126,31 @@ function DocumentsShared () {
                index={perm._id}
                onClick={handleClick}
              >
-              <Fragment>
-                <Grid columns={6} columns='equal' divided>
+             {lastShared.map(last_version => 
+              //last_version && perm.document._id === last_version.document._id ?
+                <Grid columns={6} columns='equal' divided key={last_version._id}>
                   <Grid.Row color='blue'>
                       <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
-                      <Grid.Column>{perm.document.coment}</Grid.Column>
-                      <Grid.Column>{perm.withPermisions.name}</Grid.Column>
+                      <Grid.Column>{last_version.coment}</Grid.Column>
+                      <Grid.Column>{last_version.document_user.name}</Grid.Column>
                       <Grid.Column>
-                        <Moment fromNow>{perm.document.createdAt}</Moment>
-                      </Grid.Column>
-                      <Grid.Column>
+                        <Moment fromNow>{last_version.document.createdAt}</Moment></Grid.Column>
+                      <Grid.Column> 
+                        <DocumentsOptions document={perm.document._id}/>
                       </Grid.Column>
                   </Grid.Row>  
                 </Grid>   
-              </Fragment>
+             // :null
+            )}
             </Accordion.Title>
 
             {/**
              ACCORDION FOR DOCUMENTS VERSIONS 
             */}
             <Accordion.Content active={activeIndex === perm._id}>
-              {docs_version.map(doc_version => 
-                 perm.document._id === doc_version.document._id ?
+              {docs_version.length > 0 ?
+                docs_version.map(doc_version => 
+                docs_version && perm.document._id === doc_version.document._id ?
                   <Fragment key={doc_version._id}>
                     <Grid columns={6} columns='equal' celled>
                       <Grid.Row color='teal'>
@@ -104,26 +159,43 @@ function DocumentsShared () {
                          <Grid.Column>{doc_version.document_user.name}</Grid.Column>
                          <Grid.Column><Moment fromNow>{doc_version.createdAt}</Moment></Grid.Column>
                          <Grid.Column>
-                           <Link
-                             to={"/edit_document_version/" + doc_version._id}>
-                             <Icon name='pen square' color='orange' size='big'/>
-                           </Link>
+                         <Icon.Group size='large'>
+                         <Icon name='eye' color='red' size='small' circular inverted/>
+                         </Icon.Group>
                          </Grid.Column>
                        </Grid.Row>
                     </Grid>
                    </Fragment>
-              : null)}
+              : null)
+            :null}
             </Accordion.Content>
           </Accordion>
           </Grid.Row>
-             :null
-             // )
-          )
+          <Divider hidden />
+          </Fragment>
+             // :null
+             ) 
+         // )
               }
-          </Grid>      
+          </div>
+          </Grid>  
+
+          <Confirm />
+
+        </Transition.Group>
+        </Transition> 
         </Container>
-            
-        )
+        : 
+        <div style={{marginTop:100}}>
+        <Segment placeholder>
+          <Header as='h2' icon textAlign='center'>
+            <Icon name='file pdf outline' size='big' />
+            <Header.Content> Ups lo sentimos</Header.Content>
+            <Header.Content>Aun no se ha compartido un artículo contigo</Header.Content>
+          </Header>
+        </Segment>
+        </div>
+      )
     }
 
 export default DocumentsShared

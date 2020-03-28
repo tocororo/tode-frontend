@@ -1,15 +1,15 @@
-import React, {Fragment, useState, useEffect } from 'react';
-import { Menu, Icon, Dropdown} from 'semantic-ui-react'
+import React, {Fragment, useState, useEffect, useContext } from 'react';
+import { Menu, Icon, Dropdown, Transition} from 'semantic-ui-react'
 import { useHistory, Link} from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { SideBarContext } from '../contexts/SideBar';
 
 import NavigationSideBar from './NavigationSideBar';
 import Request from '../Notifications/Request'
 import Notifications from '../Notifications/Notifications'
 import LoginOauth2 from '../User/LoginOauth2'
-// import RegisterModal from '../User/Register'
-// import LoginModal from '../User/Login'
+import { ChatContext } from '../contexts/ChatContext';
 
 import {logout} from '../../actions/OAuth2Action'
 import {getNotifications, getNotificationsNumber, getRequestNumber} from '../../actions/NotificationAction'
@@ -17,15 +17,18 @@ import {getNotifications, getNotificationsNumber, getRequestNumber} from '../../
 const MyLink = styled(Link)`
 &&&{
     color:#df3e32;
-}
 
 &&&:hover{
-    color:tomato;
+    color:grey;
+    
 }
 `
 const MyIcon = styled(Icon)`
   &&& {
    color: white;
+
+   &&&:hover{
+    color: grey;
   }
 `
 
@@ -40,9 +43,6 @@ const MyMenu = styled(Menu)`
 
 
 function NavigationBar ()  {
-  const [state, setState] = useState({
-    visible: false
-  })
 
   const dispatch = useDispatch()
   const history = useHistory()
@@ -51,14 +51,11 @@ function NavigationBar ()  {
     const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
     const {notificationsNumber, requestNumber} = useSelector(state => state.notification);
+    
+    const {open,toogleOpen} = useContext(SideBarContext) 
+    const {visible,toogleVisible, iconVisible} = useContext(ChatContext) 
 
-  const showMenu = () => {
-    setState( state => ({...state, visible: !state.visible }))   
-     
-  }
-
-  const onHide = () => setState({...state, visible: false})
-  
+    //let chat = localStorage.getItem('doc_chat')
 
   useEffect(() => {    
       dispatch(getNotifications())    
@@ -77,14 +74,24 @@ function NavigationBar ()  {
 
   /** MENU FOR USERS AUTHENTICATEDS */
   const authLinks = (
-    <MyMenu color='teal' inverted size='small'>
-            <MyMenu.Item onClick={showMenu} >
+    <MyMenu color='teal' inverted size='tiny'>
+            <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name='bars' />
             </MyMenu.Item>
         <MyMenu.Item>
             <MyLink className="navbar-brand" to='/'> <h1>TODE</h1></MyLink>
         </MyMenu.Item>
-        <MyMenu.Menu position='right'>
+        <MyMenu.Menu position='right'>        
+        { //chat !== '' ?
+            <Transition.Group animation='fade' duration={100}>
+                {iconVisible && (
+                <MyMenu.Item>
+                    <MyIcon  name='wechat' size='big' onClick={toogleVisible}/>
+                </MyMenu.Item>
+                )}   
+            </Transition.Group>
+        //: null
+        }
             <MyMenu.Item>
                 <Request count={requestNumber}/>
             </MyMenu.Item>
@@ -112,8 +119,8 @@ function NavigationBar ()  {
 const gestLinks = (
 
     <Fragment >
-        <MyMenu color='teal' inverted size='small'>
-            <MyMenu.Item onClick={showMenu} >
+        <MyMenu color='teal' inverted size='tiny'>
+            <MyMenu.Item onClick={toogleOpen} >
                 <MyIcon size='big' name="bars" />
             </MyMenu.Item>
             <MyMenu.Item>
@@ -132,7 +139,7 @@ const gestLinks = (
     return (
           <div>
             {oauth2IsAuthenticated ? authLinks : gestLinks}
-            <NavigationSideBar onHide={onHide} visibility={state.visible}/>
+            <NavigationSideBar />
           </div>
     );
   }

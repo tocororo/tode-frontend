@@ -14,11 +14,6 @@ const MyTable = styled(Table)`
     margin-bottom: 10vh;
   }
 `
-const MyLink = styled(Link)`
-  &&& {
-    color:red;
-  }
-`
 
 
 class Permisions extends Component {
@@ -44,14 +39,13 @@ class Permisions extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>{doc.name}</Table.HeaderCell>
-                  <Table.HeaderCell>{doc.coment}</Table.HeaderCell>
                   <Table.HeaderCell>{doc.document_user.name}</Table.HeaderCell>
                   <Table.HeaderCell>{doc.document_user.rol}</Table.HeaderCell>
                   <Table.HeaderCell><Moment fromNow>{doc.createdAt}</Moment></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               </MyTable>
-          : "" )}
+          : null )}
         </div>
         {/** DIV FOR COMPONENT PermisionSearch */}
         <div>

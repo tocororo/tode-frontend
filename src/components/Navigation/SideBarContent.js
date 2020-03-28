@@ -1,16 +1,25 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useContext } from 'react'
 import {  useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Menu} from 'semantic-ui-react'
+
+import { SideBarContext } from '../contexts/SideBar';
+import { ChatContext } from '../contexts/ChatContext';
         
 function SideBar (props) {
     const history = useHistory()
 
     const [state, setState] = useState({activeItem: 'a'})
+
+    const {open,toogleOpen} = useContext(SideBarContext)
+    const {hideIcon} = useContext(ChatContext) 
     
     const handleItemClick = (e, { name, url }) => {
     setState({ activeItem: name })
+    toogleOpen()
     history.push(url)
+    //localStorage.setItem('doc_chat', '')
+    hideIcon()
     }
 
     const handleItemClickGest= (e, { name }) => {
@@ -51,6 +60,15 @@ function SideBar (props) {
               >              
                 Nuevo Documento
               </Menu.Item>
+
+              <Menu.Item 
+              name='d'
+              active={state.activeItem === 'd'}
+              onClick={handleItemClick} 
+              url="/dropzone"
+              >              
+              Importar Documento
+              </Menu.Item>
             </Menu>
           </Fragment>
         )
@@ -82,6 +100,14 @@ function SideBar (props) {
                 onClick={handleItemClickGest} 
                 >              
                   Nuevo Documento
+                </Menu.Item>
+
+                <Menu.Item 
+                name='d'
+                active={state.activeItem === 'd'}
+                onClick={handleItemClickGest} 
+                >              
+                  Importar Documento
                 </Menu.Item>
               </Menu>
             </Fragment>

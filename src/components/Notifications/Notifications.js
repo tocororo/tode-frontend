@@ -2,23 +2,21 @@ import React, {Fragment,} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {Icon, Dropdown, Message, Label } from 'semantic-ui-react'
 import { getNotificationDocVersion} from '../../actions/NotificationAction'
-import MessagesForVersions from './MessagesForVersions'
 import Moment  from 'react-moment'
 import styled from 'styled-components'
 
 
 const MyIcon = styled(Icon)`
   &&& {
-   color: grey;
+   color: white;
 
    &&&:hover{
-    color: white;
+    color: grey;
   }
 `
 function Notifications(props)  { 
 
   const {notifications} = useSelector(state => state.notification);
-  // const {users, isAuthenticated} = useSelector(state => state.auth); 
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
   
   const dispatch = useDispatch()
@@ -39,15 +37,23 @@ function Notifications(props)  {
       </Fragment>
   )
 
+  var notificaciones = new Array()
+  notifications.forEach((notify, index) => {
+    if(oauth2IsAuthenticated && notify.toUser && notify.toUser._id === oauth2Users._id) {
+      notificaciones[index] = notify
+    }
+  });
+
         return (
             <div>
                 <Dropdown trigger={trigger}  pointing='top right'  icon={null}> 
                 <Dropdown.Menu >
                 {
-                notifications.map(notify => (
+                  notificaciones.length > 0 ?
+                  notificaciones.map(notify => (
 
                 // NOTIFICACIONS FOR VERSIONS
-                oauth2IsAuthenticated && notify.toUser && notify.toUser._id === oauth2Users._id  ?                  
+               /*  oauth2IsAuthenticated && notify.toUser && notify.toUser._id === oauth2Users._id  ?      */             
                 <Dropdown.Item active = {notify.notificationSied === false ? true : false }
                     document = {notify.document._id}
                     document_version = {notify.document_version._id}       
@@ -69,11 +75,13 @@ function Notifications(props)  {
                   color='grey'
                   header='Sin notificaciones aun'
                 /> */
+                //:
+              
+                ))
                 :
-                <Dropdown.Header key={notify._id}
+                <Dropdown.Header 
                 content='Sin notificaciones aun'
                 />
-                ))
               }
 
               </Dropdown.Menu>

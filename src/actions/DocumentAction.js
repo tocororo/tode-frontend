@@ -3,6 +3,7 @@ import {
     GET_DOCUMENTS,
     GET_DOCUMENT,
     GET_ERRORS,
+    ADD_DOCUMENT,
     CLEAR_ERRORS,
     DELETE_DOCUMENT,
     CREATE_TEXT
@@ -11,15 +12,20 @@ import {
     tokenConfig
 } from './OAuth2Action'
 
-export const getDocuments = () => (dispatch, getSate) => {
-    axios.get('/document', tokenConfig(getSate)).then(res => {
+export const getDocuments = () => async (dispatch) => {
+    await axios.get('/document', tokenConfig()).then(res => {
             dispatch({
                 type: GET_DOCUMENTS,
                 payload: res.data
             })
         })
         .catch((err) => {
+           /*  dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            }) */
             console.log(err);
+            
         });
 };
 
@@ -43,11 +49,15 @@ export const getDocumentByName = (name) => dispatch => {
         });
 };
 
-export const newDocument = (newDoc, history, url) => dispatch => {
+export const newDocument = (newDoc/* , history, url */) => dispatch => {
     axios.post('/new_document', newDoc)
         .then(res => {
             if (newDoc) {
-                history.push(url)
+                /* history.push(url) */
+                dispatch({
+                    type: ADD_DOCUMENT,
+                    payload: res.data
+                })
                 dispatch({
                     type: CLEAR_ERRORS
                 })
@@ -95,7 +105,6 @@ export const updateDocumentName = (id, name) => dispatch => {
         })
         .catch((err) => {
             console.log(err);
-        });
-        
+        });        
         dispatch(getDocuments())
 };

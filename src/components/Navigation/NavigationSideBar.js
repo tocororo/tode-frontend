@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Segment, Sidebar,} from 'semantic-ui-react'
 import { BrowserRouter as Router, Route ,Switch} from 'react-router-dom';
 import styled from 'styled-components'
 
+import { SideBarContext } from '../contexts/SideBar';
 import PrivateRoute from './PrivateRoute'
 import SideBarContent from './SideBarContent';
 import Home from '../Home'
 import Documentos from '../Documents/Documentos'
 import DocumentsShared from '../Documents/DocumentsShared'
 import Permisions from '../Permisions/Permisions'
-import NewDocument from '../Documents/NewDocument'
 import EditDocumentVersion from '../Documents/EditDocumentVersion'
 import AddContent from '../Documents/AddContent'
 import LoginOauth2 from '../User/LoginOauth2'
@@ -29,21 +29,25 @@ const MySegment = styled(Segment)`
 `
 
 function NavigationSideBar (props) {
+
+  const {open,toogleOpen} = useContext(SideBarContext)
+
  return(
+   
     <MySidebar.Pushable >
 
         <MySidebar
         animation='overlay'
         icon='labeled'
-        onHide={props.onHide}        
-        visible={props.visibility}
+        onHide={null}        
+        visible={open}
         width='wide'
         >
         <SideBarContent />
         </MySidebar>
 
 
-        <MySidebar.Pusher dimmed={props.visibility}>
+        <MySidebar.Pusher dimmed={open}>
                 <MySegment basic>
 
                 <Switch>
@@ -55,11 +59,9 @@ function NavigationSideBar (props) {
                  
                   <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />
                 
-                  <PrivateRoute exact path="/new_document" component={NewDocument} />
+                  <PrivateRoute exact path="/new_document" component={AddContent} />
                 
-                  <PrivateRoute exact path="/dropzone/:name" component={Dropzone} />
-                               
-                  <PrivateRoute exact path="/add-content/:name" component={AddContent} />
+                  <PrivateRoute exact path="/dropzone" component={Dropzone} />
                 
                   <PrivateRoute exact path="/permisions/:id" component={Permisions} />
                
