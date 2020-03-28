@@ -19,7 +19,7 @@ function LoginOauth2(){
         // Authenticate using via passport api in the backend
         // Open Twitter login page
         // Upon successful login, a cookie session will be stored in the client
-        window.open("https://10.2.64.4:4000/oauth2", "_self");
+        window.open("https://10.2.100.160:4000/oauth2", "_self");
     };
     
     return(
