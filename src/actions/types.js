@@ -31,6 +31,7 @@ export const OAUT2_ERROR = 'OAUT2_ERROR';
 
 
 export const GET_USERS = 'GET_USERS';
+export const GET_USER = 'GET_USER';
 export const GET_USERS_TOPERMISONS = 'GET_USERS_TOPERMISONS';
 export const GET_USER_AUTH = 'GET_USER_AUTH';
 export const ADD_USER = 'ADD_USER';

@@ -16,6 +16,7 @@ import LoginOauth2 from '../User/LoginOauth2'
 import Dropzone from '../Documents/Dropzone'
 import Texture from '../Texture/Texture'
 import URLNotFound from './URLNotFound'
+import Profile from '../User/Profile';
 
 const MySidebar = styled(Sidebar)`
   &&& {
@@ -55,6 +56,8 @@ function NavigationSideBar (props) {
                 <Route exact path="/login-oauth2" component={LoginOauth2} />
                 <Route exact path="/texture" component={Texture} />
                   
+                  <PrivateRoute exact path="/profile" component={Profile} />
+
                   <PrivateRoute exact path="/documents" component={Documentos} />
                  
                   <PrivateRoute exact path="/documents-shared" component={DocumentsShared} />

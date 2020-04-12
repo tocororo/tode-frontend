@@ -1,7 +1,7 @@
 import React, {Fragment, useState, useEffect, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Accordion, Icon, Container,  Segment, Header, Grid, Transition, Dimmer, Loader, Divider} from 'semantic-ui-react'
+import { Accordion, Icon, Container,  Segment, Header, Grid, Transition, Dimmer, Loader, Divider, Pagination} from 'semantic-ui-react'
 import Moment  from 'react-moment'
 import styled from 'styled-components'
 
@@ -22,6 +22,8 @@ function Documentos () {
   const [activeIndex, setActiveIndex] = useState('');  
   const [showLoader, setShowLoader] = useState(true);
   const [showDocuments, setShowDocuments] = useState(false);
+  const [currentPage, SetCurrentPage] = useState(1);
+  const [documentsPerPage] = useState(5);
   
 
   /* utilizando variables de los reducers.js */
@@ -52,10 +54,20 @@ function Documentos () {
   const handleClick = (e, titleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
-
     setActiveIndex(newIndex )
   }
+  
+  let indexOfLastPermision = currentPage * documentsPerPage;
+  let indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+  let currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
+  let totalPages = Math.ceil(perms.length / documentsPerPage) 
 
+  const handlePaginationChange =  (e, activePage  ) => {
+    SetCurrentPage( activePage.activePage );
+    indexOfLastPermision = currentPage * documentsPerPage;
+    indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+    currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
+  }
   /* var permisos = new Array(perms.length);
   if (perms.length > 0) {
   perms.forEach((perm, index) => {
@@ -78,6 +90,10 @@ function Documentos () {
     last[perm_index] = versiones[versiones.length-1];
   })  
 }   */
+
+console.log(currentPermisions);
+console.log(currentPage);
+
 
   return (
     perms.length > 0 && perms[0] != null ?
@@ -117,14 +133,14 @@ function Documentos () {
           <div style={{overflowY:'scroll', maxHeight:400}}>
             {
           //docs.map(doc =>   
-          perms.map((perm) => 
+          currentPermisions.map((perm) => 
             /* oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ?  */
             
               /**
               ACCORDION FOR MAIN DOCUMENT
                */
-          <Fragment>
-          <Grid.Row key={perm._id}>
+          <Fragment key={perm._id}>
+          <Grid.Row >
           <Accordion fluid  >
           <Accordion.Title
             active={activeIndex === perm._id}
@@ -132,7 +148,7 @@ function Documentos () {
             onClick={handleClick}
           >
           {last.map(last_version => 
-           //last_version && perm.document._id === last_version.document._id ?
+           last_version && perm.document._id === last_version.document._id ?
              <Grid columns={6} columns='equal' divided key={last_version._id}>
                <Grid.Row color='blue'>
                    <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
@@ -145,7 +161,7 @@ function Documentos () {
                    </Grid.Column>
                </Grid.Row>  
              </Grid>   
-           //:null
+           :null
          )}
          </Accordion.Title>
 
@@ -191,6 +207,11 @@ function Documentos () {
         <Confirm />
       </Transition.Group>
       </Transition> 
+      <Pagination
+        activePage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePaginationChange}
+      />
     </Container> 
         :
         <div style={{marginTop:100}}>

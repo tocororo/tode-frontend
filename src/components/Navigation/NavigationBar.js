@@ -103,7 +103,10 @@ function NavigationBar ()  {
                 trigger={trigger}
                 icon={null}
                 >
-                <Dropdown.Menu >               
+                <Dropdown.Menu >      
+                    <Dropdown.Item onClick={() => history.push('/profile')}>
+                        <Icon name='user circle' color='red'/> Perfil
+                    </Dropdown.Item>         
                     <Dropdown.Item onClick={() => dispatch(logout(history))}>
                         <Icon name='log out' color='red'/> Log Out
                     </Dropdown.Item>

@@ -5,6 +5,7 @@ import { Button, Form, TextArea, Sidebar, Segment, Container, Input, Table } fro
 import '../../css/editpage.css'
 import styled from 'styled-components'
 import Moment  from 'react-moment'
+import '../../css/Profile.css'
 
 import { editDocument_version, getDocument_version_content, getDocument_versionById} from '../../actions/DocumentVersionAction'
 import Chat from '../ChatRoom/index'
@@ -162,13 +163,10 @@ function EditDocumentVersion(props) {
                     //ref={fileInputRef}
                     />}
                 />
-                 {/* <Button
-                content="Choose File"
-                labelPosition="left"
-                icon="file"
-                onClick={handleClick}
-              />   */}
-                  
+                
+                <Form.Field width={1}>
+                {/* <input type = "file" name = "image" id = "image" multiple onChange={OnChangeImage} className = "inputfile" /> <label htmlFor="image"><strong>Cambiar</strong></label> */}
+                </Form.Field>
                   <Form.Field>
                       <MyButton onClick={handleOpen}> Guardar </MyButton>
                   </Form.Field>

@@ -12,6 +12,8 @@ import {
     returnErrors
 } from './ErrorAction'
 
+import {OAuth2Loaded} from '../actions/OAuth2Action'
+
 export const getUsersToPermission = ({
     value,
     document
@@ -38,23 +40,38 @@ export const getUsers = () => (dispatch, getState) => {
         });
 };
 
-export const deleteUser = id => (dispatch, getState) => {
-    axios.delete(`/delete_user/${id}`, tokenConfig(getState)).then(res => dispatch({
-            type: DELETE_USER,
-            payload: id
-        }))
-        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
-};
-
-export const addUser = user => dispatch => {
+export const updateUser = user => dispatch => {
     dispatch(setItemsLoading());
-    axios.post('/register', user).then(res => dispatch({
+    axios.post('/updateUser', user).then(res => dispatch({
             type: ADD_USER,
             payload: res.data
         }))
         .catch((err) => {
             console.log(err);
         });
+
+        dispatch(OAuth2Loaded())
+};
+
+export const updateImage = image => dispatch => {
+    dispatch(setItemsLoading());
+    axios.post('/updateImage', image).then(res => dispatch({
+            type: ADD_USER,
+            payload: res.data
+        }))
+        .catch((err) => {
+            console.log(err);
+        });
+
+        dispatch(OAuth2Loaded())
+};
+
+export const deleteUser = id => (dispatch, getState) => {
+    axios.delete(`/delete_user/${id}`, tokenConfig(getState)).then(res => dispatch({
+            type: DELETE_USER,
+            payload: id
+        }))
+        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
 };
 
 export const setItemsLoading = () => {

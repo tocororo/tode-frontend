@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       render={props =>
         oauth2Users && localStorage.getItem('expires_in') > date.getTime()
         ? <Component {...props} />
-        : window.open("https://10.2.64.4:4000/oauth2", "_self")
+        : window.open("https://192.168.1.100:4000/oauth2", "_self")
       }
     />
   )

@@ -17,16 +17,17 @@ function DocumentsShared () {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showLoader, setShowLoader] = useState(true);
   const [showDocuments, setShowDocuments] = useState(false);
+  const [currentPage, SetCurrentPage] = useState(1);
+  const [documentsPerPage, setDocumentsPerPage] = useState(5);
 
   /* utilizando variables de los reducers.js */
   const {docs_version, lastShared} = useSelector(state => state.doc_version.docs_version);
   const {docs, permsShared} = useSelector(state => state.doc);
-  // const {users, isAuthenticated} = useSelector(state => state.auth)
-  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
+  const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2);
 
   /*  dispatch para utilizar las actions.js */
   const dispatch = useDispatch()
-  const {showIcon} = useContext(ChatContext)     
+  //const {showIcon} = useContext(ChatContext)     
 
   const handleLoader = () => {
     setTimeout(() =>{
@@ -50,6 +51,17 @@ function DocumentsShared () {
     setActiveIndex(newIndex )    
   }
 
+  let indexOfLastPermision = currentPage * documentsPerPage;
+  let indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+  let currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
+  let totalPages = Math.ceil(permsShared.length / documentsPerPage) 
+
+  const handlePaginationChange =  (e, activePage  ) => {
+    SetCurrentPage( activePage.activePage );
+    indexOfLastPermision = currentPage * documentsPerPage;
+    indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+    currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
+  }
   /* var permisos = new Array(perms.length);
   if (perms.length > 0 && docs.length > 0) {
   docs.forEach((doc, doc_index) =>{
@@ -112,7 +124,7 @@ function DocumentsShared () {
           <div style={{overflowY:'scroll', maxHeight:400}}>
           {
         //docs.map(doc =>  
-        permsShared.map(perm => 
+        currentPermisions.map(perm => 
           /*  oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id !== perm.document.document_user && perm.requestAcepted === true && perm.document._id === doc._id ?   */
           
             /**
@@ -184,6 +196,11 @@ function DocumentsShared () {
 
         </Transition.Group>
         </Transition> 
+        <Pagination
+        activePage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePaginationChange}
+      />
         </Container>
         : 
         <div style={{marginTop:100}}>
