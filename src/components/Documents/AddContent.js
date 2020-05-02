@@ -69,7 +69,8 @@ function AddContent(props) {
       formData.append('document', document);
       formData.append('text', text);
       toogleOpen()
-      dispatch(newDocument_version(formData, history));
+      dispatch(newDocument_version(formData));
+      history.push('/documents')
   }
        
       return (          

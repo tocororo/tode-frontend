@@ -49,11 +49,10 @@ export const getDocumentByName = (name) => dispatch => {
         });
 };
 
-export const newDocument = (newDoc/* , history, url */) => dispatch => {
+export const newDocument = (newDoc) => dispatch => {
     axios.post('/new_document', newDoc)
         .then(res => {
             if (newDoc) {
-                /* history.push(url) */
                 dispatch({
                     type: ADD_DOCUMENT,
                     payload: res.data
@@ -83,17 +82,6 @@ export const deleteDocument = (id) => (dispatch, getSate) => {
         });
 
     dispatch(getDocuments())
-};
-
-export const createText = (name, formData, history) => (dispatch) => {
-    axios.post(`/createText?name=${name}`, formData).then(res => dispatch({
-            type: CREATE_TEXT,
-            payload: formData
-        }))
-        .catch((err) => {
-            console.log(err);
-        });
-    history.push(`/documents`)
 };
 
 export const updateDocumentName = (id, name) => dispatch => {

@@ -49,15 +49,8 @@ function DocumentModal(props) {
     e.preventDefault();
     const newDoc = {name, document_user}; 
     dispatch(newDocument(newDoc));   
-    handleCreate();
+    handleCreate();    
    }
-
-   /* const OnSubmitVersion = (e) => {
-        e.preventDefault();
-        let formData = props.formData.append('comment', comment);
-        dispatch(newDocument_version(props.formData));
-        history.push('/documents')
-   } */
 
     return(
         

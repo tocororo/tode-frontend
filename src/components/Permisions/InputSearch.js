@@ -41,9 +41,7 @@ class InputSearch extends Component{
           const {value, document} = this.state;
           this.props.getUsersToPermission({value, document}); 
           
-          const {users} = this.props.user
-          console.log(value);
-          
+          const {users} = this.props.user         
 
           return this.setState({
             isLoading: false,
@@ -79,7 +77,7 @@ class InputSearch extends Component{
         })}
         results={results}
         resultRenderer={({ name, rol, _id }) => 
-        <Grid >
+        <Grid key={_id}>
           <Grid.Column width={4}>                              
           <Modal trigger={
               <Icon 

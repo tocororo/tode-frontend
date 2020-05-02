@@ -88,24 +88,25 @@ function EditDocumentVersion(props) {
       }        
     };
 
-    const OnChangeImage = e => {
-      setImage( e.target.files[0], ); 
+    let formData = new FormData();
+
+    const OnChangeImage = e => {      
+      let files = e.target.files
+      for (let index = 0; index < files.length; index++) {
+        formData.append('image', files[index]) ;        
+      }
       
-    };
-    /* function handleClick() {
-      fileInputRef.current.click();
-    } */
+    };    
 
     const OnSubmitVersion = (comment) => (e) => {
       e.preventDefault();
-      let formData = new FormData();
       formData.append('comment', comment);
       formData.append('document_user', document_user);
       formData.append('document', document);
       formData.append('text', text);
-      formData.append('image', image);
-      dispatch(editDocument_version(formData, history));
+      dispatch(editDocument_version(formData));
       hideIcon()
+      history.push('/documents-shared')
       //localStorage.removeItem('doc_chat')
   }
        

@@ -8,12 +8,26 @@ import styled from 'styled-components'
 import DocumentsOptions from './DocumentsOptions'
 import { getDocument_version } from '../../actions/DocumentVersionAction'
 import { getDocuments } from '../../actions/DocumentAction'
+import { getChatNumber } from '../../actions/MessageAction'
 import Confirm from '../Notifications/Confirm';
-import { ChatContext } from '../contexts/ChatContext';
 
 const MyLink = styled(Link)`
   &&& {
     background-color:#1d314d;
+  }
+`
+
+const MyAccordion = styled(Accordion)`
+  &&&{
+    padding: 0;
+    margin: 0;
+  }
+`
+
+const MyGrid = styled(Grid)`
+  &&&{
+    padding: 0;
+    margin: 0;
   }
 `
 
@@ -32,8 +46,33 @@ function Documentos () {
   const {oauth2Users, oauth2IsAuthenticated} = useSelector(state => state.oauth2)
 
   /*  dispatch para utilizar las actions.js */
-  const dispatch = useDispatch()
-  const {showIcon} = useContext(ChatContext)     
+  const dispatch = useDispatch() 
+
+  let permisos = new Array()
+  for (let i = 0; i < perms.length; i++) {
+   if (perms[i]) {
+     permisos.push(perms[i])
+   }   
+  }
+
+  let lastVersions = new Array()
+  for (let i = 0; i < last.length; i++) {
+   if (last[i]) {
+    lastVersions.push(last[i])
+   }   
+  }
+  
+  let indexOfLastPermision = currentPage * documentsPerPage;
+  let indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+  let currentPermisions = permisos.slice(indexOfFirstPermision, indexOfLastPermision);
+  let totalPages = Math.ceil(permisos.length / documentsPerPage) 
+
+  const handlePaginationChange =  (e, activePage  ) => {
+    SetCurrentPage( activePage.activePage );
+    indexOfLastPermision = currentPage * documentsPerPage;
+    indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
+    currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
+  }    
 
   const handleLoader = () => {
     setTimeout(() =>{
@@ -47,56 +86,27 @@ function Documentos () {
     dispatch(getDocuments());
     dispatch(getDocument_version()); 
     handleLoader();
+
+    return () => {
+      dispatch(getDocuments());
+      dispatch(getDocument_version());
+    }
   },[docs.length, docs_version.length])
   
+  const chatNumber = (e, {document}) => {
+    dispatch(getChatNumber({document}))
+  }
 
-  /* funcion para manejar la apertura y cierre del accordion */
+  /* funcion para manejar la apertura y cierre del Myaccordion */
   const handleClick = (e, titleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex )
   }
   
-  let indexOfLastPermision = currentPage * documentsPerPage;
-  let indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
-  let currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
-  let totalPages = Math.ceil(perms.length / documentsPerPage) 
-
-  const handlePaginationChange =  (e, activePage  ) => {
-    SetCurrentPage( activePage.activePage );
-    indexOfLastPermision = currentPage * documentsPerPage;
-    indexOfFirstPermision = indexOfLastPermision - documentsPerPage;
-    currentPermisions = perms.slice(indexOfFirstPermision, indexOfLastPermision);
-  }
-  /* var permisos = new Array(perms.length);
-  if (perms.length > 0) {
-  perms.forEach((perm, index) => {
-    if(oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user) {
-    permisos[index] = perm;
-    }
-  });
-} */
-
-  /* var versiones 
-  var last = new Array(permisos.length);
-  if (docs_version.length > 0) {
-    permisos.forEach((perm, perm_index) => {
-      versiones = new Array(); 
-    docs_version.forEach((vers, vers_index) => {    
-      if(perm.document._id === vers.document._id){
-      versiones[vers_index] = vers;
-      }
-    }) 
-    last[perm_index] = versiones[versiones.length-1];
-  })  
-}   */
-
-console.log(currentPermisions);
-console.log(currentPage);
-
 
   return (
-    perms.length > 0 && perms[0] != null ?
+    currentPermisions.length > 0 ?
     <Container>       
     <Transition  animation='fade' duration={100} visible={showLoader}>
       <Transition.Group as={Container}>                    
@@ -108,27 +118,27 @@ console.log(currentPage);
      
       <Transition animation='fade' duration={100} visible={showDocuments}>
       <Transition.Group as={Container}>
-          <Grid columns={6} columns='equal' divided padded >
-            <Grid.Row>
+          <MyGrid columns={6} columns='equal' divided padded >
+            <MyGrid.Row>
               <h2>Mi Biblioteca</h2>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
+            </MyGrid.Row>
+            <MyGrid.Row>
+              <MyGrid.Column>
                 Articulo
-              </Grid.Column>
-              <Grid.Column>
+              </MyGrid.Column>
+              <MyGrid.Column>
                 Comentario
-              </Grid.Column>
-              <Grid.Column>
+              </MyGrid.Column>
+              <MyGrid.Column>
                 Usuario
-              </Grid.Column>
-              <Grid.Column>
+              </MyGrid.Column>
+              <MyGrid.Column>
                 Fecha
-              </Grid.Column>
-              <Grid.Column>
+              </MyGrid.Column>
+              <MyGrid.Column>
                 Opciones
-              </Grid.Column>
-            </Grid.Row> 
+              </MyGrid.Column>
+            </MyGrid.Row> 
             
           <div style={{overflowY:'scroll', maxHeight:400}}>
             {
@@ -137,71 +147,76 @@ console.log(currentPage);
             /* oauth2IsAuthenticated && oauth2Users._id === perm.withPermisions._id && oauth2Users._id === perm.document.document_user ?  */
             
               /**
-              ACCORDION FOR MAIN DOCUMENT
-               */
+              MyACCORDION FOR MAIN DOCUMENT
+               */          
           <Fragment key={perm._id}>
-          <Grid.Row >
-          <Accordion fluid  >
-          <Accordion.Title
+          <MyGrid.Row >
+          <MyAccordion fluid  >
+          <MyAccordion.Title
             active={activeIndex === perm._id}
             index={perm._id}
             onClick={handleClick}
           >
-          {last.map(last_version => 
+          {lastVersions.map(last_version => 
            last_version && perm.document._id === last_version.document._id ?
-             <Grid columns={6} columns='equal' divided key={last_version._id}>
-               <Grid.Row color='blue'>
-                   <Grid.Column><Icon name='dropdown'/>{perm.document.name}</Grid.Column>
-                   <Grid.Column>{last_version.coment}</Grid.Column>
-                   <Grid.Column>{last_version.document_user.name}</Grid.Column>
-                   <Grid.Column>
-                     <Moment fromNow>{last_version.document.createdAt}</Moment></Grid.Column>
-                   <Grid.Column> 
+             <MyGrid columns={6} columns='equal' divided key={last_version._id}>
+               <MyGrid.Row color='blue'>
+                   <MyGrid.Column><Icon name='dropdown'/>{perm.document.name}</MyGrid.Column>
+                   <MyGrid.Column>{last_version.coment}</MyGrid.Column>
+                   <MyGrid.Column>{last_version.document_user.name}</MyGrid.Column>
+                   <MyGrid.Column>
+                     <Moment fromNow>{last_version.document.createdAt}</Moment></MyGrid.Column>
+                   <MyGrid.Column> 
                      <DocumentsOptions document={perm.document._id} version={last_version._id}/>
-                   </Grid.Column>
-               </Grid.Row>  
-             </Grid>   
+                   </MyGrid.Column>
+               </MyGrid.Row>  
+             </MyGrid>   
            :null
          )}
-         </Accordion.Title>
+         </MyAccordion.Title>
 
          {/**
-          ACCORDION FOR DOCUMENTS VERSIONS 
+          MyACCORDION FOR DOCUMENTS VERSIONS 
          */}
-         <Accordion.Content active={activeIndex === perm._id}>
+         <MyAccordion.Content active={activeIndex === perm._id}>
            {docs_version.length > 0 ?
             docs_version.map(doc_version => 
             doc_version && perm.document._id === doc_version.document._id ?
                <Fragment key={doc_version._id}>
-                 <Grid columns={6} columns='equal' celled>
-                   <Grid.Row color='teal'>
-                      <Grid.Column>{doc_version.document.name}</Grid.Column>
-                      <Grid.Column>{doc_version.coment}</Grid.Column>
-                      <Grid.Column>{doc_version.document_user.name}</Grid.Column>
-                      <Grid.Column><Moment fromNow>{doc_version.createdAt}</Moment></Grid.Column>
-                      <Grid.Column>
+                 <MyGrid columns={6} columns='equal' celled>
+                   <MyGrid.Row color='teal'>
+                      <MyGrid.Column>{doc_version.document.name}</MyGrid.Column>
+                      <MyGrid.Column>{doc_version.coment}</MyGrid.Column>
+                      <MyGrid.Column>{doc_version.document_user.name}</MyGrid.Column>
+                      <MyGrid.Column><Moment fromNow>{doc_version.createdAt}</Moment></MyGrid.Column>
+                      <MyGrid.Column>
                       <Icon.Group size='large'>
                       <Icon name='eye' color='red' size='small' circular inverted/>
                       </Icon.Group>
-                      </Grid.Column>
-                    </Grid.Row>
-                 </Grid>
+                      <Icon.Group size='large'>
+                      <Link to = {"/edit_document_version/" + doc_version._id}>
+                      <Icon name='edit' color='red' size='small' circular inverted/>
+                      </Link>
+                      </Icon.Group>
+                      </MyGrid.Column>
+                    </MyGrid.Row>
+                 </MyGrid>
                 </Fragment>
            : null)
           :null
           }
           
-         </Accordion.Content>
-       </Accordion>
-       </Grid.Row>
+         </MyAccordion.Content>
+       </MyAccordion>
+       </MyGrid.Row>
        <Divider hidden/>
        </Fragment>
           /* :null */
           // )
-       )
+         ) 
            }
        </div>
-        </Grid>   
+        </MyGrid>   
         
         {/* LLamando al componente con el mensaje de cofirmacion del documento creado */}
         <Confirm />

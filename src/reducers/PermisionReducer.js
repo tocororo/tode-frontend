@@ -6,11 +6,10 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
        
-        case GET_PERMISION:
-                
+        case GET_PERMISION:                
             return {
                 ...state,
-                permisions: action.payload
+                permisions: action.payload                
             };
         case ADD_PERMISION:
             return {

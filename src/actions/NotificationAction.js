@@ -22,10 +22,7 @@ export const getNotifications = () => (dispatch, getSate) => {
         });
 };
 
-export const getNotificationDocVersion = ({
-    document,
-    document_version
-}) => (dispatch, getSate) => {
+export const getNotificationDocVersion = (document, document_version) => (dispatch, getSate) => {
     axios.get(`/notificationDocVersion?document=${document}&&document_version=${document_version}`,
         tokenConfig(getSate))
 
@@ -63,9 +60,7 @@ export const getRequestNumber = () => (dispatch, getSate) => {
         });
 };
 
-export const deleteNotification = ({
-    document
-}) => (dispatch, getSate) => {
+export const deleteNotification = (document) => (dispatch, getSate) => {
     axios.delete(`/delete_notification/${document}`, tokenConfig(getSate)).then(res => dispatch({
             type: DELETE_NOTIFICATION,
             payload: document
@@ -73,4 +68,7 @@ export const deleteNotification = ({
         .catch((err) => {
             console.log(err);
         });
+    
+    dispatch(getNotifications());
+    dispatch(getRequestNumber());
 };

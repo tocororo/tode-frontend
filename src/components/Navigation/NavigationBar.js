@@ -29,6 +29,7 @@ const MyIcon = styled(Icon)`
 
    &&&:hover{
     color: grey;
+    cursor: pointer
   }
 `
 
@@ -57,10 +58,14 @@ function NavigationBar ()  {
 
     //let chat = localStorage.getItem('doc_chat')
 
-  useEffect(() => {    
-      dispatch(getNotifications())    
-      dispatch(getNotificationsNumber());    
-      dispatch(getRequestNumber());
+  useEffect(() => { 
+      if (oauth2Users) {            
+        dispatch(getNotifications())    
+        dispatch(getNotificationsNumber());    
+        dispatch(getRequestNumber());
+        console.log('hi there');
+        
+      } 
   },[notificationsNumber, requestNumber])
 
   const trigger = (
@@ -83,10 +88,10 @@ function NavigationBar ()  {
         </MyMenu.Item>
         <MyMenu.Menu position='right'>        
         { //chat !== '' ?
-            <Transition.Group animation='fade' duration={100}>
+            <Transition.Group animation='fade' duration={100} >
                 {iconVisible && (
                 <MyMenu.Item>
-                    <MyIcon  name='wechat' size='big' onClick={toogleVisible}/>
+                    <MyIcon name='wechat' size='big' onClick={toogleVisible}/>
                 </MyMenu.Item>
                 )}   
             </Transition.Group>

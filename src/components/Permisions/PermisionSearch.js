@@ -1,33 +1,31 @@
-import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom';
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import {useHistory} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
 import _ from 'lodash'
 import Avatar from '../../assets/Avatar.png'
 import {deletePermision} from '../../actions/PermisionAction'
-import {getDocuments} from '../../actions/DocumentAction'
+import {getPermisions} from '../../actions/PermisionAction'
 import {  Grid, Header, Segment, Label, Divider, List, Image } from 'semantic-ui-react'
 
 import InputSearch from './InputSearch'
 import DeleteModal from '../Utils/DeleteModal'
 
-class PermisionSearch extends Component {
-  constructor(props){
-      super(props)
-      this.state = {
-          modalOpen: false,
-          document:props.document_id,
-          permision: [],
-          withPermisions:""
-      }
-  }
+function PermisionSearch(props) {
+  const [state, setstate] = useState({
+    modalOpen: false,
+    document:props.document_id,
+    withPermisions:""
+  })
 
-  componentDidMount() {
-    this.props.getDocuments()
-  }
+  const {permisions} = useSelector(state => state.permision);
 
-    render() {
-       
-      const {perms} = this.props.doc
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect( () => {
+    const id = state.document
+    dispatch(getPermisions(id));   
+  },[]);
 
       return (
             
@@ -36,8 +34,8 @@ class PermisionSearch extends Component {
           <Segment>
           <Header><h2>Usuarios con permisos otorgados</h2></Header>
            <Divider/>
-              {perms.map(permision => 
-                permision.document._id === this.state.document ?
+              {permisions.map(permision => 
+                permision.document && permision.document._id == state.document ?
                   <List key={permision._id}>
                       <List.Item>
                         <List.Content floated='right'>
@@ -74,17 +72,11 @@ class PermisionSearch extends Component {
         </Grid.Column>
         <Grid.Column width={5}>
 
-          <InputSearch document_id={this.state.document} />
+          <InputSearch document_id={state.document} />
           
-        </Grid.Column>
+        </Grid.Column>        
       </Grid>             
       )
-    }
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user,
-    doc: state.doc
-})
-
-export default connect(mapStateToProps, {deletePermision, getDocuments}) (withRouter(PermisionSearch))
+export default PermisionSearch

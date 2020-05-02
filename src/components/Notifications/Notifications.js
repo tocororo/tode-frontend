@@ -1,9 +1,10 @@
 import React, {Fragment,} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {Icon, Dropdown, Message, Label } from 'semantic-ui-react'
+import {Icon, Dropdown, Label } from 'semantic-ui-react'
 import { getNotificationDocVersion} from '../../actions/NotificationAction'
 import Moment  from 'react-moment'
 import styled from 'styled-components'
+import '../../css/notifications.css'
 
 
 const MyIcon = styled(Icon)`
@@ -22,8 +23,7 @@ function Notifications(props)  {
   const dispatch = useDispatch()
 
   const NotificationCheckedForVersion = (e, { document, document_version }) => {
-    dispatch(getNotificationDocVersion({document, document_version}) );
-
+    dispatch(getNotificationDocVersion(document, document_version) );
   }
 
   const trigger =  (
@@ -54,29 +54,33 @@ function Notifications(props)  {
 
                 // NOTIFICACIONS FOR VERSIONS
                /*  oauth2IsAuthenticated && notify.toUser && notify.toUser._id === oauth2Users._id  ?      */             
-                <Dropdown.Item active = {notify.notificationSied === false ? true : false }
+                <Dropdown.Item key={notify._id} 
                     document = {notify.document._id}
-                    document_version = {notify.document_version._id}       
+                    document_version = {notify.document_version}       
                     onClick={NotificationCheckedForVersion} 
-                    content= {notify.notification}
-                    description = {<Moment>{notify.createdAt}</Moment>}
+                    content= {
+                      notify.notificationSied === false ?
+                      <Fragment>
+                        <div className="message">
+                        <Icon name='circle' color="blue"/>{notify.notification} 
+                        </div>
+                        <br/>
+                        <span className="name">{notify.document.name}</span>
+                        <br/>
+                        <Moment className="date" fromNow>{notify.createdAt}</Moment>
+                      </Fragment>  
+                      : 
+                      <Fragment>
+                        <div className="message">
+                        {notify.notification} 
+                        </div>
+                        <br/>
+                        <span className="name">{notify.document.name}</span>
+                        <br/>
+                        <Moment className="date" fromNow>{notify.createdAt}</Moment>
+                      </Fragment>
+                    }
                     />
-
-                  /* <MessagesForVersions 
-                    notification={notify.notification} 
-                    name={notify.document.name} 
-                    date={notify.createdAt}  
-                    notificationSied={notify.notificationSied}/>
-                </Dropdown.Item>
-                : 
-                <Message
-                  key={notify._id}
-                  size='small'
-                  color='grey'
-                  header='Sin notificaciones aun'
-                /> */
-                //:
-              
                 ))
                 :
                 <Dropdown.Header 

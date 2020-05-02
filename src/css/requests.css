@@ -1,0 +1,14 @@
+.message{
+    margin-bottom: 1.5px;
+    font-size: small;
+}
+ .name{
+    color:teal;
+    margin-bottom: 3px;
+    font-size: small;
+ }
+
+.date{
+    margin-left: 5.5vh;
+    color: grey;
+}

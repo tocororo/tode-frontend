@@ -41,7 +41,7 @@ export const getDocument_version_content = (id) => (dispatch) => {
         });
 };
 
-export const newDocument_version = (formData, history) => dispatch => {        
+export const newDocument_version = (formData) => dispatch => {        
     axios.post('/new_document_version', formData).then(res => dispatch({
             type: ADD_DOCUMENT_VERSION,
             payload: res.data
@@ -49,7 +49,6 @@ export const newDocument_version = (formData, history) => dispatch => {
         .catch((err) => {
             console.log(err);
         });
-    history.push('/documents')
 };
 
 export const editDocument_version = (formData, history) => dispatch => {        

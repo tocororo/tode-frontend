@@ -1,6 +1,7 @@
-import { GET_MESSAGES, ADD_MESSAGE } from '../actions/types'
+import { GET_MESSAGES, ADD_MESSAGE,GET_CHAT_NUMBER } from '../actions/types'
 const initialState = {
-    messages: []
+    messages: [],
+    numberOfMessages: []
 }
 
 export default function (state = initialState, action) {
@@ -14,6 +15,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 messages: [action.payload, ...state.messages]
+            };
+        case GET_CHAT_NUMBER:
+            return {
+                ...state,
+                numberOfMessages: [action.payload, ...state.numberOfMessages]
             };
         default:
             return state;

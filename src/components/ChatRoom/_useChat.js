@@ -12,14 +12,13 @@ const useChat = (doc) => {
   useEffect( () => {        
     
     socketRef.current = socketIOClient(
-      "https://10.2.64.4:4000"
+      "https://192.168.1.103:4000"
     );
     
     return () => {
       socketRef.current.disconnect();
     };
   }, []);
-
   
   const sendMessage = (message) => {
     if (oauth2Users) {      

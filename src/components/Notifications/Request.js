@@ -20,8 +20,8 @@ function Request(props)  {
   
   const dispatch = useDispatch()
 
-  const OnCancel = (e, {document}) => {
-    dispatch(deleteNotification({document}))
+  const OnCancel = (e, document) => {    
+    dispatch(deleteNotification(document.id))
   }
 
   const NotificationCheckedForPermision = (e, { document, forPermisions }) => {
@@ -45,58 +45,60 @@ function Request(props)  {
     }
   });
 
-        return (
+  return (
          
-                <Dropdown trigger={trigger}  pointing='top right' icon={null}> 
-                <Dropdown.Menu >
-                <Dropdown.Menu scrolling>
-                {
-                notificaciones.length > 0 ?
-                  notificaciones.map(notify => (
+    <Dropdown trigger={trigger}  pointing='top right' icon={null}> 
+      <Dropdown.Menu >
+        <Dropdown.Menu scrolling>
+        {
+        notificaciones.length > 0 ?
+          notificaciones.map(notify => (
 
-                // NOTIFICACIONS FOR PERMISIONS
-                /* oauth2IsAuthenticated && notify.forPermisions && notify.forPermisions._id === oauth2Users._id ? */
-               <Fragment  key={notify._id}>
-               <Dropdown.Header  
-               children ={notify.notification}
-               />
-                {
-                  notify.notificationSied === false ?
-                    <Fragment>
-                      <Dropdown.Header                      
-                        content= {
-                          <Button.Group size='mini' >
-                            <Button  type='submit'
-                              document = {notify.document._id}    
-                              onClick = {NotificationCheckedForPermision} >
-                              <Icon name='checkmark'/> Aceptar
-                            </Button>
-                          <Button.Or />
-                            <Button 
-                              // id = {notify.document._id}   
-                              onClick={OnCancel.bind(this, notify.document._id) }>
-                              <Icon name='remove' /> Cancelar
-                            </Button>
-                          </Button.Group>                    
-                        }                        
-                      /> 
-                    </Fragment>
-                  :null
-                }
-                </Fragment>
-                //:               
-                ))
+        // NOTIFICACIONS FOR PERMISIONS
+        /* oauth2IsAuthenticated && notify.forPermisions && notify.forPermisions._id === oauth2Users._id ? */
+        <Fragment  key={notify._id}>
+        <Dropdown.Header children ={
+        <Fragment>
+        <span className="message">{notify.notification}</span>
+        <br/>
+        <span className="name">{notify.document.name}</span>
+        </Fragment>
+        }/>
+        {notify.notificationSied === false ?
+          <Dropdown.Header                      
+            content= {
+            <Fragment>
+              <Button.Group size='mini' >
+                <Button  type='submit'
+                  document = {notify.document._id}    
+                  onClick = {NotificationCheckedForPermision} >
+                  <Icon name='checkmark'/> Aceptar
+                </Button>
+              <Button.Or />
+                <Button 
+                  id = {notify.document._id}   
+                  onClick={OnCancel}>
+                  <Icon name='remove' /> Cancelar
+                </Button>
+              </Button.Group><span className="date">{notify.document.createdAt}</span>                           
+            </Fragment>                  
+            }                        
+              /> 
+          :null}
+        </Fragment>
+        //:               
+        ))
 
-                :
-                <Dropdown.Header
-                children = 'Sin solicitudes aun'
-                /> 
-              }
+        :
+        <Dropdown.Header
+        children = 'Sin solicitudes aun'
+        /> 
+        }
 
-              </Dropdown.Menu>
-              </Dropdown.Menu>
-            </Dropdown>
-        )
-    }
+        </Dropdown.Menu>
+      </Dropdown.Menu>
+    </Dropdown>
+  )
+}
 
 export default Request

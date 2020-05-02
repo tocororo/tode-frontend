@@ -10,6 +10,7 @@ const Chat = (props) => {
     <div>
       <Messages doc={props.doc} messages={props.messages} />
       <MessageBox
+        doc={props.doc}
         onSendMessage={message => {
           sendMessage( message );
         }}

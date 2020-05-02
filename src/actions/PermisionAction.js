@@ -11,8 +11,8 @@ import {
     getDocuments
 } from './DocumentAction'
 
-export const getPermisions = () => (dispatch, getSate) => {
-    axios.get('/permision', tokenConfig(getSate)).then(res => dispatch({
+export const getPermisions = (documentId) => (dispatch, getSate) => {
+    axios.get(`/permision/${documentId}`, tokenConfig(getSate)).then(res => dispatch({
             type: GET_PERMISION,
             payload: res.data
         }))
@@ -36,6 +36,19 @@ export const newPermision = newPermision => dispatch => {
 
 export const deletePermision = id => (dispatch) => {
     axios.delete(`/delete_permision/${id}`).then(res => {
+            dispatch({
+                type: DELETE_PERMISION,
+                payload: id
+            });
+            dispatch(getDocuments())
+        })
+        .catch((err) => {
+            console.log(err);
+        });        
+};
+
+export const cancelPermisionShared = id => (dispatch) => {
+    axios.delete(`/cancelPermisionShared/${id}`).then(res => {
             dispatch({
                 type: DELETE_PERMISION,
                 payload: id

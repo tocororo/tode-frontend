@@ -11,13 +11,13 @@ export const OAuth2Loaded = () => async (dispatch) => {
     dispatch({
         type: USER_LOADING
     })
-    
-        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => 
+    if (localStorage.getItem('sceibaId')) {        
+        await axios.get(`/user/${localStorage.getItem('sceibaId')}`).then(res => {
             dispatch({
             type: OAUT2_LOADED,
             payload: res.data
         })
-        )
+        })
         .catch(err => {         
             dispatch({
                 type: OAUT2_ERROR
@@ -29,6 +29,7 @@ export const OAuth2Loaded = () => async (dispatch) => {
                 payload: err.response.data
             }); */
         }); 
+    }
 };
 
 export const logout = (history) => dispatch =>{
